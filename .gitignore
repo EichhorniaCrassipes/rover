@@ -1,0 +1,7 @@
+/.idea/
+/.venv/
+
+/*build*/
+/.release/
+
+/SFML-3.0.2/
