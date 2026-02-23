@@ -1,10 +1,11 @@
 //
 // Created by arsen on 23/02/2026.
 //
+#pragma once
+#include <SFML/Graphics.hpp>
 
 #ifndef ROVER_OBJECT_H
 #define ROVER_OBJECT_H
-
 class Object
 {
 public:
@@ -12,9 +13,9 @@ public:
     virtual ~Object();
     virtual int draw();// int чтобы отлавливать ошибки, если не сделаем что-то более мудрое
 protected:
-    //scale
+    sf::vector2f scale;
+    sf::Vector2f position;
     //sprite_filepath
-    //coordinates
 };
 
 #endif //ROVER_OBJECT_H

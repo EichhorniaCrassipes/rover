@@ -14,6 +14,8 @@ set(SOURCES
         main.cpp
         objects/object.h
         objects/object.cpp
+        objects/entity.h
+        objects/entity.cpp
 )
 
 if (RENDER_ICON)
