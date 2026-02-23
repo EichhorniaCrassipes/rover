@@ -16,6 +16,7 @@ set(SOURCES
         objects/object.cpp
         objects/entity.h
         objects/entity.cpp
+        objects/mapElement.h
 )
 
 if (RENDER_ICON)
