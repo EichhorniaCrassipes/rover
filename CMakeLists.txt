@@ -12,6 +12,8 @@ endif()
 
 set(SOURCES
         main.cpp
+        objects/object.h
+        objects/object.cpp
 )
 
 if (RENDER_ICON)
