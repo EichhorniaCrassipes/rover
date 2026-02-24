@@ -12,6 +12,8 @@ endif()
 
 set(SOURCES
         main.cpp
+        utils/generator/PerlinNoise.cpp
+        utils/generator/mapGenerator.cpp
 )
 
 if (RENDER_ICON)
