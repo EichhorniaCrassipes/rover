@@ -1,6 +1,3 @@
-//
-// Created by arsen on 23/02/2026.
-//
 #include "object.h"
 
 Object::Object()
