@@ -1,5 +1,5 @@
 # OOP task for 2nd semester C++ course
-#### 📊 Иерархия классов
+#### 🌳 Иерархия классов
 ````
 Object
 ├── MapElement
@@ -15,4 +15,5 @@ Object
 │   │   │   ├── Enemy
 │   │   │   └── Player
 ````
-<img src="diagram_classes.png" alt="Class Diagram" width="600">
+#### 📊 Диаграмма
+<img src="diagram_classes.png" alt="Class Diagram" width="1408">
