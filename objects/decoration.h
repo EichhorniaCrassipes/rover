@@ -8,18 +8,9 @@ using namespace std;
 class Decoration: public MapElement
 {
 public:
-    Decoration() : MapElement()
-    {
-        cout << "[Decoration] created!" << endl;
-    }
-    static void say()
-    {
-        cout << "[Decoration] some text!" << endl;
-    }
-    ~Decoration()
-    {
-        cout << "[Decoration] deleted!" << endl;
-    }
+    Decoration();
+    static void say();
+    ~Decoration() override;
 };
 
 #endif //ROVER_DECORATION_H

@@ -8,18 +8,9 @@ using namespace std;
 class Mob : public Entity
 {
 public:
-    Mob() : Entity()
-    {
-        cout << "[Mob] created" << endl;
-    }
-    static void say()
-    {
-        cout << "[Mob] some text!" << endl;
-    }
-    ~Mob()
-    {
-        cout << "[Mob] deleted!" << endl;
-    }
+    Mob();
+    static void say();
+    ~Mob() override;
 };
 
 #endif //ROVER_MOB_H

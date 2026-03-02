@@ -8,18 +8,9 @@ using namespace std;
 class Enemy : public Mob
 {
 public:
-    Enemy() : Mob()
-    {
-        cout << "[Enemy] created!" << endl;
-    }
-    static void say()
-    {
-        cout << "[Enemy] some text!" << endl;
-    }
-    ~Enemy()
-    {
-        cout << "[Enemy] deleted!" << endl;
-    }
+    Enemy();
+    static void say();
+    ~Enemy() override;
 };
 
 #endif //ROVER_ENEMY_H

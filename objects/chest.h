@@ -8,18 +8,9 @@ using namespace std;
 class Chest : public Block
 {
 public:
-    Chest() : Block()
-    {
-        cout << "[Chest] created!" << endl;
-    }
-    static void say()
-    {
-        cout << "[Chest] some text!" << endl;
-    }
-    ~Chest()
-    {
-        cout << "[Chest] deleted!" << endl;
-    }
+    Chest();
+    static void say();
+    ~Chest() override;
 };
 
 #endif //ROVER_CHEST_H

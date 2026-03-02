@@ -11,7 +11,7 @@ if (RENDER_ICON)
 endif()
 
 set(SOURCES
-        main.cpp
+        test.cpp
         objects/object.h
         objects/object.cpp
         objects/entity.h
@@ -19,6 +19,19 @@ set(SOURCES
         objects/mapElement.h
         utils/generator/PerlinNoise.cpp
         utils/generator/mapGenerator.cpp
+        objects/block.cpp
+        objects/building.cpp
+        objects/chest.cpp
+        objects/decoration.cpp
+        objects/deposit.cpp
+        objects/enemy.cpp
+        objects/entity.cpp
+        objects/loot.cpp
+        objects/mapElement.cpp
+        objects/mob.cpp
+        objects/npc.cpp
+        objects/object.cpp
+        objects/player.cpp
 )
 
 if (RENDER_ICON)

@@ -8,18 +8,9 @@ using namespace std;
 class Deposit: public Block //месторождение
 {
 public:
-    Deposit() : Block()
-    {
-        cout << "[Deposit] created!" << endl;
-    }
-    static void say()
-    {
-        cout << "[Deposit] some text!" << endl;
-    }
-    ~Deposit()
-    {
-        cout << "[Deposit] deleted!" << endl;
-    }
+    Deposit();
+    static void say();
+    ~Deposit() override;
 };
 
 #endif //ROVER_DEPOSIT_H

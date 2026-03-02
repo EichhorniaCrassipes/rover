@@ -2,26 +2,19 @@
 #define ROVER_BLOCK_H
 #include "mapElement.h"
 
+#include <SFML/Graphics.hpp>
+
 #include <iostream>
 using namespace std;
 
 class Block : public MapElement
 {
 public:
-    Block() : MapElement()
-    {
-        cout << "[Block] created!" << endl;
-    }
-    static void say()
-    {
-        cout << "[Block] some text!" << endl;
-    }
-    ~Block()
-    {
-        cout << "[Block] deleted!" << endl;
-    }
+    Block();
+    static void say();
+    ~Block() override;
 protected:
-    sf::vector2f hitbox;
+    sf::Vector2f hitbox;
 };
 
 

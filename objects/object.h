@@ -1,12 +1,15 @@
-#pragma once
-#include <SFML/Graphics.hpp>
-
 #ifndef ROVER_OBJECT_H
 #define ROVER_OBJECT_H
+
+#include <SFML/Graphics.hpp>
+#include <iostream>
+using namespace std;
+
 class Object
 {
 public:
     Object();
+    static void say();
     virtual ~Object();
     virtual int draw();// int чтобы отлавливать ошибки, если не сделаем что-то более мудрое
 protected:
