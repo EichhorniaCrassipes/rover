@@ -10,7 +10,7 @@ public:
     virtual ~Object();
     virtual int draw();// int чтобы отлавливать ошибки, если не сделаем что-то более мудрое
 protected:
-    sf::vector2f scale;
+    sf::Vector2f scale;
     sf::Vector2f position;
     //sprite_filepath
 };
