@@ -2,7 +2,8 @@
 #define ROVER_ENEMY_H
 #include "mob.h"
 
-class Enemy : public Mob {
+class Enemy : public Mob
+{
     public:
 };
 

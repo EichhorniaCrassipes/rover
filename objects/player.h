@@ -2,7 +2,8 @@
 #define ROVER_PLAYER_H
 #include "mob.h"
 
-class Player : public Mob {
+class Player : public Mob
+{
     public:
 };
 

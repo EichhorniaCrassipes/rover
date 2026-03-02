@@ -4,7 +4,7 @@
 
 class Chest : public Block
 {
-
+public:
 };
 
 #endif //ROVER_CHEST_H
