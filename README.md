@@ -1,4 +1,5 @@
 # OOP task for 2nd semester C++ course
+#### 📊 Иерархия классов
 ````
 Object
 ├── MapElement
