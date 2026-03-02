@@ -14,3 +14,5 @@ Object
 │   │   ├── Mob
 │   │   │   ├── Enemy
 │   │   │   └── Player
+````
+<img src="diagram_classes.png" alt="Class Diagram" width="600">
