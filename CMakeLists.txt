@@ -17,6 +17,8 @@ set(SOURCES
         objects/entity.h
         objects/entity.cpp
         objects/mapElement.h
+        utils/generator/PerlinNoise.cpp
+        utils/generator/mapGenerator.cpp
 )
 
 if (RENDER_ICON)
