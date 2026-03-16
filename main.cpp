@@ -5,6 +5,7 @@
 #include <SFML/Window.hpp>
 #include <string>
 #include <unordered_map>
+#include <optional>
 
 using sf::RenderWindow;
 using sf::Text;
@@ -17,10 +18,21 @@ using std::unordered_map;
 
 int main() {
     unsigned long long frames = 0;
+    bool backgroundFlag = false;
+
+    sf::SoundBuffer soundBuffer;
+    std::optional<sf::Sound> sound;
+    bool soundFlag = soundBuffer.loadFromFile("sound.wav");
+
+    if (soundFlag)
+    {
+        sound.emplace(soundBuffer);
+    }
+    soundFlag = false;
 
     RenderWindow window(
         VideoMode({1280, 720}),
-        "SFML-built-test"
+        "Catch the number!"
     );
     window.setFramerateLimit(24);
 
@@ -38,6 +50,7 @@ int main() {
     achievements[69] = "69 number achieved";
     achievements[228] = "228 number achieved";
     achievements[1488] = "1488 number achieved";
+    achievements[52] = "52 number achieved";
     string ach_text;
 
     unordered_map<int, bool> flag;
@@ -45,6 +58,7 @@ int main() {
     flag[69] = false;
     flag[228] = false;
     flag[1488] = false;
+    flag[52] = false;
 
     Text frames_text(font);
     frames_text.setCharacterSize(50);
@@ -61,10 +75,21 @@ int main() {
 
     Text instruction_text(font);
     instruction_text.setCharacterSize(25);
-    instruction_text.setString("WASD to move \nSpace to return default coords \nP to catch \nEscape to close");
+    instruction_text.setString("WASD to move \nSpace to return default coords \nP to catch \nEscape to close \n\n\nNumbers to catch:\n52-[easy]\n67-[easy]\n69-[easy]\n228-[hard]\n1488-[impossible]");
     achievement_text.setPosition(Vector2f{900, 5});
 
     float delta_t = 1;
+
+    sf::Texture backgroundTexture;
+    std::optional<sf::Sprite> backgroundSprite;
+    if (backgroundTexture.loadFromFile("meme.jpg"))
+    {
+        backgroundSprite.emplace(backgroundTexture);
+        backgroundSprite->setScale(sf::Vector2f(
+        static_cast<float>(window.getSize().x) / backgroundTexture.getSize().x,
+        static_cast<float>(window.getSize().y) / backgroundTexture.getSize().y
+        ));
+    }
 
     while (window.isOpen()) {
         if (clock.getElapsedTime().asSeconds() >= 1/24)
@@ -108,6 +133,16 @@ int main() {
 
         window.clear();
 
+        if (frames >= 333 && frames < 500 && backgroundSprite.has_value())
+        {
+            window.draw(*backgroundSprite);
+        }
+
+        if (frames >= 333 && !soundFlag && sound.has_value())
+        {
+            sound->play();
+            soundFlag = true;
+        }
 
         window.draw(instruction_text);
         window.draw(achievement_text);
