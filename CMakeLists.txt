@@ -12,13 +12,12 @@ endif()
 
 set(SOURCES
         main.cpp
-        objects/object.h
         objects/object.cpp
-        objects/entity.h
         objects/entity.cpp
-        objects/mapElement.h
-        utils/generator/PerlinNoise.cpp
-        utils/generator/mapGenerator.cpp
+        generator/PerlinNoise.cpp
+        generator/mapGenerator.cpp
+        engine/engine.cpp
+        scenes/scene.cpp
 )
 
 if (RENDER_ICON)
