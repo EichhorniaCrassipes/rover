@@ -1,7 +1,13 @@
 #include "object.h"
 
 Object::Object()
-= default;
+    : scale(sf::Vector2f(1, 1))
+    , position(sf::Vector2f(0, 0))
+    , texture("sample_texture.jpg")
+    , sprite(texture) {
+    sprite.setPosition(position);
+    sprite.setScale(scale);
+}
 Object::~Object()
 = default;
 int Object::draw()

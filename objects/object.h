@@ -1,8 +1,7 @@
-#pragma once
-#include <SFML/Graphics.hpp>
-
 #ifndef ROVER_OBJECT_H
 #define ROVER_OBJECT_H
+#include <SFML/Graphics.hpp>
+
 class Object
 {
 public:
@@ -12,7 +11,8 @@ public:
 protected:
     sf::Vector2f scale;
     sf::Vector2f position;
-    //sprite_filepath
+    sf::Texture texture;
+    sf::Sprite sprite;
 };
 
 #endif //ROVER_OBJECT_H
