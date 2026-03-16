@@ -133,7 +133,7 @@ int main() {
 
         window.clear();
 
-        if (frames >= 333 && frames < 500 && backgroundSprite.has_value())
+        if (frames >= 333 && frames < 455 && backgroundSprite.has_value())
         {
             window.draw(*backgroundSprite);
         }
