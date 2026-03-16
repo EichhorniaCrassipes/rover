@@ -10,7 +10,7 @@ Object::Object()
 }
 Object::~Object()
 = default;
-int Object::draw()
+sf::Sprite Object::getSprite()
 {
-    return 0;// 0 for no erros
+    return sprite;// 0 for no erros
 }
