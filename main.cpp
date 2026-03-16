@@ -3,6 +3,7 @@
 #include <SFML/Network.hpp>
 #include <SFML/System.hpp>
 #include <SFML/Window.hpp>
+#include "objects/object.h"
 
 using sf::RenderWindow;
 using sf::Text;
@@ -27,6 +28,8 @@ int main() {
     frames_text.setCharacterSize(50);
     frames_text.setPosition(Vector2f{615, 355});
 
+    Object testObject;
+
     while (window.isOpen()) {
         while (const auto event = window.pollEvent())
             if (event->is<sf::Event::Closed>())
@@ -36,6 +39,7 @@ int main() {
 
         frames_text.setString(to_string(frames));
         window.draw(frames_text);
+        window.draw(testObject.getSprite());
 
         window.display();
         frames++;
