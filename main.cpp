@@ -1,3 +1,4 @@
+#include "engine/engine.h"
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 #include <SFML/Network.hpp>
@@ -5,14 +6,10 @@
 #include <SFML/Window.hpp>
 #include "objects/object.h"
 
-using sf::RenderWindow;
-using sf::Text;
-using sf::Font;
-using sf::VideoMode;
-using sf::Vector2f;
-using std::to_string;
 
 int main() {
+    const game::Engine engine;
+    engine.run();
     unsigned long long frames = 0;
 
     RenderWindow window(

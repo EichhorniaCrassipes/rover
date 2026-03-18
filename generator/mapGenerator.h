@@ -2,9 +2,11 @@
 #define MAP_GENERATOR_H
 
 #include "PerlinNoise.h"
+
 #include <vector>
-#include <limits>
 using std::vector;
+
+#include <limits>
 using std::numeric_limits;
 
 namespace generator {
