@@ -1,18 +1,18 @@
-#pragma once
-#include <SFML/Graphics.hpp>
-
 #ifndef ROVER_OBJECT_H
 #define ROVER_OBJECT_H
+#include <SFML/Graphics.hpp>
+
 class Object
 {
 public:
     Object();
     virtual ~Object();
-    virtual int draw();// int чтобы отлавливать ошибки, если не сделаем что-то более мудрое
+    sf::Sprite getSprite();// int чтобы отлавливать ошибки, если не сделаем что-то более мудрое
 protected:
-    sf::vector2f scale;
+    sf::Vector2f scale;
     sf::Vector2f position;
-    //sprite_filepath
+    sf::Texture texture;
+    sf::Sprite sprite;
 };
 
 #endif //ROVER_OBJECT_H
