@@ -8,6 +8,8 @@ using std::cerr;
 
 #include "enums.h"
 
+#include "../scenes/UI/testScene.h"
+
 
 game::Engine::Engine() : Engine(DEFAULT_WIDTH, DEFAULT_HEIGHT, DEFAULT_TITLE) {}
 game::Engine::Engine(const string &name) : Engine(DEFAULT_WIDTH, DEFAULT_HEIGHT, name) {}
@@ -35,15 +37,15 @@ game::Engine::~Engine() {
 }
 
 void game::Engine::run(const short fps) const {
-    game_scenes[0] = new scene::GameScene();
-    game_scenes[1] = new scene::GameScene();
-    game_scenes[2] = new scene::GameScene();
-    game_scenes[3] = new scene::GameScene();
+    game_scenes[0] = new scene::GameScene(window);
+    game_scenes[1] = new scene::GameScene(window);
+    game_scenes[2] = new scene::GameScene(window);
+    game_scenes[3] = new scene::GameScene(window);
 
-    UI_scenes[0] = new scene::UIScene();
-    UI_scenes[1] = new scene::UIScene();
-    UI_scenes[2] = new scene::UIScene();
-    UI_scenes[3] = new scene::UIScene();
+    UI_scenes[0] = new scene::TestScene(window);
+    UI_scenes[1] = new scene::UIScene(window);
+    UI_scenes[2] = new scene::UIScene(window);
+    UI_scenes[3] = new scene::UIScene(window);
 
     if (fps > 0) window->setFramerateLimit(fps);
     else window->setVerticalSyncEnabled(true);
