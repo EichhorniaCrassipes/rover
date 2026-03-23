@@ -27,7 +27,7 @@ namespace scene {
     protected:
         RenderWindow* window;
 
-        vector<Object> test_pull;
+        vector<Object*> test_pull;
         // std::map<int, map<int, UIObject>> objects;
         // media (OST + ...)
     };
