@@ -4,22 +4,30 @@
 #include <SFML/Window/Event.hpp>
 using sf::Event;
 
+#include <SFML/Graphics/RenderWindow.hpp>
+using sf::RenderWindow;
+
 #include <vector>
 using std::vector;
 
 #include <map>
 using std::map;
 
+#include "../../objects/object.h"
+
 namespace scene {
     class UIScene {
     public:
-        UIScene() = default;
-        virtual ~UIScene() = default;
+        explicit UIScene(RenderWindow* window_link);
+        virtual ~UIScene() = 0;
 
-        void render();
+        void render() const;
         void update();
         bool event(const Event &event); // возвращает true, если произошла какая-либо обработка
-    private:
+    protected:
+        RenderWindow* window;
+
+        vector<Object> test_pull;
         // std::map<int, map<int, UIObject>> objects;
         // media (OST + ...)
     };
