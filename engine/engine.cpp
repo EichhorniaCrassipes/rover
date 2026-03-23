@@ -17,23 +17,33 @@ game::Engine::Engine(const unsigned short width, const unsigned short height, co
         VideoMode({width, height}),
         name
     );
-    scenes = new Scene*[SCENES_CAP];
+    game_scenes = new scene::GameScene*[SCENES_CAP];
+    UI_scenes = new scene::UIScene*[SCENES_CAP];
     timer = new Clock();
 }
 
 game::Engine::~Engine() {
-    for (unsigned short i = 0; i < SCENES_CAP; i++) delete scenes[i];
-    delete[] scenes;
+    for (unsigned short i = 0; i < SCENES_CAP; i++) {
+        delete game_scenes[i];
+        delete UI_scenes[i];
+    }
+    delete[] game_scenes;
+    delete[] UI_scenes;
 
     delete timer;
     delete window;
 }
 
 void game::Engine::run(const short fps) const {
-    scenes[0] = new Scene();
-    scenes[1] = new Scene();
-    scenes[2] = new Scene();
-    scenes[3] = new Scene();
+    game_scenes[0] = new scene::GameScene();
+    game_scenes[1] = new scene::GameScene();
+    game_scenes[2] = new scene::GameScene();
+    game_scenes[3] = new scene::GameScene();
+
+    UI_scenes[0] = new scene::UIScene();
+    UI_scenes[1] = new scene::UIScene();
+    UI_scenes[2] = new scene::UIScene();
+    UI_scenes[3] = new scene::UIScene();
 
     if (fps > 0) window->setFramerateLimit(fps);
     else window->setVerticalSyncEnabled(true);
@@ -51,19 +61,22 @@ void game::Engine::loop() const {
                 window->close();
 
             try {
-                scenes[scene_index]->event(*event);
+                UI_scenes[scene_index]->event(*event);
+                game_scenes[scene_index]->event(*event);
             }
             catch (const std::runtime_error &e) {
                 cerr << e.what() << '\n';
             }
         }
 
-        scenes[scene_index]->render();
+        game_scenes[scene_index]->render();
+        UI_scenes[scene_index]->render();
 
         window->display();
         if (timer->getElapsedTime() >= UPS_delta) {
             timer->restart();
-            scenes[scene_index]->update();
+            UI_scenes[scene_index]->update();
+            game_scenes[scene_index]->update();
         }
     }
 }
