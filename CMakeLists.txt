@@ -20,6 +20,7 @@ set(SOURCES
         engine/engine.cpp
         scenes/game/gameScene.cpp
         scenes/UI/UIScene.cpp
+        scenes/UI/testScene.cpp
 )
 
 if (RENDER_ICON)
