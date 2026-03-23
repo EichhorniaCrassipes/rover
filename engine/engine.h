@@ -1,7 +1,8 @@
 #ifndef ROVER_ENGINE_H
 #define ROVER_ENGINE_H
 
-#include "../scenes/scene.h"
+#include "../scenes/game/gameScene.h"
+#include "../scenes/UI/UIScene.h"
 
 #include <SFML/Graphics/RenderWindow.hpp>
 using sf::RenderWindow;
@@ -23,7 +24,8 @@ namespace game {
         void run(short fps = 0) const;
     private:
         RenderWindow* window;
-        Scene** scenes;
+        scene::GameScene** game_scenes;
+        scene::UIScene** UI_scenes;
         Clock* timer;
 
         short scene_index = 0;

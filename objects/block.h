@@ -4,12 +4,12 @@
 
 class Block : public MapElement
 {
-    public:
+public:
     Block();
-    ~Block();
+    ~Block() override;
 protected:
-    sf::vector2f hitbox;
+    sf::Vector2f hitbox;
 };
 
 
-#endif //ROVER_BLOCK_H
+#endif
