@@ -8,7 +8,7 @@ class Block : public MapElement
     Block();
     ~Block();
 protected:
-    sf::vector2f hitbox;
+    sf::Vector2f hitbox;
 };
 
 
