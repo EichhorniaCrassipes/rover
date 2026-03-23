@@ -1,18 +1,21 @@
 #ifndef ROVER_OBJECT_H
 #define ROVER_OBJECT_H
 #include <SFML/Graphics.hpp>
+using sf::Sprite;
+using sf::Vector2f;
+using sf::Texture;
 
 class Object
 {
 public:
     Object();
-    virtual ~Object();
-    sf::Sprite getSprite();// int чтобы отлавливать ошибки, если не сделаем что-то более мудрое
+    virtual ~Object() = default;
+    Sprite getSprite() const;
 protected:
-    sf::Vector2f scale;
-    sf::Vector2f position;
-    sf::Texture texture;
-    sf::Sprite sprite;
+    Vector2f scale;
+    Vector2f position;
+    Texture texture;
+    Sprite sprite;
 };
 
-#endif //ROVER_OBJECT_H
+#endif
