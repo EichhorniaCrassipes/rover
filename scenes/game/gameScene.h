@@ -20,7 +20,7 @@ namespace scene {
     class GameScene {
     public:
         explicit GameScene(RenderWindow* window_link);
-        virtual ~GameScene() = 0;
+        virtual ~GameScene() = default;
 
         void render() const;
         void update();

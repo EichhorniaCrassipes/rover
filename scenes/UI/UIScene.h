@@ -19,7 +19,7 @@ namespace scene {
     class UIScene {
     public:
         explicit UIScene(RenderWindow* window_link);
-        virtual ~UIScene() = 0;
+        virtual ~UIScene() = default;
 
         void render() const;
         void update();
