@@ -6,8 +6,8 @@ scene::UIScene::UIScene(RenderWindow* window_link) {
 
 
 void scene::UIScene::render() const {
-    for (const auto &o : test_pull) {
-        window->draw(o.getSprite());
+    for (const auto o : test_pull) {
+        window->draw(o->getSprite());
     }
 }
 
