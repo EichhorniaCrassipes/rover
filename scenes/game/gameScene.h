@@ -4,6 +4,9 @@
 #include <SFML/Window/Event.hpp>
 using sf::Event;
 
+#include <SFML/Graphics/RenderWindow.hpp>
+using sf::RenderWindow;
+
 #include <vector>
 using std::vector;
 
@@ -16,13 +19,15 @@ using std::map;
 namespace scene {
     class GameScene {
     public:
-        GameScene() = default;
-        virtual ~GameScene() = default;
+        explicit GameScene(RenderWindow* window_link);
+        virtual ~GameScene() = 0;
 
-        void render();
+        void render() const;
         void update();
         bool event(const Event &event); // возвращает true, если произошла какая-либо обработка
-    private:
+    protected:
+        RenderWindow* window;
+
         map<int, map<int, Block>> upper_decorations, interactive_blocks;
         vector<Entity> entities;
         // tilemap нижних декораций
