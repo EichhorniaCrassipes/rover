@@ -1,11 +1,12 @@
 #include "PerlinNoise.h"
 
-#include <algorithm>
-#include <cmath>
 #include <random>
-
 using std::default_random_engine;
+
+#include <algorithm>
 using std::shuffle;
+
+#include <cmath>
 using std::floor;
 
 
