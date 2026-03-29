@@ -11,7 +11,7 @@
 </div>
 
 #
-## Creators and Developers
+## Создатели и разработчики
 [`@GriB28`](https://github.com/GriB28),
 [`@ArsenyKenunen`](https://github.com/ArsenyKenunen),
 [`@EichhorniaCrassipes`](https://github.com/EichhorniaCrassipes)
