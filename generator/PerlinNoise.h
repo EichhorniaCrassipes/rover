@@ -1,5 +1,5 @@
-#ifndef PERLIN_NOISE_H
-#define PERLIN_NOISE_H
+#ifndef PERLIN_NOISE
+#define PERLIN_NOISE
 
 #include <vector>
 using std::vector;

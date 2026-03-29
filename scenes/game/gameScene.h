@@ -13,7 +13,7 @@ using std::vector;
 #include <map>
 using std::map;
 
-#include "../../objects/block.h"
+#include "../../objects/map/block.h"
 #include "../../objects/entity.h"
 
 namespace scene {
@@ -28,8 +28,8 @@ namespace scene {
     protected:
         RenderWindow* window;
 
-        map<int, map<int, Block>> upper_decorations, interactive_blocks;
-        vector<Entity> entities;
+        map<int, map<int, object::Block>> upper_decorations, interactive_blocks;
+        vector<object::Entity> entities;
         // tilemap нижних декораций
         // tilemap карты
     };

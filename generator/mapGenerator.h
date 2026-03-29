@@ -1,5 +1,5 @@
-#ifndef MAP_GENERATOR_H
-#define MAP_GENERATOR_H
+#ifndef MAP_GENERATOR
+#define MAP_GENERATOR
 
 #include "PerlinNoise.h"
 
