@@ -1,10 +1,14 @@
-#ifndef ROVER_MAPELEMENT_H
-#define ROVER_MAPELEMENT_H
+#ifndef MAP_ELEMENT
+#define MAP_ELEMENT
+
 #include "object.h"
 
+namespace object {
+    class MapElement : public Object {
+    public:
+        MapElement();
+        ~MapElement() override = default;
+    };
+}
 
-class MapElement : public Object
-{
-
-};
-#endif //ROVER_MAPELEMENT_H
+#endif

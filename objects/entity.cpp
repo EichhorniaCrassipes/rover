@@ -1,14 +1,11 @@
 #include "entity.h"
 
-Entity::Entity()
-{
+object::Entity::Entity() {
     collision = false;
 }
-Entity::~Entity()
-= default;
 
-void Entity::move(sf::Vector2f direction, float speed, float dt)
-{
-    //if no collision
-    position += direction * speed * dt;
+
+void object::Entity::move(const Vector2f direction, const float speed, const float dt) {
+    if (!collision)
+        position += direction * speed * dt;
 }
