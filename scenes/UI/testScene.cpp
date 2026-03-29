@@ -2,6 +2,5 @@
 
 
 scene::TestScene::TestScene(RenderWindow* window_link) : UIScene(window_link) {
-    Object* test = new Object();
-    test_pull.push_back(test);
+    test_pull.push_back(new object::Object());
 }

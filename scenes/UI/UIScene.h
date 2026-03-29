@@ -19,7 +19,7 @@ namespace scene {
     class UIScene {
     public:
         explicit UIScene(RenderWindow* window_link);
-        virtual ~UIScene() = default;
+        virtual ~UIScene();
 
         void render() const;
         void update();
@@ -27,7 +27,7 @@ namespace scene {
     protected:
         RenderWindow* window;
 
-        vector<Object*> test_pull;
+        vector<object::Object*> test_pull;
         // std::map<int, map<int, UIObject>> objects;
         // media (OST + ...)
     };

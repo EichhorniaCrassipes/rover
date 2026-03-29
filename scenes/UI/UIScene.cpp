@@ -4,11 +4,14 @@ scene::UIScene::UIScene(RenderWindow* window_link) {
     window = window_link;
 }
 
+scene::UIScene::~UIScene() {
+    for (const auto o : test_pull) delete o;
+}
+
 
 void scene::UIScene::render() const {
-    for (const auto o : test_pull) {
+    for (const auto o : test_pull)
         window->draw(o->getSprite());
-    }
 }
 
 void scene::UIScene::update() {}
