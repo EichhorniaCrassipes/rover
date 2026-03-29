@@ -12,13 +12,17 @@ endif()
 
 set(SOURCES
         main.cpp
+        engine/engine.cpp
+
         objects/object.cpp
         objects/entity.cpp
         objects/block.cpp
+
         generator/PerlinNoise.cpp
         generator/mapGenerator.cpp
-        engine/engine.cpp
+
         scenes/game/gameScene.cpp
+
         scenes/UI/UIScene.cpp
         scenes/UI/testScene.cpp
 )
