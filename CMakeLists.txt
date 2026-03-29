@@ -16,7 +16,19 @@ set(SOURCES
 
         objects/object.cpp
         objects/entity.cpp
-        objects/block.cpp
+        objects/mapElement.cpp
+
+        objects/entity/enemy.cpp
+        objects/entity/mob.cpp
+        objects/entity/npc.cpp
+        objects/entity/player.cpp
+
+        objects/map/block.cpp
+        objects/map/building.cpp
+        objects/map/chest.cpp
+        objects/map/decoration.cpp
+        objects/map/deposit.cpp
+        objects/map/loot.cpp
 
         generator/PerlinNoise.cpp
         generator/mapGenerator.cpp
