@@ -18,9 +18,12 @@ namespace generator {
         [[nodiscard]] double get_tile(size_t x, size_t y) const;
 
     private:
+        double STRETCH = 10;
         PerlinNoise *temperature, *humidity, *height;
         double world_size;
         long long seed;
+
+        double get_tile_noise_value(double x, double y, unsigned char octaves, const PerlinNoise* noise) const;
 
         [[nodiscard]] long long seed_shift(unsigned shift) const;
     };

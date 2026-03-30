@@ -9,25 +9,44 @@ using std::string;
 
 
 generator::MapGenerator::MapGenerator(const long long seed, const size_t world_size) {
+    this->seed = seed;
+    this->world_size = static_cast<double>(world_size);
+
     temperature = new PerlinNoise(seed);
     humidity = new PerlinNoise(seed_shift(1));
     height = new PerlinNoise(seed_shift(2));
-    this->seed = seed;
-    this->world_size = static_cast<double>(world_size);
 }
 generator::MapGenerator::~MapGenerator() {
     delete temperature;
     delete humidity;
+    delete height;
 }
 
 
 double generator::MapGenerator::get_tile(const size_t x, const size_t y) const {
     const double relative_x = static_cast<double>(x) / world_size,
                  relative_y = static_cast<double>(y) / world_size;
-    const auto te = temperature->noise(relative_x, relative_y),
-               hu = humidity->noise(relative_x, relative_y),
-               he = height->noise(relative_x, relative_y);
+
+    const double te = get_tile_noise_value(relative_x, relative_y, 4, temperature),
+                 hu = get_tile_noise_value(relative_x, relative_y, 2, humidity),
+                 he = get_tile_noise_value(relative_x, relative_y, 2, height);
+
     return te + hu + he;  // здесь определение биома и высоты по параметрам
+}
+double generator::MapGenerator::get_tile_noise_value(const double x, const double y, const unsigned char octaves, const PerlinNoise* noise) const {
+    const double xn = x / STRETCH,
+                 yn = y / STRETCH;
+
+    double value = 0,
+           sum   = 0;
+
+    for (unsigned char octave = 0; octave < octaves; octave++) {
+        const auto k = 1l << octave;
+        sum += 1. / k;
+        value += noise->noise(xn * k, yn * k) / k;
+    }
+
+    return value / sum;
 }
 
 long long generator::MapGenerator::seed_shift(const unsigned shift) const {
