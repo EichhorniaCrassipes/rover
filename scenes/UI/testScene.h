@@ -9,7 +9,7 @@ using sf::RenderWindow;
 namespace scene {
     class TestScene : public UIScene {
     public:
-        explicit TestScene(RenderWindow* window_link);
+        explicit TestScene(const RenderWindow* window_link, unsigned short* scene_index_link);
     };
 }
 

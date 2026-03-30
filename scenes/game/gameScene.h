@@ -19,7 +19,7 @@ using std::map;
 namespace scene {
     class GameScene {
     public:
-        explicit GameScene(RenderWindow* window_link);
+        explicit GameScene(RenderWindow* window_link, unsigned short* scene_index_link);
         virtual ~GameScene() = default;
 
         void render() const;
@@ -27,6 +27,7 @@ namespace scene {
         bool event(const Event &event); // возвращает true, если произошла какая-либо обработка
     protected:
         RenderWindow* window;
+        unsigned short* scene_index;
 
         map<int, map<int, object::Block>> upper_decorations, interactive_blocks;
         vector<object::Entity> entities;

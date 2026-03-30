@@ -6,8 +6,6 @@ using sf::Event;
 #include <iostream>
 using std::cerr;
 
-#include "enums.h"
-
 #include "../scenes/UI/testScene.h"
 
 
@@ -19,13 +17,15 @@ game::Engine::Engine(const unsigned short width, const unsigned short height, co
         VideoMode({width, height}),
         name
     );
-    game_scenes = new scene::GameScene*[SCENES_CAP];
-    UI_scenes = new scene::UIScene*[SCENES_CAP];
+    game_scenes = new scene::GameScene*[scenes::CAP];
+    UI_scenes = new scene::UIScene*[scenes::CAP];
     timer = new Clock();
+
+    scene_index = scenes::CUTSCENE;
 }
 
 game::Engine::~Engine() {
-    for (unsigned short i = 0; i < SCENES_CAP; i++) {
+    for (unsigned short i = 0; i < scenes::CAP; i++) {
         delete game_scenes[i];
         delete UI_scenes[i];
     }
@@ -37,15 +37,15 @@ game::Engine::~Engine() {
 }
 
 void game::Engine::run(const short fps) const {
-    game_scenes[0] = new scene::GameScene(window);
-    game_scenes[1] = new scene::GameScene(window);
-    game_scenes[2] = new scene::GameScene(window);
-    game_scenes[3] = new scene::GameScene(window);
+    game_scenes[scenes::LOADING]   = new scene::GameScene(window, &scene_index);
+    game_scenes[scenes::MAIN_MENU] = new scene::GameScene(window, &scene_index);
+    game_scenes[scenes::CUTSCENE]  = new scene::GameScene(window, &scene_index);
+    game_scenes[scenes::MAIN_GAME] = new scene::GameScene(window, &scene_index);
 
-    UI_scenes[0] = new scene::TestScene(window);
-    UI_scenes[1] = new scene::UIScene(window);
-    UI_scenes[2] = new scene::UIScene(window);
-    UI_scenes[3] = new scene::UIScene(window);
+    UI_scenes[scenes::LOADING]   = new scene::UIScene(window, &scene_index);
+    UI_scenes[scenes::MAIN_MENU] = new scene::UIScene(window, &scene_index);
+    UI_scenes[scenes::CUTSCENE]  = new scene::TestScene(window, &scene_index);
+    UI_scenes[scenes::MAIN_GAME] = new scene::UIScene(window, &scene_index);
 
     if (fps > 0) window->setFramerateLimit(fps);
     else window->setVerticalSyncEnabled(true);
