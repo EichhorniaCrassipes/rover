@@ -18,7 +18,7 @@ using std::map;
 namespace scene {
     class UIScene {
     public:
-        explicit UIScene(RenderWindow* window_link);
+        explicit UIScene(RenderWindow* window_link, unsigned short* scene_index_link);
         virtual ~UIScene();
 
         void render() const;
@@ -26,6 +26,7 @@ namespace scene {
         bool event(const Event &event); // возвращает true, если произошла какая-либо обработка
     protected:
         RenderWindow* window;
+        unsigned short* scene_index;
 
         vector<object::Object*> test_pull;
         // std::map<int, map<int, UIObject>> objects;

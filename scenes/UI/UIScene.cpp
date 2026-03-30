@@ -1,7 +1,8 @@
 #include "UIScene.h"
 
-scene::UIScene::UIScene(RenderWindow* window_link) {
+scene::UIScene::UIScene(RenderWindow* window_link, unsigned short* scene_index_link) {
     window = window_link;
+    scene_index = scene_index_link;
 }
 
 scene::UIScene::~UIScene() {
