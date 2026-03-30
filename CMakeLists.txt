@@ -32,6 +32,7 @@ set(SOURCES
 
         generator/PerlinNoise.cpp
         generator/mapGenerator.cpp
+        generator/biomes.cpp
 
         scenes/game/gameScene.cpp
 
