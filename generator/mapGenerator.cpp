@@ -1,5 +1,8 @@
 #include "mapGenerator.h"
 
+#include "biomes.h"
+#include "deposits.h"
+
 #include <random>
 using std::default_random_engine;
 using std::uniform_int_distribution;
@@ -23,7 +26,7 @@ generator::MapGenerator::~MapGenerator() {
 }
 
 
-double generator::MapGenerator::get_tile(const size_t x, const size_t y) const {
+generator::Tile generator::MapGenerator::get_tile(const size_t x, const size_t y) const {
     const double relative_x = static_cast<double>(x) / world_size,
                  relative_y = static_cast<double>(y) / world_size;
 
@@ -31,7 +34,24 @@ double generator::MapGenerator::get_tile(const size_t x, const size_t y) const {
                  hu = get_tile_noise_value(relative_x, relative_y, 2, humidity),
                  he = get_tile_noise_value(relative_x, relative_y, 2, height);
 
-    return te + hu + he;  // здесь определение биома и высоты по параметрам
+    Tile tile;
+    tile.variation = static_cast<unsigned char>(height->noise(relative_x, relative_y) * 4);
+
+    for (const auto &b : GLOBAL_BIOMES)
+        if (b.temperature_low <= te && te <= b.temperature_high &&
+               b.humidity_low <= hu && hu <= b.humidity_high) {
+            tile.biome = b.name;
+            break;
+        }
+    for (const auto &d : GLOBAL_DEPOSITS)
+        if (d.temperature_low <= te && te <= d.temperature_high &&
+               d.humidity_low <= hu && hu <= d.humidity_high &&
+                 d.height_low <= he && he <= d.height_high) {
+            tile.deposit = d.name;
+            break;
+        }
+
+    return tile;
 }
 double generator::MapGenerator::get_tile_noise_value(const double x, const double y, const unsigned char octaves, const PerlinNoise* noise) const {
     const double xn = x / STRETCH,

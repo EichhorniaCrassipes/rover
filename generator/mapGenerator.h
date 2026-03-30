@@ -2,6 +2,7 @@
 #define MAP_GENERATOR
 
 #include "PerlinNoise.h"
+#include "tile.h"
 
 #include <vector>
 using std::vector;
@@ -15,7 +16,7 @@ namespace generator {
         explicit MapGenerator(long long seed, size_t world_size = numeric_limits<size_t>::max());
         ~MapGenerator();
 
-        [[nodiscard]] double get_tile(size_t x, size_t y) const;
+        [[nodiscard]] Tile get_tile(size_t x, size_t y) const;
 
     private:
         double STRETCH = 10;
