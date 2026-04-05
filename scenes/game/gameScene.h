@@ -13,13 +13,16 @@ using std::vector;
 #include <map>
 using std::map;
 
+#include "../../engine/stats.h"
+using game::EngineStats;
+
 #include "../../objects/map/block.h"
 #include "../../objects/entity.h"
 
 namespace scene {
     class GameScene {
     public:
-        explicit GameScene(RenderWindow* window_link, unsigned short* scene_index_link);
+        explicit GameScene(RenderWindow* window_link, EngineStats* scene_index_link);
         virtual ~GameScene() = default;
 
         void render() const;
@@ -27,7 +30,7 @@ namespace scene {
         bool event(const Event &event); // возвращает true, если произошла какая-либо обработка
     protected:
         RenderWindow* window;
-        unsigned short* scene_index;
+        EngineStats* scene_index;
 
         map<int, map<int, object::Block>> upper_decorations, interactive_blocks;
         vector<object::Entity> entities;
