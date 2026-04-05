@@ -13,6 +13,8 @@ using std::string;
 
 
 namespace game {
+    extern unsigned short scene_index;
+
     class Engine {
     public:
         Engine();
@@ -27,8 +29,6 @@ namespace game {
         scene::GameScene** game_scenes;
         scene::UIScene** UI_scenes;
         Clock* timer;
-
-        static unsigned short scene_index;
 
         void loop() const;
     };
