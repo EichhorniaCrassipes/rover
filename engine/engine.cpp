@@ -6,6 +6,9 @@ using sf::Event;
 #include <iostream>
 using std::cerr;
 
+#include "enums.h"
+unsigned short game::scene_index = scenes::CUTSCENE;
+
 #include "../scenes/UI/testScene.h"
 
 
@@ -20,8 +23,6 @@ game::Engine::Engine(const unsigned short width, const unsigned short height, co
     game_scenes = new scene::GameScene*[scenes::CAP];
     UI_scenes = new scene::UIScene*[scenes::CAP];
     timer = new Clock();
-
-    scene_index = scenes::CUTSCENE;
 }
 
 game::Engine::~Engine() {

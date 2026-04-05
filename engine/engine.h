@@ -4,8 +4,6 @@
 #include "../scenes/game/gameScene.h"
 #include "../scenes/UI/UIScene.h"
 
-#include "enums.h"
-
 #include <SFML/Graphics/RenderWindow.hpp>
 using sf::RenderWindow;
 using sf::Clock;
@@ -15,6 +13,8 @@ using std::string;
 
 
 namespace game {
+    extern unsigned short scene_index;
+
     class Engine {
     public:
         Engine();
@@ -29,8 +29,6 @@ namespace game {
         scene::GameScene** game_scenes;
         scene::UIScene** UI_scenes;
         Clock* timer;
-
-        static unsigned short scene_index;
 
         void loop() const;
     };
