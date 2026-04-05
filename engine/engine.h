@@ -7,16 +7,16 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 using sf::RenderWindow;
 using sf::Clock;
+using sf::Time;
+
+using sf::Font;
+using sf::Text;
 
 #include <string>
 using std::string;
 
-#include "stats.h"
-
 
 namespace game {
-    extern EngineStats global_stats;
-
     class Engine {
     public:
         Engine();
@@ -25,14 +25,26 @@ namespace game {
         Engine(unsigned short width, unsigned short height, const string &name);
         ~Engine();
 
-        void run(short fps = 0) const;
+        void run(short fps = 0);
     private:
         RenderWindow* window;
+
         scene::GameScene** game_scenes;
         scene::UIScene** UI_scenes;
-        Clock* timer;
 
-        void loop() const;
+        Clock TPS_timer, count_display_timer;
+        Time last_tps_time_value;
+
+        Font default_monospace_font;
+        Text FPS, FPS_delta, TPS, TPS_delta;
+        unsigned short frames, last_fps_update_value,
+                       ticks, last_tps_update_value;
+
+        Text mouse_position, scene_num, version;
+
+        void loop();
+
+        void info_overdraw();
     };
 }
 
