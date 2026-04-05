@@ -6,6 +6,8 @@ namespace game {
         unsigned short current_scene_index;
         unsigned window_width, window_height;
     };
+    
+    extern EngineStats global_stats;
 }
 
 #endif
