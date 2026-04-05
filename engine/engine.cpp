@@ -6,6 +6,8 @@ using sf::Event;
 #include <iostream>
 using std::cerr;
 
+#include "enums.h"
+
 #include "../scenes/UI/testScene.h"
 
 
