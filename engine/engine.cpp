@@ -173,7 +173,8 @@ void game::Engine::info_overdraw() {
             );
         mouse_position.setPosition({window_x_max_coord - 35, 55});
 
-        scene_num.setPosition({window_x_max_coord - 50, 90});
+        scene_num.setPosition({window_x_max_coord - 30, 90});
+        scene_num.setString(to_string(global_stats.current_scene_index));
 
         version.setPosition({window_x_max_coord - window->getSize().x + 5, window_y_max_coord - 15});
     }
