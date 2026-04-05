@@ -11,7 +11,7 @@ if (RENDER_ICON)
 endif()
 
 set(SOURCES
-        test.cpp
+        main.cpp
         objects/object.h
         objects/object.cpp
         objects/entity.h
