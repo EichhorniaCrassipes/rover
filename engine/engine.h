@@ -11,9 +11,11 @@ using sf::Clock;
 #include <string>
 using std::string;
 
+#include "stats.h"
+
 
 namespace game {
-    extern unsigned short scene_index;
+    extern EngineStats global_stats;
 
     class Engine {
     public:
