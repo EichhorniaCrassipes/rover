@@ -35,33 +35,16 @@ game::Engine::Engine(const unsigned short width, const unsigned short height, co
 
     if (!default_monospace_font.openFromFile("fonts/OCR A Extended Regular.ttf")) {}
 
-    FPS.setFont(default_monospace_font);
-    FPS.setCharacterSize(10);
     FPS.setFillColor({147, 147, 147, 241});
-    FPS_delta.setFont(default_monospace_font);
-    FPS_delta.setCharacterSize(10);
     frames = 0;
     last_fps_update_value = 0;
 
-    TPS.setFont(default_monospace_font);
-    TPS.setCharacterSize(10);
     TPS.setFillColor({147, 147, 147, 241});
-    TPS_delta.setFont(default_monospace_font);
-    TPS_delta.setCharacterSize(10);
     ticks = 0;
     last_tps_update_value = 0;
 
-    mouse_position.setFont(default_monospace_font);
-    mouse_position.setCharacterSize(10);
     mouse_position.setFillColor({147, 147, 147, 141});
-
-    scene_num.setFont(default_monospace_font);
-    scene_num.setCharacterSize(10);
     scene_num.setFillColor({147, 147, 147, 141});
-
-    version.setFont(default_monospace_font);
-    version.setString("v0.0-indev");
-    version.setCharacterSize(12);
     version.setFillColor({147, 147, 147, 141});
 }
 
