@@ -11,7 +11,7 @@ Chunk::Chunk(generator::MapGenerator gen, int x, int y): size{16, 16}, position{
     for (int j = 0; j < size.y; j++)
         for (int i = 0; i < size.x; i++)
         {
-            generator::Tile tile = gen.get_tile(i*10 + position.x, j*10 + position.y);
+            generator::Tile tile = gen.get_tile(i + position.x, j + position.y);
             if (tile.biome == "test0")
            tiles[i + j*size.x] = 0;
             else if (tile.biome == "test1")
@@ -19,6 +19,7 @@ Chunk::Chunk(generator::MapGenerator gen, int x, int y): size{16, 16}, position{
         }
     if (!load("textures/tileset.png", {16, 16}, tiles.data(), size.x, size.y))
         std::cout << "Failed to load tileset.png" << std::endl;
+    setPosition({(float)position.x*size.x, (float)position.y * size.y});
 }
 Chunk::~Chunk()
 {
