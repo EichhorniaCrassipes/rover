@@ -3,6 +3,7 @@
 
 object::Player::Player(View default_view) {
     current_view = default_view;
+    sprite.setScale({.4, .4});
 }
 
 
