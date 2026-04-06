@@ -21,6 +21,7 @@ using game::EngineStats;
 
 #include "../../objects/map/block.h"
 #include "../../objects/entity.h"
+#include "../../objects/entity/player.h"
 
 namespace scene {
     class GameScene {
@@ -36,10 +37,13 @@ namespace scene {
         EngineStats* scene_index;
 
         Clock FPS_timer;
-        double delta_time;
+        float delta_time;
 
         map<int, map<int, object::Block>> upper_decorations, interactive_blocks;
         vector<object::Entity> entities;
+
+        object::Player player;
+
         // tilemap нижних декораций
         // tilemap карты
     };
