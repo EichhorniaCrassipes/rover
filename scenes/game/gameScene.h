@@ -7,6 +7,9 @@ using sf::Event;
 #include <SFML/Graphics/RenderWindow.hpp>
 using sf::RenderWindow;
 
+#include <SFML/System/Clock.hpp>
+using sf::Clock;
+
 #include <vector>
 using std::vector;
 
@@ -18,6 +21,7 @@ using game::EngineStats;
 
 #include "../../objects/map/block.h"
 #include "../../objects/entity.h"
+#include "../../objects/entity/player.h"
 
 namespace scene {
     class GameScene {
@@ -25,15 +29,21 @@ namespace scene {
         explicit GameScene(RenderWindow* window_link, EngineStats* scene_index_link);
         virtual ~GameScene() = default;
 
-        void render() const;
+        void render();
         void update();
         bool event(const Event &event); // возвращает true, если произошла какая-либо обработка
     protected:
         RenderWindow* window;
         EngineStats* scene_index;
 
+        Clock FPS_timer;
+        float delta_time;
+
         map<int, map<int, object::Block>> upper_decorations, interactive_blocks;
         vector<object::Entity> entities;
+
+        object::Player player;
+
         // tilemap нижних декораций
         // tilemap карты
     };
