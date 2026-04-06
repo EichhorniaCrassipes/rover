@@ -2,18 +2,22 @@
 
 #include <iostream>
 
+#include "../../generator/mapGenerator.h"
 #include "SFML/Graphics/RenderTarget.hpp"
 
-Chunk::Chunk()
+Chunk::Chunk(generator::MapGenerator gen, int x, int y): size{16, 16}, position{x, y}
 {
-    constexpr std::array level = {
-        0, 1, 0, 0,
-        1, 2, 2, 1,
-        3, 2, 3, 3,
-        2, 3, 2, 3,
-
-    };
-    if (!load("textures/tileset.png", {32, 32}, level.data(), 4, 4))
+    std::array<int, 256> tiles = {};
+    for (int j = 0; j < size.y; j++)
+        for (int i = 0; i < size.x; i++)
+        {
+            generator::Tile tile = gen.get_tile(i*10 + position.x, j*10 + position.y);
+            if (tile.biome == "test0")
+           tiles[i + j*size.x] = 0;
+            else if (tile.biome == "test1")
+                tiles[i + j*size.x] = 1;
+        }
+    if (!load("textures/tileset.png", {16, 16}, tiles.data(), size.x, size.y))
         std::cout << "Failed to load tileset.png" << std::endl;
 }
 Chunk::~Chunk()

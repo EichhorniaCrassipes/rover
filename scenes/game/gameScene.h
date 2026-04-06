@@ -2,6 +2,8 @@
 #define ROVER_GAME_SCENE_H
 
 #include <SFML/Window/Event.hpp>
+
+#include "../../generator/mapGenerator.h"
 using sf::Event;
 
 #include <SFML/Graphics/RenderWindow.hpp>
@@ -31,6 +33,8 @@ namespace scene {
 
         map<int, map<int, object::Block>> upper_decorations, interactive_blocks;
         vector<object::Entity> entities;
+        vector<sf::Drawable*> test_pull;
+        generator::MapGenerator gen;
         // tilemap нижних декораций
         // tilemap карты
     };

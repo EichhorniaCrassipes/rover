@@ -11,7 +11,7 @@ namespace generator {
                humidity_low, humidity_high;
     };
 
-    extern Biome GLOBAL_BIOMES[3];
+    extern Biome GLOBAL_BIOMES[2];
 }
 
 #endif
