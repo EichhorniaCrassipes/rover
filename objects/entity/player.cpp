@@ -13,5 +13,5 @@ void object::Player::zoom(const float coefficient) {
 void object::Player::move(const Vector2f vector, const float delta_time) {
     const Vector2f delta = vector * speed * delta_time;
     position += delta;
-    current_view.move(delta); // возможно, надо будет домножить на текущий скейл
+    current_view.move({delta.x, -delta.y}); // возможно, надо будет домножить на текущий скейл
 }
