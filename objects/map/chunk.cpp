@@ -1,4 +1,7 @@
 #include "chunk.h"
+
+#include <iostream>
+
 #include "SFML/Graphics/RenderTarget.hpp"
 
 Chunk::Chunk()
@@ -10,7 +13,8 @@ Chunk::Chunk()
         2, 3, 2, 3,
 
     };
-    load("tileset.png", {32, 32}, level.data(), 4, 4);
+    if (!load("textures/tileset.png", {32, 32}, level.data(), 4, 4))
+        std::cout << "Failed to load tileset.png" << std::endl;
 }
 Chunk::~Chunk()
 {

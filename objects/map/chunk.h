@@ -1,4 +1,3 @@
-
 #ifndef ROVER_CHUNK_H
 #define ROVER_CHUNK_H
 #include <filesystem>
@@ -7,6 +6,8 @@
 #include "SFML/Graphics/Texture.hpp"
 #include "SFML/Graphics/Transformable.hpp"
 #include "SFML/Graphics/VertexArray.hpp"
+
+#include "../object.h"
 
 class Chunk : public sf::Drawable, public sf::Transformable
 {

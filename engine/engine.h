@@ -30,7 +30,7 @@ namespace game {
         scene::UIScene** UI_scenes;
         Clock* timer;
 
-        static unsigned short scene_index;
+        inline static unsigned short scene_index;
 
         void loop() const;
     };

@@ -21,14 +21,14 @@ namespace scene {
         explicit UIScene(RenderWindow* window_link, unsigned short* scene_index_link);
         virtual ~UIScene();
 
-        void render() const;
+        void render();
         void update();
         bool event(const Event &event); // возвращает true, если произошла какая-либо обработка
     protected:
         RenderWindow* window;
         unsigned short* scene_index;
 
-        vector<object::Object*> test_pull;
+        vector<sf::Drawable*> test_pull;
         // std::map<int, map<int, UIObject>> objects;
         // media (OST + ...)
     };
