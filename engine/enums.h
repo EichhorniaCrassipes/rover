@@ -12,8 +12,12 @@ namespace game {
                           DEFAULT_HEIGHT = 1080;
     inline string         DEFAULT_TITLE  = "ROVER";
 
-    inline short          TPS_value      = 30;
-    inline Time           TPS_delta_time = sf::microseconds(1000000 / TPS_value);
+    inline float          TPS_value      = 30;
+    inline Time           TPS_delta_time = sf::seconds(1 / TPS_value);
+
+    inline Time           TPS_adjuster_delta_time = sf::seconds(300),
+                          TPS_adjuster_delta_time_flag = sf::seconds(1);
+    inline double         epsilon = .1;
 
     namespace scenes {
         inline unsigned short CAP       = 4,

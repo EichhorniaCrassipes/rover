@@ -8,7 +8,7 @@ using std::to_string;
 
 #include "enums.h"
 #include "stats.h"
-EngineStats game::global_stats {scenes::LOADING, 0, 0};
+EngineStats game::global_stats {scenes::CUTSCENE, 0, 0};
 
 #include "../scenes/UI/testScene.h"
 
@@ -42,6 +42,7 @@ game::Engine::Engine(const unsigned short width, const unsigned short height, co
     TPS.setFillColor({147, 147, 147, 241});
     ticks = 0;
     last_tps_update_value = 0;
+    current_real_TPS = 0;
 
     mouse_position.setFillColor({147, 147, 147, 141});
     scene_num.setFillColor({147, 147, 147, 141});
@@ -61,7 +62,7 @@ game::Engine::~Engine() {
 
 void game::Engine::run(const short fps) {
     game_scenes[scenes::LOADING]   = nullptr;
-    game_scenes[scenes::MAIN_MENU] = new scene::GameScene(window, &global_stats);
+    game_scenes[scenes::MAIN_MENU] = nullptr;
     game_scenes[scenes::CUTSCENE]  = nullptr;
     game_scenes[scenes::MAIN_GAME] = new scene::GameScene(window, &global_stats);
 
@@ -73,8 +74,9 @@ void game::Engine::run(const short fps) {
     if (fps > 0) window->setFramerateLimit(fps);
     else window->setVerticalSyncEnabled(true);
 
-    TPS_timer.restart();
-    count_display_timer.restart();
+    TPS_timer.start();
+    TPS_adjuster_timer.start();
+    count_display_timer.start();
     loop();
 }
 
@@ -100,30 +102,64 @@ void game::Engine::loop() {
             }
         }
 
-        if (current_game_scene != nullptr)
-            current_game_scene->render();
-        if (current_UI_scene != nullptr)
-            current_UI_scene->render();
-
         info_overdraw();
 
+        render(current_game_scene, current_UI_scene);
+        update(current_game_scene, current_UI_scene);
         window->display();
-        if (TPS_timer.getElapsedTime() >= TPS_delta_time) {
-            TPS_timer.restart();
-            if (current_UI_scene != nullptr)
-                current_UI_scene->update();
-            if (current_game_scene != nullptr)
-                current_game_scene->update();
-            ticks++;
+
+        adjust_tps();
+    }
+}
+void game::Engine::render(scene::GameScene *game, scene::UIScene *ui) {
+    if (game != nullptr)
+        game->render();
+    if (ui != nullptr)
+        ui->render();
+    frames++;
+}
+void game::Engine::update(scene::GameScene *game, scene::UIScene *ui) {
+    if (TPS_timer.getElapsedTime() >= TPS_delta_time) {
+        TPS_timer.restart();
+        if (game != nullptr)
+            game->update();
+        if (ui != nullptr)
+            ui->update();
+        ticks++;
+    }
+}
+
+
+void game::Engine::adjust_tps() {
+    if (adjustment_proceeding) {
+        if (TPS_adjuster_timer.getElapsedTime() >= TPS_adjuster_delta_time_flag) {
+            TPS_adjuster_timer.restart();
+            const float local_middle = (left_target + right_target) / 2;
+            TPS_delta_time = sf::seconds(1 / local_middle);
+            std::cout << "new delta time: " << TPS_delta_time.asSeconds() << std::endl;
+            adjustment_proceeding = false;
         }
-        frames++;
+    }
+    else {
+        if (TPS_adjuster_timer.getElapsedTime() >= TPS_adjuster_delta_time) {
+            TPS_adjuster_timer.restart();
+            std::cout << "adjuster called\n";
+            if (TPS_value - epsilon >= current_real_TPS || current_real_TPS >= TPS_value + epsilon) {
+                std::cout << "adjustment started...\n";
+                adjustment_proceeding = true;
+                left_target = current_real_TPS * 1.2f;
+                right_target = TPS_value * 2 - current_real_TPS;
+                std::cout << "left target: " << left_target << ", right target: " << right_target << std::endl;
+            }
+        }
     }
 }
 
 void game::Engine::info_overdraw() {
     if (count_display_timer.getElapsedTime().asMilliseconds() >= 500) {
         frames = static_cast<unsigned short>(static_cast<float>(frames) / count_display_timer.getElapsedTime().asSeconds());
-        ticks  = static_cast<unsigned short>(static_cast<float>(ticks) / count_display_timer.getElapsedTime().asSeconds());
+        current_real_TPS = static_cast<float>(ticks) / count_display_timer.getElapsedTime().asSeconds();
+        ticks  = static_cast<unsigned short>(current_real_TPS);
 
         const auto window_x_max_coord = window->getView().getCenter().x + static_cast<float>(global_stats.window_width) / 2,
                    window_y_max_coord = window->getView().getCenter().y + static_cast<float>(global_stats.window_height) / 2;
