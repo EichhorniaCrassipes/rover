@@ -6,7 +6,7 @@
 namespace object {
     class Enemy : public Mob {
     public:
-        Enemy();
+        Enemy() = default;
         ~Enemy() override = default;
     private:
         Vector2f position;

@@ -42,9 +42,19 @@ namespace game {
 
         Text mouse_position, scene_num, version;
 
+        float current_real_TPS;
+        Clock TPS_adjuster_timer;
+
         void loop();
 
+        inline void render(scene::GameScene *game, scene::UIScene *ui);
+        inline void update(scene::GameScene *game, scene::UIScene *ui);
+
         void info_overdraw();
+
+        void adjust_tps();
+        bool adjustment_proceeding = false;
+        float left_target = 0, right_target = 0;
     };
 }
 

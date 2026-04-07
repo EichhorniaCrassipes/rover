@@ -1,7 +1,7 @@
 #include "player.h"
 
 
-object::Player::Player(View default_view) {
+object::Player::Player(View default_view) : Mob() {
     current_view = default_view;
     sprite.setScale({.4, .4});
 }
