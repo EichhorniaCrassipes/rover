@@ -6,7 +6,7 @@
 namespace object {
     class Mob : public Entity {
     public:
-        Mob();
+        Mob() = default;
         ~Mob() override = default;
     };
 }

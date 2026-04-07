@@ -6,7 +6,7 @@
 namespace object {
     class NPC : public Entity {
     public:
-        NPC();
+        NPC() = default;
         ~NPC() override = default;
     };
 }
