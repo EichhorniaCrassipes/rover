@@ -19,7 +19,7 @@ private:
    sf::VertexArray vertices;
    sf::Vector2<int> position;
    sf::Texture m_tileset;
-   sf::Vector2<int> size;
+   const sf::Vector2<int> size;
 
    bool load(const std::filesystem::path& tileset, sf::Vector2u tileSize, const int* tiles, unsigned int width, unsigned int height);
 };
