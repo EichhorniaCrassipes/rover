@@ -1,13 +1,20 @@
 #include "chunk.h"
+#include "tiletexturelist.h"
 
 #include <iostream>
 
 #include "../../generator/mapGenerator.h"
 #include "SFML/Graphics/RenderTarget.hpp"
 
+string get4tiles(generator::MapGenerator gen, int x, int y)
+{
+    generator::Tile tile = gen.get_tile(x, y);
+}
+
 Chunk::Chunk(generator::MapGenerator gen, int x, int y): size{16, 16}, position{x, y}
 {
     std::array<int, 256> tiles = {};
+
     for (int j = 0; j < size.y; j++)
         for (int i = 0; i < size.x; i++)
         {
@@ -17,7 +24,7 @@ Chunk::Chunk(generator::MapGenerator gen, int x, int y): size{16, 16}, position{
             else if (tile.biome == "test1")
                 tiles[i + j*size.x] = 1;
         }
-    if (!load("textures/tileset.png", {16, 16}, tiles.data(), size.x, size.y))
+    if (!load( {16, 16}, tiles.data(), size.x, size.y))
         std::cout << "Failed to load tileset.png" << std::endl;
     setPosition({(float)position.x*size.x, (float)position.y * size.y});
 }
@@ -33,10 +40,10 @@ void Chunk::draw(sf::RenderTarget &target, sf::RenderStates states) const
     target.draw(vertices, states);
 }
 
-bool Chunk::load(const std::filesystem::path& tileset, sf::Vector2u tileSize, const int* tiles, unsigned int width, unsigned int height)
+bool Chunk::load( sf::Vector2u tileSize, const int* tiles, unsigned int width, unsigned int height)
 {
     // load the tileset texture
-    if (!m_tileset.loadFromFile(tileset))
+    if (!m_tileset.loadFromFile("textures/tileset.png"))
         return false;
 
     // resize the vertex array to fit the level size

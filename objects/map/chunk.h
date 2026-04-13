@@ -9,6 +9,7 @@
 #include "SFML/Graphics/VertexArray.hpp"
 #define CHUNK_WIDTH 16
 #define CHUNK_HEIGHT 16
+
 class Chunk : public sf::Drawable, public sf::Transformable
 {
 public:
@@ -21,7 +22,7 @@ private:
    sf::Texture m_tileset;
    const sf::Vector2<int> size;
 
-   bool load(const std::filesystem::path& tileset, sf::Vector2u tileSize, const int* tiles, unsigned int width, unsigned int height);
+   bool load( sf::Vector2u tileSize, const int* tiles, unsigned int width, unsigned int height);
 };
 
 
