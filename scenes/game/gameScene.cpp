@@ -3,7 +3,8 @@
 #include <SFML/Window/Keyboard.hpp>
 
 
-scene::GameScene::GameScene(RenderWindow* window_link, EngineStats* scene_index_link) : player(window_link->getDefaultView()) {
+scene::GameScene::GameScene(RenderWindow* window_link, EngineStats* scene_index_link) : gen(0, 1),
+                                                                                        player(window_link->getDefaultView()) {
     window      = window_link;
     scene_index = scene_index_link;
     FPS_timer.start();
