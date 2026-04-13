@@ -24,12 +24,13 @@ game::Engine::Engine(const unsigned short width, const unsigned short height, co
                                                                                                     TPS_delta(default_monospace_font, "", 10),
                                                                                                     mouse_position(default_monospace_font, "", 10),
                                                                                                     scene_num(default_monospace_font, "", 10),
-                                                                                                    version(default_monospace_font, "v0.0-indev", 12) {
+                                                                                                    version(default_monospace_font, "v0.0-indev", 12),
+                                                                                                    exitDialog_text(default_monospace_font, "Are you sure you want to exit?\n[Y]es  [N]o\nWe will miss you", 28){
     window = new RenderWindow(
         VideoMode({width, height}),
         name,
         sf::Style::Default,
-        sf::State::Fullscreen
+        sf::State::Fullscreen // fullscreen mode set as default
     );
 
     global_stats.window_height = height;
@@ -39,6 +40,22 @@ game::Engine::Engine(const unsigned short width, const unsigned short height, co
     UI_scenes   = new scene::UIScene*[scenes::CAP];
 
     if (!default_monospace_font.openFromFile("fonts/OCR A Extended Regular.ttf")) {}
+
+    //Text exitDialog_text(default_monospace_font, "Are you sure you want to exit?\n[Y]es  [N]o\nWe will miss you", 28);
+    exitDialog_text.setFillColor(sf::Color::White);
+    exitDialog_text.setOutlineColor(sf::Color::Black);
+    exitDialog_text.setOutlineThickness(1.f);
+    exitDialog_text.setFillColor({255, 255, 255, 0});
+    exitDialog_text.setOutlineColor({0, 0, 0, 0});
+
+
+    auto bounds = exitDialog_text.getLocalBounds();
+    exitDialog_text.setOrigin({bounds.size.x, bounds.size.y / 2.0f});
+    exitDialog_text.setPosition({
+        static_cast<float>(window->getSize().x) / 2.f,
+        static_cast<float>(window->getSize().y) / 2.f
+    }  //todo сделать центровку (done) и перенести в testScene
+    );
 
     FPS.setFillColor({147, 147, 147, 241});
     frames = 0;
@@ -85,6 +102,8 @@ void game::Engine::run(const short fps) {
     loop();
 }
 
+bool exit_flag = false;
+
 void game::Engine::loop() {
     while (window->isOpen()) {
         window->clear();
@@ -95,7 +114,22 @@ void game::Engine::loop() {
             if (event->is<Event::Closed>())
                 window->close();
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape))
+            {
+                //window->close();
+                exit_flag = true;
+                exitDialog_text.setFillColor({255, 255, 255, 255});
+                exitDialog_text.setOutlineColor({0, 0, 0, 255});
+            }
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Y) && (exit_flag == true))
+            {
                 window->close();
+            }
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::N) && (exit_flag == true))
+            {
+                exit_flag = false;
+                exitDialog_text.setFillColor({255, 255, 255, 0});
+                exitDialog_text.setOutlineColor({0, 0, 0, 0});
+            }
 
             bool UI_event_update = false;
             if (current_UI_scene != nullptr) {
@@ -119,6 +153,8 @@ void game::Engine::loop() {
         }
 
         info_overdraw();
+
+        window->draw(exitDialog_text);
 
         render(current_game_scene, current_UI_scene);
         update(current_game_scene, current_UI_scene);
