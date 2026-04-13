@@ -1,5 +1,6 @@
 #include "gameScene.h"
 
+#include <iostream>
 #include <SFML/Window/Keyboard.hpp>
 
 #include "../../objects/map/chunk.h"
@@ -22,35 +23,27 @@ void scene::GameScene::render() {
     FPS_timer.restart();
     for (const auto o : test_pull)
         window->draw(*o);
+    player.render(window);
+
+    float x = 0, y = 0;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up))
+        y = 1;
+    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S) || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down))
+        y = -1;
+
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right))
+        x = 1;
+    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left))
+        x = -1;
+
+    if (x != 0 || y != 0)
+        player.move({x, y}, delta_time);
 }
 
 void scene::GameScene::update() {}
 
 bool scene::GameScene::event(const Event &event) {
     bool updated = false;
-    if (const auto key = event.getIf<Event::KeyPressed>())
-        switch (key->code) {
-            case sf::Keyboard::Key::W:
-            case sf::Keyboard::Key::Up:
-                player.move({0, 1}, delta_time);
-                updated = true;
-                break;
-            case sf::Keyboard::Key::A:
-            case sf::Keyboard::Key::Left:
-                player.move({-1, 0}, delta_time);
-                updated = true;
-                break;
-            case sf::Keyboard::Key::S:
-            case sf::Keyboard::Key::Down:
-                player.move({0, -1}, delta_time);
-                updated = true;
-                break;
-            case sf::Keyboard::Key::D:
-            case sf::Keyboard::Key::Right:
-                player.move({1, 0}, delta_time);
-                updated = true;
-                break;
-            default: break;
-        }
+
     return updated;
 }
