@@ -9,7 +9,7 @@ using sf::View;
 namespace object {
     class Player : public Mob {
     public:
-        explicit Player(View default_view);
+        explicit Player(const View &default_view, sf::RenderWindow *window_link);
         ~Player() override = default;
 
         void zoom(float coefficient);
@@ -18,6 +18,7 @@ namespace object {
     private:
         float speed = 250;
         View current_view;
+        sf::RenderWindow *window;
     };
 }
 
