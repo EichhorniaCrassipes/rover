@@ -13,10 +13,8 @@ EngineStats game::global_stats {scenes::CUTSCENE, 0, 0};
 #include "../scenes/UI/testScene.h"
 
 
-game::Engine::Engine() : Engine(DEFAULT_WIDTH, DEFAULT_HEIGHT, DEFAULT_TITLE) {}
-game::Engine::Engine(const string &name) : Engine(DEFAULT_WIDTH, DEFAULT_HEIGHT, name) {}
-game::Engine::Engine(const unsigned short width, const unsigned short height) : Engine(width, height, DEFAULT_TITLE) {}
-game::Engine::Engine(const unsigned short width, const unsigned short height, const string &name) : FPS(default_monospace_font, "", 10),
+game::Engine::Engine() : Engine(DEFAULT_TITLE) {}
+game::Engine::Engine(const string &name) : FPS(default_monospace_font, "", 10),
                                                                                                     FPS_delta(default_monospace_font, "", 10),
                                                                                                     TPS(default_monospace_font, "", 10),
                                                                                                     TPS_delta(default_monospace_font, "", 10),
@@ -24,22 +22,22 @@ game::Engine::Engine(const unsigned short width, const unsigned short height, co
                                                                                                     scene_num(default_monospace_font, "", 10),
                                                                                                     version(default_monospace_font, "v0.0-indev", 12),
                                                                                                     exitDialog_text(default_monospace_font, "Are you sure you want to exit?\n[Y]es  [N]o\nWe will miss you", 28){
+    const auto video_mode = VideoMode::getDesktopMode();
     window = new RenderWindow(
-        VideoMode({width, height}),
+        video_mode,
         name,
         sf::Style::Default,
-        sf::State::Fullscreen // fullscreen mode set as default
+        sf::State::Fullscreen
     );
 
-    global_stats.window_height = height;
-    global_stats.window_width = width;
+    global_stats.window_width = video_mode.size.x;
+    global_stats.window_height = video_mode.size.y;
 
     game_scenes = new scene::GameScene*[scenes::CAP];
     UI_scenes   = new scene::UIScene*[scenes::CAP];
 
     if (!default_monospace_font.openFromFile("fonts/OCR A Extended Regular.ttf")) {}
 
-    //Text exitDialog_text(default_monospace_font, "Are you sure you want to exit?\n[Y]es  [N]o\nWe will miss you", 28);
     exitDialog_text.setFillColor(sf::Color::White);
     exitDialog_text.setOutlineColor(sf::Color::Black);
     exitDialog_text.setOutlineThickness(1.f);
