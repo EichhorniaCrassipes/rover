@@ -25,8 +25,11 @@ game::Engine::Engine(const unsigned short width, const unsigned short height, co
                                                                                                     version(default_monospace_font, "v0.0-indev", 12) {
     window = new RenderWindow(
         VideoMode({width, height}),
-        name
+        name,
+        sf::Style::Default,
+        sf::State::Fullscreen
     );
+
     global_stats.window_height = height;
     global_stats.window_width = width;
 
