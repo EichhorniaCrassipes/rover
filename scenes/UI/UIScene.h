@@ -13,12 +13,15 @@ using std::vector;
 #include <map>
 using std::map;
 
+#include "../../engine/stats.h"
+using game::EngineStats;
+
 #include "../../objects/object.h"
 
 namespace scene {
     class UIScene {
     public:
-        explicit UIScene(RenderWindow* window_link, unsigned short* scene_index_link);
+        explicit UIScene(RenderWindow* window_link, EngineStats* scene_index_link);
         virtual ~UIScene();
 
         void render();
@@ -26,7 +29,7 @@ namespace scene {
         bool event(const Event &event); // возвращает true, если произошла какая-либо обработка
     protected:
         RenderWindow* window;
-        unsigned short* scene_index;
+        EngineStats* scene_index;
 
         vector<sf::Drawable*> test_pull;
         // std::map<int, map<int, UIObject>> objects;

@@ -4,11 +4,13 @@
 #include "../scenes/game/gameScene.h"
 #include "../scenes/UI/UIScene.h"
 
-#include "enums.h"
-
 #include <SFML/Graphics/RenderWindow.hpp>
 using sf::RenderWindow;
 using sf::Clock;
+using sf::Time;
+
+using sf::Font;
+using sf::Text;
 
 #include <string>
 using std::string;
@@ -23,16 +25,37 @@ namespace game {
         Engine(unsigned short width, unsigned short height, const string &name);
         ~Engine();
 
-        void run(short fps = 0) const;
+        void run(short fps = 0);
     private:
         RenderWindow* window;
+
         scene::GameScene** game_scenes;
         scene::UIScene** UI_scenes;
-        Clock* timer;
 
-        inline static unsigned short scene_index;
+        Clock TPS_timer, count_display_timer;
+        Time last_tps_time_value;
 
-        void loop() const;
+        Font default_monospace_font;
+        Text FPS, FPS_delta, TPS, TPS_delta;
+        unsigned short frames, last_fps_update_value,
+                       ticks, last_tps_update_value;
+
+        Text mouse_position, scene_num, version;
+        Text exitDialog_text;
+
+        float current_real_TPS;
+        Clock TPS_adjuster_timer;
+
+        void loop();
+
+        inline void render(scene::GameScene *game, scene::UIScene *ui);
+        inline void update(scene::GameScene *game, scene::UIScene *ui);
+
+        void info_overdraw();
+
+        void adjust_tps();
+        bool adjustment_proceeding = false;
+        float left_target = 0, right_target = 0;
     };
 }
 
