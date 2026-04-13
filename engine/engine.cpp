@@ -89,6 +89,8 @@ void game::Engine::loop() {
         while (const auto event = window->pollEvent()) {
             if (event->is<Event::Closed>())
                 window->close();
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape))
+                window->close();
 
             try {
                 bool UI_event_update = false;
