@@ -17,8 +17,8 @@ namespace object {
         Sprite getSprite() const;
         Vector2f getPosition() const;
 
+        void setPosition(Vector2f new_position);
         void setScale(Vector2f new_scale);
-
     protected:
         Vector2f scale;
         Vector2f position;
