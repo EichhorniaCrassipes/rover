@@ -2,6 +2,7 @@
 
 #include <SFML/Window/Keyboard.hpp>
 
+#include "../../objects/map/chunk.h"
 
 scene::GameScene::GameScene(RenderWindow* window_link, EngineStats* scene_index_link) : gen(0, 1),
                                                                                         player(window_link->getDefaultView()) {
@@ -9,12 +10,18 @@ scene::GameScene::GameScene(RenderWindow* window_link, EngineStats* scene_index_
     scene_index = scene_index_link;
     FPS_timer.start();
     delta_time = 0;
+    test_pull.push_back(new Chunk(generator::MapGenerator(0, 1), 0, 0));
+    test_pull.push_back(new Chunk(generator::MapGenerator(0, 1), 16, 0));
+    test_pull.push_back(new Chunk(generator::MapGenerator(0, 1), 0, 16));
+    test_pull.push_back(new Chunk(generator::MapGenerator(0, 1), 16, 16));
 }
 
 
 void scene::GameScene::render() {
     delta_time = FPS_timer.getElapsedTime().asSeconds();
     FPS_timer.restart();
+    for (const auto o : test_pull)
+        window->draw(*o);
 }
 
 void scene::GameScene::update() {}
