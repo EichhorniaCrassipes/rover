@@ -29,6 +29,7 @@ set(SOURCES
         objects/map/decoration.cpp
         objects/map/deposit.cpp
         objects/map/loot.cpp
+        objects/map/chunk.cpp
 
         generator/PerlinNoise.cpp
         generator/mapGenerator.cpp

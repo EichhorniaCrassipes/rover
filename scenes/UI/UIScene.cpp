@@ -10,9 +10,9 @@ scene::UIScene::~UIScene() {
 }
 
 
-void scene::UIScene::render() const {
+void scene::UIScene::render() {
     for (const auto o : test_pull)
-        window->draw(o->getSprite());
+        window->draw(*o);
 }
 
 void scene::UIScene::update() {}
