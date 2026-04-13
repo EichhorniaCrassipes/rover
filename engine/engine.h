@@ -41,6 +41,7 @@ namespace game {
                        ticks, last_tps_update_value;
 
         Text mouse_position, scene_num, version;
+        Text exitDialog_text;
 
         float current_real_TPS;
         Clock TPS_adjuster_timer;
