@@ -4,7 +4,9 @@ using sf::Event;
 
 #include <iostream>
 using std::cerr;
+using std::cout;
 using std::to_string;
+using std::runtime_error;
 
 #include "enums.h"
 #include "stats.h"
@@ -95,15 +97,24 @@ void game::Engine::loop() {
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape))
                 window->close();
 
-            try {
-                bool UI_event_update = false;
-                if (current_UI_scene != nullptr)
+            bool UI_event_update = false;
+            if (current_UI_scene != nullptr) {
+                try {
                     UI_event_update = current_UI_scene->event(*event);
-                if (!UI_event_update && current_game_scene != nullptr)
-                    current_game_scene->event(*event);
+                }
+                catch (const runtime_error &e) {
+                    cout << "[UI event update] got an error while handling an event:\n";
+                    cerr << e.what() << '\n';
+                }
             }
-            catch (const std::runtime_error &e) {
-                cerr << e.what() << '\n';
+            if (!UI_event_update && current_game_scene != nullptr) {
+                try {
+                    current_game_scene->event(*event);
+                }
+                catch (const runtime_error &e) {
+                    cout << "[game event update] got an error while handling an event:\n";
+                    cerr << e.what() << '\n';
+                }
             }
         }
 
@@ -117,19 +128,47 @@ void game::Engine::loop() {
     }
 }
 void game::Engine::render(scene::GameScene *game, scene::UIScene *ui) {
-    if (game != nullptr)
-        game->render();
-    if (ui != nullptr)
-        ui->render();
+    if (game != nullptr) {
+        try {
+            game->render();
+        }
+        catch (const runtime_error &e) {
+            cout << "[game render] got an error while trying to render a scene:\n";
+            cerr << e.what() << '\n';
+        }
+    }
+    if (ui != nullptr) {
+        try {
+            ui->render();
+        }
+        catch (const runtime_error &e) {
+            cout << "[UI render] got an error while trying to render a scene:\n";
+            cerr << e.what() << '\n';
+        }
+    }
     frames++;
 }
 void game::Engine::update(scene::GameScene *game, scene::UIScene *ui) {
     if (TPS_timer.getElapsedTime() >= TPS_delta_time) {
         TPS_timer.restart();
-        if (game != nullptr)
-            game->update();
-        if (ui != nullptr)
-            ui->update();
+        if (game != nullptr) {
+            try {
+                game->update();
+            }
+            catch (const runtime_error &e) {
+                cout << "[game updater] got an error while trying to update a scene:\n";
+                cerr << e.what() << '\n';
+            }
+        }
+        if (ui != nullptr) {
+            try {
+                ui->update();
+            }
+            catch (const runtime_error &e) {
+                cout << "[UI updater] got an error while trying to update a scene:\n";
+                cerr << e.what() << '\n';
+            }
+        }
         ticks++;
     }
 }
@@ -145,17 +184,15 @@ void game::Engine::adjust_tps() {
             adjustment_proceeding = false;
         }
     }
-    else {
-        if (TPS_adjuster_timer.getElapsedTime() >= TPS_adjuster_delta_time) {
-            TPS_adjuster_timer.restart();
-            std::cout << "adjuster called\n";
-            if (TPS_value - epsilon >= current_real_TPS || current_real_TPS >= TPS_value + epsilon) {
-                std::cout << "adjustment started...\n";
-                adjustment_proceeding = true;
-                left_target = current_real_TPS * 1.2f;
-                right_target = TPS_value * 2 - current_real_TPS;
-                std::cout << "left target: " << left_target << ", right target: " << right_target << std::endl;
-            }
+    else if (TPS_adjuster_timer.getElapsedTime() >= TPS_adjuster_delta_time) {
+        TPS_adjuster_timer.restart();
+        std::cout << "adjuster called\n";
+        if (TPS_value - epsilon >= current_real_TPS || current_real_TPS >= TPS_value + epsilon) {
+            std::cout << "adjustment started...\n";
+            adjustment_proceeding = true;
+            left_target = current_real_TPS * 1.2f;
+            right_target = TPS_value * 2 - current_real_TPS;
+            std::cout << "left target: " << left_target << ", right target: " << right_target << std::endl;
         }
     }
 }
