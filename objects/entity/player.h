@@ -16,7 +16,7 @@ namespace object {
 
         void move(Vector2f vector, float delta_time);
     private:
-        float speed = 10;
+        float speed = 250;
         View current_view;
     };
 }
