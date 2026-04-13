@@ -10,7 +10,7 @@ using std::runtime_error;
 
 #include "enums.h"
 #include "stats.h"
-EngineStats game::global_stats {scenes::CUTSCENE, 0, 0};
+EngineStats game::global_stats {scenes::MAIN_GAME, 0, 0};
 
 #include "../scenes/UI/testScene.h"
 
