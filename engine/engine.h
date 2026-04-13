@@ -21,8 +21,6 @@ namespace game {
     public:
         Engine();
         explicit Engine(const string &name);
-        Engine(unsigned short width, unsigned short height);
-        Engine(unsigned short width, unsigned short height, const string &name);
         ~Engine();
 
         void run(short fps = 0);
