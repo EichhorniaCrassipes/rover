@@ -2,11 +2,11 @@
 #define ROVER_TILETEXTURELIST_H
 #include <string>
 using std::string;
-#include <unordered_map>
+#include <map>
 
 
 namespace texturelist {
-    inline std::unordered_map<string, int> maptiles  =
+    inline std::map<string, int> maptiles  =
     {
         {"1111", 14},
         {"0000", 15},

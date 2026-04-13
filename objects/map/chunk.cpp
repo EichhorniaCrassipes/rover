@@ -6,13 +6,14 @@
 #include "../../generator/mapGenerator.h"
 #include "SFML/Graphics/RenderTarget.hpp"
 
-string get4tiles(generator::MapGenerator gen, int x, int y)
+string get4tiles(const generator::MapGenerator& gen, int x, int y)
 {
+    std::cout << "get4tiles: " << x << " " << y << std::endl;
     generator::Tile tile0 = gen.get_tile(x, y);
     generator::Tile tile1 = gen.get_tile(x + 1, y);
     generator::Tile tile2 = gen.get_tile(x, y + 1);
     generator::Tile tile3 = gen.get_tile(x + 1, y + 1);
-    string t0, t1, t2, t3;
+    string t0 = "0", t1 = "0", t2 = "0", t3 = "0";
     if (tile0.biome == "test1")
         t0 = '1';
     if (tile1.biome == "test1")
@@ -41,13 +42,9 @@ Chunk::Chunk(generator::MapGenerator gen, int x, int y): size{16, 16}, position{
     for (int j = 0; j < size.y; j++)
         for (int i = 0; i < size.x; i++)
         {
-            std::cout << texturelist::maptiles[get4tiles(gen, i, j)];
-            std::cout << i << j;
             tiles.at(i + j * size.x) = texturelist::maptiles[get4tiles(gen, i, j)];
-            std::cout << tiles[i + j * size.x];
-
         }
-    if (!load( {16, 16}, tiles.data(), size.x, size.y))
+    if (!load( {64, 64}, tiles.data(), size.x, size.y))
         std::cout << "Failed to load tileset.png" << std::endl;
     setPosition({(float)position.x*size.x, (float)position.y * size.y});
 }
@@ -58,7 +55,8 @@ Chunk::~Chunk()
 
 void Chunk::draw(sf::RenderTarget &target, sf::RenderStates states) const
 {
-    states.transform *= getTransform(); // getTransform() is defined by sf::Transformable
+    states.transform *= getTransform();// getTransform() is defined by sf::Transformable
+    states.transform.translate(sf::Vector2f(32, 32));
     states.texture = &m_tileset;
     target.draw(vertices, states);
 }
