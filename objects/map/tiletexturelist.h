@@ -1,34 +1,29 @@
 #ifndef ROVER_TILETEXTURELIST_H
 #define ROVER_TILETEXTURELIST_H
 #include <string>
-#include <array>
-#include <map>
+using std::string;
 #include <unordered_map>
 
-struct tileTexture {
-    std::string filename;
-    int number;
-};
 
 namespace texturelist {
-    inline std::unordered_map<std::string, tileTexture> maptiles  =
+    inline std::unordered_map<string, int> maptiles  =
     {
-        {"Yellow", tileTexture{"test0", 0}},
-        {"Green", tileTexture{"test1", 0}},
-        {"Green Yellow 0011", tileTexture{"test01", 0}},
-        {"Green Yellow 1010", tileTexture{"test01", 1}},
-        {"Green Yellow 1100", tileTexture{"test01", 2}},
-        {"Green Yellow 0101", tileTexture{"test01", 3}},
-        {"Green Yellow 1000", tileTexture{"test01", 4}},
-        {"Green Yellow 0100", tileTexture{"test01", 5}},
-        {"Green Yellow 0010", tileTexture{"test01", 6}},
-        {"Green Yellow 0001", tileTexture{"test01", 7}},
-        {"Green Yellow 0111", tileTexture{"test01", 8}},
-        {"Green Yellow 1011", tileTexture{"test01", 9}},
-        {"Green Yellow 1101", tileTexture{"test01", 10}},
-        {"Green Yellow 1110", tileTexture{"test01", 11}},
-        {"Green Yellow 0110", tileTexture{"test01", 12}},
-        {"Green Yellow 1001", tileTexture{"test01", 13}}
+        {"1111", 14},
+        {"0000", 15},
+        {"0011", 0},
+        {"1010", 1},
+        {"1100", 2},
+        {"0101", 3},
+        {"1000", 4},
+        {"0100", 5},
+        {"0010", 6},
+        {"0001", 7},
+        {"0111", 8},
+        {"1011", 9},
+        {"1101", 10},
+        {"1110", 11},
+        {"0110", 12},
+        {"1001", 13}
 
     };
 }

@@ -8,21 +8,44 @@
 
 string get4tiles(generator::MapGenerator gen, int x, int y)
 {
-    generator::Tile tile = gen.get_tile(x, y);
+    generator::Tile tile0 = gen.get_tile(x, y);
+    generator::Tile tile1 = gen.get_tile(x + 1, y);
+    generator::Tile tile2 = gen.get_tile(x, y + 1);
+    generator::Tile tile3 = gen.get_tile(x + 1, y + 1);
+    string t0, t1, t2, t3;
+    if (tile0.biome == "test1")
+        t0 = '1';
+    if (tile1.biome == "test1")
+        t1 = '1';
+    if (tile2.biome == "test1")
+        t2 = '1';
+    if (tile3.biome == "test1")
+        t3 = '1';
+    if (tile0.biome == "test0")
+        t0 = '0';
+    if (tile1.biome == "test0")
+        t1 = '0';
+    if (tile2.biome == "test0")
+        t2 = '0';
+    if (tile3.biome == "test0")
+        t3 = '0';
+    return t0+t1+t2+t3;
 }
 
 Chunk::Chunk(generator::MapGenerator gen, int x, int y): size{16, 16}, position{x, y}
 {
+    std::cout << "chunk";
     std::array<int, 256> tiles = {};
+    tiles.fill(0);
 
     for (int j = 0; j < size.y; j++)
         for (int i = 0; i < size.x; i++)
         {
-            generator::Tile tile = gen.get_tile(i + position.x, j + position.y);
-            if (tile.biome == "test0")
-           tiles[i + j*size.x] = 0;
-            else if (tile.biome == "test1")
-                tiles[i + j*size.x] = 1;
+            std::cout << texturelist::maptiles[get4tiles(gen, i, j)];
+            std::cout << i << j;
+            tiles.at(i + j * size.x) = texturelist::maptiles[get4tiles(gen, i, j)];
+            std::cout << tiles[i + j * size.x];
+
         }
     if (!load( {16, 16}, tiles.data(), size.x, size.y))
         std::cout << "Failed to load tileset.png" << std::endl;
@@ -42,8 +65,9 @@ void Chunk::draw(sf::RenderTarget &target, sf::RenderStates states) const
 
 bool Chunk::load( sf::Vector2u tileSize, const int* tiles, unsigned int width, unsigned int height)
 {
+    std::cout << "Loading tileset.png" << std::endl;
     // load the tileset texture
-    if (!m_tileset.loadFromFile("textures/tileset.png"))
+    if (!m_tileset.loadFromFile("textures/test01.png"))
         return false;
 
     // resize the vertex array to fit the level size
