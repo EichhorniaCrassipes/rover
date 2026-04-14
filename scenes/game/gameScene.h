@@ -34,6 +34,8 @@ namespace scene {
         void render();
         void update();
         bool event(const Event &event); // возвращает true, если произошла какая-либо обработка
+
+        void reseed(long long generator_seed);
     protected:
         RenderWindow* window;
         EngineStats* engine_stats_link;
