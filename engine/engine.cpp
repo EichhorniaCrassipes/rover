@@ -31,6 +31,7 @@ game::Engine::Engine(const string &name) : FPS(default_monospace_font, "", 10),
         sf::Style::Default,
         sf::State::Fullscreen
     );
+    gameScene_camera = new Camera(window);
 
     global_stats.window_width = video_mode.size.x;
     global_stats.window_height = video_mode.size.y;
@@ -78,13 +79,14 @@ game::Engine::~Engine() {
     delete[] UI_scenes;
 
     delete window;
+    delete gameScene_camera;
 }
 
 void game::Engine::run(const short fps) {
     game_scenes[scenes::LOADING]   = nullptr;
     game_scenes[scenes::MAIN_MENU] = nullptr;
     game_scenes[scenes::CUTSCENE]  = nullptr;
-    game_scenes[scenes::MAIN_GAME] = new scene::GameScene(window, &global_stats);
+    game_scenes[scenes::MAIN_GAME] = new scene::GameScene(window, gameScene_camera, &global_stats);
 
     UI_scenes[scenes::LOADING]   = new scene::UIScene(window, &global_stats);
     UI_scenes[scenes::MAIN_MENU] = new scene::UIScene(window, &global_stats);

@@ -6,10 +6,15 @@
 
 #include <SFML/Graphics/RenderWindow.hpp>
 using sf::RenderWindow;
+
+#include <SFML/System/Clock.hpp>
 using sf::Clock;
 using sf::Time;
 
+#include <SFML/Graphics/Font.hpp>
 using sf::Font;
+
+#include <SFML/Graphics/Text.hpp>
 using sf::Text;
 
 #include <string>
@@ -26,6 +31,7 @@ namespace game {
         void run(short fps = 0);
     private:
         RenderWindow* window;
+        Camera* gameScene_camera;
 
         scene::GameScene** game_scenes;
         scene::UIScene** UI_scenes;
