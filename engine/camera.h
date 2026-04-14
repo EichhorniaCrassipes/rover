@@ -15,8 +15,12 @@ namespace game {
         explicit Camera(RenderWindow *window_link);
         ~Camera() = default;
 
+        View get_current_view() const;
+
         void move(const Vector2f &delta);
         void zoom(float coefficient);
+
+        void apply() const;
     private:
         RenderWindow *window;
         View current_view;
