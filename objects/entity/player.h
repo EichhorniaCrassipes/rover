@@ -16,7 +16,11 @@ namespace object {
 
         void move(Vector2f vector, float delta_time);
     private:
-        float speed = 250;
+        void move_camera(float delta_time);
+
+        float player_speed = 250,
+              camera_speed = 200,
+              distance_multiplier = 0.001;
         View current_view;
         sf::RenderWindow *window;
     };

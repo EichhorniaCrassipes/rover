@@ -1,5 +1,8 @@
 #include "player.h"
 
+#include <cmath>
+using std::exp;
+
 #include <iostream>
 using std::cout;
 
@@ -23,10 +26,22 @@ void object::Player::zoom(const float coefficient) {
 
 void object::Player::move(const Vector2f vector, const float delta_time) {
     cout << "[player/move]\n\t"
-    << "moved with vector: {" << vector.x << ';' << vector.y << "}\n\n";
+    << "moved with vector: {" << vector.x << ';' << vector.y << "}\n\t";
 
-    const Vector2f delta = vector * speed * delta_time / vector.length();
+    const auto delta = vector.normalized() * player_speed * delta_time;
     position += delta;
-    current_view.move({delta.x, delta.y});
+
+    move_camera(delta_time);
+}
+
+void object::Player::move_camera(const float delta_time) {
+    const auto distance = position - current_view.getCenter(),
+               delta = exp(-distance.length() * distance_multiplier) * camera_speed * delta_time * distance.normalized();
+
+    cout << "camera move:\n\t\t"
+    << "distance: {" << distance.x << ';' << distance.y << "}\n\t\t"
+    << "delta: {" << delta.x << ';' << delta.y << "}\n\n";
+
+    current_view.move(delta);
     window->setView(current_view);
 }
