@@ -31,7 +31,7 @@ namespace game {
         void run(short fps = 0);
     private:
         RenderWindow* window;
-        Camera* gameScene_camera;
+        Camera** cameras;
 
         scene::GameScene** game_scenes;
         scene::UIScene** UI_scenes;
@@ -52,8 +52,8 @@ namespace game {
 
         void loop();
 
-        inline void render(scene::GameScene *game, scene::UIScene *ui);
-        inline void update(scene::GameScene *game, scene::UIScene *ui);
+        inline void render(scene::GameScene* game, scene::UIScene* ui, const Camera* camera);
+        inline void update(scene::GameScene* game, scene::UIScene* ui);
 
         void info_overdraw();
 

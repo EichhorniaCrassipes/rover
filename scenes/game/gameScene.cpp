@@ -57,7 +57,7 @@ void scene::GameScene::handle_player() {
 
 void scene::GameScene::handle_camera() const {
     const auto distance = player.getPosition() - camera->get_current_view().getCenter(),
-               delta = exp(-distance.length() * distance_multiplier) * camera_speed * delta_time * distance.normalized();
+               delta = exp(distance.length() * distance_multiplier) * camera_speed * delta_time * distance.normalized();
 
     cout << "camera move call:\n\t\t"
     << "distance: {" << distance.x << ';' << distance.y << "}\n\t\t"

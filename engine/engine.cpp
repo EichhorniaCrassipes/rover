@@ -31,7 +31,7 @@ game::Engine::Engine(const string &name) : FPS(default_monospace_font, "", 10),
         sf::Style::Default,
         sf::State::Fullscreen
     );
-    gameScene_camera = new Camera(window);
+    cameras = new Camera*[scenes::CAP];
 
     global_stats.window_width = video_mode.size.x;
     global_stats.window_height = video_mode.size.y;
@@ -74,19 +74,24 @@ game::Engine::~Engine() {
     for (unsigned short i = 0; i < scenes::CAP; i++) {
         delete game_scenes[i];
         delete UI_scenes[i];
+        delete cameras[i];
     }
     delete[] game_scenes;
     delete[] UI_scenes;
 
     delete window;
-    delete gameScene_camera;
 }
 
 void game::Engine::run(const short fps) {
+    cameras[scenes::LOADING]   = nullptr;
+    cameras[scenes::MAIN_MENU] = nullptr;
+    cameras[scenes::CUTSCENE]  = nullptr;
+    cameras[scenes::MAIN_GAME] = new Camera(window);
+
     game_scenes[scenes::LOADING]   = nullptr;
     game_scenes[scenes::MAIN_MENU] = nullptr;
     game_scenes[scenes::CUTSCENE]  = nullptr;
-    game_scenes[scenes::MAIN_GAME] = new scene::GameScene(window, gameScene_camera, &global_stats);
+    game_scenes[scenes::MAIN_GAME] = new scene::GameScene(window, cameras[scenes::MAIN_GAME], &global_stats);
 
     UI_scenes[scenes::LOADING]   = new scene::UIScene(window, &global_stats);
     UI_scenes[scenes::MAIN_MENU] = new scene::UIScene(window, &global_stats);
@@ -107,6 +112,7 @@ bool exit_flag = false;
 void game::Engine::loop() {
     while (window->isOpen()) {
         window->clear();
+        const auto current_camera = cameras[global_stats.current_scene_index];
         const auto current_UI_scene = UI_scenes[global_stats.current_scene_index];
         const auto current_game_scene = game_scenes[global_stats.current_scene_index];
 
@@ -156,14 +162,14 @@ void game::Engine::loop() {
 
         window->draw(exitDialog_text);
 
-        render(current_game_scene, current_UI_scene);
+        render(current_game_scene, current_UI_scene, current_camera);
         update(current_game_scene, current_UI_scene);
         window->display();
 
         adjust_tps();
     }
 }
-void game::Engine::render(scene::GameScene *game, scene::UIScene *ui) {
+void game::Engine::render(scene::GameScene* game, scene::UIScene* ui, const Camera* camera) {
     if (game != nullptr) {
         try {
             game->render();
@@ -179,6 +185,15 @@ void game::Engine::render(scene::GameScene *game, scene::UIScene *ui) {
         }
         catch (const runtime_error &e) {
             cout << "[UI render] got an error while trying to render a scene:\n";
+            cerr << e.what() << '\n';
+        }
+    }
+    if (camera != nullptr) {
+        try {
+            camera->apply();
+        }
+        catch (const runtime_error &e) {
+            cout << "[camera apply call] got an error while trying to apply camera settings:\n";
             cerr << e.what() << '\n';
         }
     }

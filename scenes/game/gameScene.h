@@ -63,7 +63,7 @@ namespace scene {
         void handle_camera() const;
 
         float camera_speed = 200,
-              distance_multiplier = 0.001;
+              distance_multiplier = 0.0001;
     };
 }
 
