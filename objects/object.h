@@ -7,7 +7,8 @@ using sf::Vector2f;
 using sf::Texture;
 
 namespace object {
-    class Object {
+    class Object : public sf::Drawable, public sf::Transformable
+    {
     public:
         Object();
         virtual ~Object() = default;
@@ -19,6 +20,7 @@ namespace object {
 
         void setPosition(Vector2f new_position);
         void setScale(Vector2f new_scale);
+        void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
     protected:
         Vector2f scale;
         Vector2f position;
