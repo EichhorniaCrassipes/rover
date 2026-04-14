@@ -9,16 +9,12 @@ using sf::View;
 namespace object {
     class Player : public Mob {
     public:
-        explicit Player(const View &default_view, sf::RenderWindow *window_link);
+        explicit Player(const Vector2f &null_position = {0, 0});
         ~Player() override = default;
-
-        void zoom(float coefficient);
 
         void move(Vector2f vector, float delta_time);
     private:
         float speed = 250;
-        View current_view;
-        sf::RenderWindow *window;
     };
 }
 

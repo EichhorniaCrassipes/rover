@@ -1,15 +1,21 @@
 #include "gameScene.h"
 
 #include <iostream>
+using std::cout;
+
+#include <cmath>
+using std::exp;
+
 #include <SFML/Window/Keyboard.hpp>
 
 #include "../../objects/map/chunk.h"
 
-scene::GameScene::GameScene(RenderWindow* window_link, EngineStats* engine_stats_link) : generator(0, 1),
-                                                                                         player(window_link->getDefaultView(), window_link) {
-    window                  = window_link;
-    this->engine_stats_link = engine_stats_link;
-    delta_time              = 0;
+scene::GameScene::GameScene(RenderWindow* window_link, Camera* camera_link, EngineStats* engine_stats_link) : generator(0, 1),
+                                                                                                              player(camera_link->get_current_view().getCenter()) {
+    window             = window_link;
+    camera             = camera_link;
+    this->engine_stats = engine_stats_link;
+    delta_time         = 0;
     FPS_timer.start();
 
     for (char i = 0; i < 2; i++)
@@ -23,12 +29,12 @@ scene::GameScene::~GameScene() {
 
 
 void scene::GameScene::render() {
-    delta_time = FPS_timer.getElapsedTime().asSeconds();
-    FPS_timer.restart();
+    delta_time = FPS_timer.restart().asSeconds();
     for (const auto chunk : active_chunks)
         window->draw(*chunk);
 
     handle_player();
+    handle_camera();
 }
 
 void scene::GameScene::handle_player() {
@@ -45,8 +51,19 @@ void scene::GameScene::handle_player() {
         x = -1;
 
     if (x != 0 || y != 0)
-        player.move({x, y}, delta_time);
+        player.move({x, -y}, delta_time);
     player.render(window);
+}
+
+void scene::GameScene::handle_camera() const {
+    const auto distance = player.getPosition() - camera->get_current_view().getCenter(),
+               delta = exp(distance.length() * distance_multiplier) * camera_speed * delta_time * distance.normalized();
+
+    cout << "camera move call:\n\t\t"
+    << "distance: {" << distance.x << ';' << distance.y << "}\n\t\t"
+    << "delta: {" << delta.x << ';' << delta.y << "}\n\n";
+
+    camera->move(delta);
 }
 
 void scene::GameScene::update() {}

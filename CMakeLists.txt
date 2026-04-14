@@ -13,6 +13,7 @@ endif()
 set(SOURCES
         main.cpp
         engine/engine.cpp
+        engine/camera.cpp
 
         objects/object.cpp
         objects/entity.cpp
