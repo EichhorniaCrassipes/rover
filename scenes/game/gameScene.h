@@ -28,7 +28,7 @@ using game::EngineStats;
 namespace scene {
     class GameScene {
     public:
-        explicit GameScene(RenderWindow* window_link, EngineStats* scene_index_link);
+        explicit GameScene(RenderWindow* window_link, EngineStats* engine_stats_link);
         virtual ~GameScene() = default;
 
         void render();
@@ -36,20 +36,20 @@ namespace scene {
         bool event(const Event &event); // возвращает true, если произошла какая-либо обработка
     protected:
         RenderWindow* window;
-        EngineStats* scene_index;
+        EngineStats* engine_stats_link;
 
         Clock FPS_timer;
         float delta_time;
 
         map<int, map<int, object::Block>> upper_decorations, interactive_blocks;
         vector<object::Entity> entities;
-        vector<sf::Drawable*> test_pull;
-        generator::MapGenerator gen;
+
+        vector<sf::Drawable*> active_chunks;
+        generator::MapGenerator generator;
 
         object::Player player;
-
-        // tilemap нижних декораций
-        // tilemap карты
+    private:
+        void handle_player();
     };
 }
 
