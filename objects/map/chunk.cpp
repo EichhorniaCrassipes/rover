@@ -2,13 +2,13 @@
 #include "tiletexturelist.h"
 
 #include <iostream>
+using std::cout;
+using std::cerr;
 
 #include "../../generator/mapGenerator.h"
 #include "SFML/Graphics/RenderTarget.hpp"
 
-string get4tiles(const generator::MapGenerator& gen, int x, int y)
-{
-    std::cout << "get4tiles: " << x << " " << y << std::endl;
+string get4tiles(const generator::MapGenerator& gen, int x, int y) {
     generator::Tile tile0 = gen.get_tile(x, y);
     generator::Tile tile1 = gen.get_tile(x + 1, y);
     generator::Tile tile2 = gen.get_tile(x, y + 1);
@@ -33,30 +33,27 @@ string get4tiles(const generator::MapGenerator& gen, int x, int y)
     return t0+t1+t2+t3;
 }
 
-Chunk::Chunk(const generator::MapGenerator &gen, int x, int y): size{16, 16}, position{x, y}
-{
-    std::cout << "chunk";
+Chunk::Chunk(const generator::MapGenerator &gen, int x, int y): size{16, 16}, position{x, y} {
+    cout << "[generator/chunk] at x = " << x << ", y = " << y << '\n';
     std::array<int, 256> tiles = {};
 
     for (int j = 0; j < size.y; j++)
         for (int i = 0; i < size.x; i++)
             tiles.at(i + j * size.x) = texturelist::maptiles[get4tiles(gen, i+position.x, j+position.y)];
     if (!load( {64, 64}, tiles.data(), size.x, size.y))
-        std::cout << "Failed to load tileset.png" << std::endl;
+        cerr << "Failed to load tileset.png\n";
     setPosition({static_cast<float>(position.x * size.x * 4), static_cast<float>(position.y * size.y * 4)});
 }
 
-void Chunk::draw(sf::RenderTarget &target, sf::RenderStates states) const
-{
+void Chunk::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     states.transform *= getTransform();// getTransform() is defined by sf::Transformable
     states.transform.translate(sf::Vector2f(32, 32));
     states.texture = &m_tileset;
     target.draw(vertices, states);
 }
 
-bool Chunk::load( sf::Vector2u tileSize, const int* tiles, unsigned int width, unsigned int height)
-{
-    std::cout << "Loading tileset.png" << std::endl;
+bool Chunk::load( sf::Vector2u tileSize, const int* tiles, unsigned int width, unsigned int height) {
+    cout << "[generator/chunk/load] tileset: test01.png\n\n";
     // load the tileset texture
     if (!m_tileset.loadFromFile("textures/test01.png"))
         return false;
