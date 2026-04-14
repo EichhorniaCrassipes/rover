@@ -7,8 +7,8 @@ using std::string;
 class Stone : public object::Block
 {
 public:
-    Stone(string biome, char variation = 0);
-    ~Stone();
+    Stone(sf::Vector2f pos,string biome, char variation);
+    ~Stone() = default;
 
 };
 

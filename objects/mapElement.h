@@ -6,7 +6,7 @@
 namespace object {
     class MapElement : public Object {
     public:
-        MapElement();
+        MapElement() = default;
         ~MapElement() override = default;
     };
 }

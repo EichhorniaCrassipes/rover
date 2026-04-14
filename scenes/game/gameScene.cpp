@@ -4,6 +4,8 @@
 #include <SFML/Window/Keyboard.hpp>
 
 #include "../../objects/map/chunk.h"
+#include "../../objects/map/block.h"
+#include "../../objects/map/stone.h"
 
 scene::GameScene::GameScene(RenderWindow* window_link, EngineStats* engine_stats_link) : generator(0, 1),
                                                                                          player(window_link->getDefaultView(), window_link) {
@@ -15,6 +17,8 @@ scene::GameScene::GameScene(RenderWindow* window_link, EngineStats* engine_stats
     for (char i = 0; i < 2; i++)
         for (char j = 0; j < 2; j++)
             active_chunks.push_back(new Chunk(generator, 16 * i, 16 * j));
+    blocks.push_back(new Stone({1, 1},"test0", 0));
+    blocks.push_back(new Stone({3, 3}, "test1", 0));
 }
 scene::GameScene::~GameScene() {
     for (const auto chunk : active_chunks)
@@ -27,6 +31,9 @@ void scene::GameScene::render() {
     FPS_timer.restart();
     for (const auto chunk : active_chunks)
         window->draw(*chunk);
+    for (const auto block : blocks)
+        block->render(window);
+
 
     handle_player();
 }

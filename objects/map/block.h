@@ -6,7 +6,7 @@
 namespace object {
     class Block : public MapElement {
     public:
-        Block();
+        Block() = default;
         ~Block() override = default;
     protected:
         Vector2f hitbox;

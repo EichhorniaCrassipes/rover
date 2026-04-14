@@ -47,6 +47,7 @@ namespace scene {
         vector<object::Entity> entities;
 
         vector<sf::Drawable*> active_chunks;
+        vector<object::Block*> blocks;
         generator::MapGenerator generator;
 
         object::Player player;
