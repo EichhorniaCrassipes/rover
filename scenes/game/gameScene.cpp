@@ -29,8 +29,7 @@ scene::GameScene::~GameScene() {
 
 
 void scene::GameScene::render() {
-    delta_time = FPS_timer.getElapsedTime().asSeconds();
-    FPS_timer.restart();
+    delta_time = FPS_timer.restart().asSeconds();
     for (const auto chunk : active_chunks)
         window->draw(*chunk);
 

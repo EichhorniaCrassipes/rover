@@ -235,6 +235,8 @@ void game::Engine::adjust_tps() {
 
 void game::Engine::info_overdraw() {
     if (count_display_timer.getElapsedTime().asMilliseconds() >= 500) {
+        count_display_timer.restart();
+
         frames = static_cast<unsigned short>(static_cast<float>(frames) / count_display_timer.getElapsedTime().asSeconds());
         current_real_TPS = static_cast<float>(ticks) / count_display_timer.getElapsedTime().asSeconds();
         ticks  = static_cast<unsigned short>(current_real_TPS);
@@ -277,7 +279,6 @@ void game::Engine::info_overdraw() {
         last_tps_update_value = ticks;
         frames = 0;
         ticks = 0;
-        count_display_timer.restart();
 
         const auto local_mouse_position = sf::Mouse::getPosition(*window);
         mouse_position.setString(
