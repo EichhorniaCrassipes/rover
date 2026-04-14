@@ -27,8 +27,8 @@ generator::MapGenerator::~MapGenerator() {
 
 
 generator::Tile generator::MapGenerator::get_tile(const size_t x, const size_t y) const {
-    const double relative_x = static_cast<double>(x) / world_size,
-                 relative_y = static_cast<double>(y) / world_size;
+    const double relative_x = static_cast<double>(x + COORD_SHIFT) / world_size,
+                 relative_y = static_cast<double>(y + COORD_SHIFT) / world_size;
 
     const double te = get_tile_noise_value(relative_x, relative_y, 4, temperature),
                  hu = get_tile_noise_value(relative_x, relative_y, 2, humidity),
