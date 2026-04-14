@@ -33,7 +33,7 @@ string get4tiles(const generator::MapGenerator& gen, int x, int y)
     return t0+t1+t2+t3;
 }
 
-Chunk::Chunk(generator::MapGenerator gen, int x, int y): size{16, 16}, position{x, y}
+Chunk::Chunk(const generator::MapGenerator &gen, int x, int y): size{16, 16}, position{x, y}
 {
     std::cout << "chunk";
     std::array<int, 256> tiles = {};
