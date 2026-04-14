@@ -21,7 +21,7 @@ namespace generator {
         void reseed(long long new_seed);
     private:
         double STRETCH = 10;
-        size_t COORD_SHIFT = 10000;
+        size_t COORD_SHIFT = 0;
 
         PerlinNoise *temperature, *humidity, *height;
         double world_size;

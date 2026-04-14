@@ -12,8 +12,8 @@ scene::GameScene::GameScene(RenderWindow* window_link, EngineStats* engine_stats
     delta_time              = 0;
     FPS_timer.start();
 
-    for (char i = 0; i < 5; i++)
-        for (char j = 0; j < 5; j++)
+    for (char i = 0; i < 2; i++)
+        for (char j = 0; j < 2; j++)
             active_chunks.push_back(new Chunk(generator, 16 * i, 16 * j));
 }
 scene::GameScene::~GameScene() {
