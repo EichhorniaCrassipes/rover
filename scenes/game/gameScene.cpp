@@ -11,7 +11,7 @@ using std::exp;
 #include "../../objects/map/chunk.h"
 
 scene::GameScene::GameScene(RenderWindow* window_link, Camera* camera_link, EngineStats* engine_stats_link) : generator(0, 1),
-                                                                                                              player(camera_link, window_link) {
+                                                                                                              player(camera_link->get_current_view().getCenter()) {
     window             = window_link;
     camera             = camera_link;
     this->engine_stats = engine_stats_link;
