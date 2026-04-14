@@ -12,9 +12,9 @@ using std::string;
 
 
 generator::MapGenerator::MapGenerator(const long long seed, const size_t world_size) {
-    this->seed = seed;
     this->world_size = static_cast<double>(world_size);
 
+    this->seed = seed;
     temperature = new PerlinNoise(seed);
     humidity = new PerlinNoise(seed_shift(1));
     height = new PerlinNoise(seed_shift(2));
@@ -27,8 +27,8 @@ generator::MapGenerator::~MapGenerator() {
 
 
 generator::Tile generator::MapGenerator::get_tile(const size_t x, const size_t y) const {
-    const double relative_x = static_cast<double>(x) / world_size,
-                 relative_y = static_cast<double>(y) / world_size;
+    const double relative_x = static_cast<double>(x + COORD_SHIFT) / world_size,
+                 relative_y = static_cast<double>(y + COORD_SHIFT) / world_size;
 
     const double te = get_tile_noise_value(relative_x, relative_y, 4, temperature),
                  hu = get_tile_noise_value(relative_x, relative_y, 2, humidity),
@@ -90,4 +90,11 @@ long long generator::MapGenerator::seed_shift(const unsigned shift) const {
 
     constexpr std::hash<std::string> hasher;
     return static_cast<long long>(hasher(seed_string) / random_value);
+}
+
+void generator::MapGenerator::reseed(const long long new_seed) {
+    seed = new_seed;
+    temperature = new PerlinNoise(seed);
+    humidity = new PerlinNoise(seed_shift(1));
+    height = new PerlinNoise(seed_shift(2));
 }

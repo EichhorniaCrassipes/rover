@@ -18,8 +18,11 @@ namespace generator {
 
         [[nodiscard]] Tile get_tile(size_t x, size_t y) const;
 
+        void reseed(long long new_seed);
     private:
         double STRETCH = 10;
+        size_t COORD_SHIFT = 0;
+
         PerlinNoise *temperature, *humidity, *height;
         double world_size;
         long long seed;

@@ -33,24 +33,17 @@ string get4tiles(const generator::MapGenerator& gen, int x, int y)
     return t0+t1+t2+t3;
 }
 
-Chunk::Chunk(generator::MapGenerator gen, int x, int y): size{16, 16}, position{x, y}
+Chunk::Chunk(const generator::MapGenerator &gen, int x, int y): size{16, 16}, position{x, y}
 {
     std::cout << "chunk";
     std::array<int, 256> tiles = {};
-    tiles.fill(0);
 
     for (int j = 0; j < size.y; j++)
         for (int i = 0; i < size.x; i++)
-        {
-            tiles.at(i + j * size.x) = texturelist::maptiles[get4tiles(gen, i, j)];
-        }
+            tiles.at(i + j * size.x) = texturelist::maptiles[get4tiles(gen, i+position.x, j+position.y)];
     if (!load( {64, 64}, tiles.data(), size.x, size.y))
         std::cout << "Failed to load tileset.png" << std::endl;
-    setPosition({(float)position.x*size.x, (float)position.y * size.y});
-}
-Chunk::~Chunk()
-{
-
+    setPosition({static_cast<float>(position.x * size.x * 4), static_cast<float>(position.y * size.y * 4)});
 }
 
 void Chunk::draw(sf::RenderTarget &target, sf::RenderStates states) const

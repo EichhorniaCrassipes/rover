@@ -13,8 +13,8 @@
 class Chunk : public sf::Drawable, public sf::Transformable
 {
 public:
-   Chunk(generator::MapGenerator gen, int x, int y);
-   ~Chunk() override;
+   Chunk(const generator::MapGenerator &gen, int x, int y);
+   ~Chunk() override = default;
 private:
    void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
    sf::VertexArray vertices;
