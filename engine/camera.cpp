@@ -30,4 +30,4 @@ void game::Camera::zoom(const float coefficient) {
 
 void game::Camera::apply() const {
     window->setView(current_view);
-};
+}
