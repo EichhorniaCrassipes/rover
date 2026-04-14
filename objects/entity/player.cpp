@@ -11,7 +11,7 @@ object::Player::Player(const View &default_view, sf::RenderWindow *window_link) 
     << "position: {" << sprite.getPosition().x << ';' << sprite.getPosition().y << "}\n\n";
 
     current_view = default_view;
-    position = current_view.getCenter();
+    position = current_view.getCenter() - sprite.getGlobalBounds().size / 2.f;
     setScale({.04, .04});
     window = window_link;
 }
