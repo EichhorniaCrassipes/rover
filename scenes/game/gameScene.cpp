@@ -11,10 +11,14 @@ scene::GameScene::GameScene(RenderWindow* window_link, EngineStats* engine_stats
     this->engine_stats_link = engine_stats_link;
     delta_time              = 0;
     FPS_timer.start();
-    active_chunks.push_back(new Chunk(generator, 0, 0));
-    active_chunks.push_back(new Chunk(generator, 16, 0));
-    active_chunks.push_back(new Chunk(generator, 0, 16));
-    active_chunks.push_back(new Chunk(generator, 16, 16));
+
+    for (char i = 0; i < 5; i++)
+        for (char j = 0; j < 5; j++)
+            active_chunks.push_back(new Chunk(generator, 16 * i, 16 * j));
+}
+scene::GameScene::~GameScene() {
+    for (const auto chunk : active_chunks)
+        delete chunk;
 }
 
 
