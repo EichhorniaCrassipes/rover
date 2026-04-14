@@ -18,6 +18,6 @@ void object::Player::move(const Vector2f vector, const float delta_time) {
     std::cout << "[player] moved with vector " << vector.x << " " << vector.y << std::endl;
     const Vector2f delta = vector * speed * delta_time / vector.length();
     position += delta;
-    current_view.move({delta.x, -delta.y}); // возможно, надо будет домножить на текущий скейл
+    current_view.move({delta.x, delta.y});
     window->setView(current_view);
 }

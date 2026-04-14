@@ -45,7 +45,7 @@ void scene::GameScene::handle_player() {
         x = -1;
 
     if (x != 0 || y != 0)
-        player.move({x, y}, delta_time);
+        player.move({x, -y}, delta_time);
     player.render(window);
 }
 
