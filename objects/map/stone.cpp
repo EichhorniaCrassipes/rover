@@ -3,7 +3,7 @@
 
 Stone::Stone(sf::Vector2f pos,string biome, char variation = 0)
 {
-    position = pos;
+    position = {pos.x*64,pos.y*64};
     scale = sf::Vector2f(1,1);
     if (biome == "test0")
         texture = sf::Texture("textures/stone.png", false, sf::IntRect({0, variation * 64}, {64, 64}));
