@@ -26,7 +26,7 @@ namespace generator {
         char TILE_VARIATION_MULTIPLIER = 4,
              DECORATION_VARIATION_MULTIPLIER = 8;
 
-        PerlinNoise *temperature, *humidity, *height;
+        PerlinNoise *temperature, *humidity, *height, *variation;
         double world_size;
         long long seed;
 

@@ -19,11 +19,13 @@ generator::MapGenerator::MapGenerator(const long long seed, const size_t world_s
     temperature = new PerlinNoise(seed);
     humidity = new PerlinNoise(seed_shift(1));
     height = new PerlinNoise(seed_shift(2));
+    variation = new PerlinNoise(seed_shift(3));
 }
 generator::MapGenerator::~MapGenerator() {
     delete temperature;
     delete humidity;
     delete height;
+    delete variation;
 }
 
 
@@ -36,7 +38,7 @@ generator::Tile generator::MapGenerator::get_tile(const size_t x, const size_t y
                  he = get_tile_noise_value(relative_x, relative_y, 2, height);
 
     Tile tile;
-    tile.variation = static_cast<unsigned char>(height->noise(relative_x, relative_y) * TILE_VARIATION_MULTIPLIER);
+    tile.variation = static_cast<unsigned char>(variation->noise(relative_x, relative_y) * TILE_VARIATION_MULTIPLIER);
     tile.decoration = {"", 0};
 
     for (const auto &b : GLOBAL_BIOMES)
@@ -58,7 +60,7 @@ generator::Tile generator::MapGenerator::get_tile(const size_t x, const size_t y
                  d.height_low <= he && he <= d.height_high) {
             tile.decoration = {
                 d.name,
-                static_cast<unsigned char>(height->noise(relative_x, relative_y) * DECORATION_VARIATION_MULTIPLIER)
+                static_cast<unsigned char>(variation->noise(relative_x, relative_y) * DECORATION_VARIATION_MULTIPLIER)
             };
             break;
         }
