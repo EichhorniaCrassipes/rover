@@ -27,6 +27,8 @@ namespace generator {
              DECORATION_VARIATION_MULTIPLIER = 8;
 
         PerlinNoise *temperature, *humidity, *height, *variation;
+        void free_noises_memory() const;
+
         double world_size;
         long long seed;
 

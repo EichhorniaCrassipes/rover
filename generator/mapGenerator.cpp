@@ -21,7 +21,9 @@ generator::MapGenerator::MapGenerator(const long long seed, const size_t world_s
     height = new PerlinNoise(seed_shift(2));
     variation = new PerlinNoise(seed_shift(3));
 }
-generator::MapGenerator::~MapGenerator() {
+generator::MapGenerator::~MapGenerator() { free_noises_memory(); }
+
+void generator::MapGenerator::free_noises_memory() const {
     delete temperature;
     delete humidity;
     delete height;
@@ -109,6 +111,7 @@ long long generator::MapGenerator::seed_shift(const unsigned shift) const {
 
 void generator::MapGenerator::reseed(const long long new_seed) {
     seed = new_seed;
+    free_noises_memory();
     temperature = new PerlinNoise(seed);
     humidity = new PerlinNoise(seed_shift(1));
     height = new PerlinNoise(seed_shift(2));
