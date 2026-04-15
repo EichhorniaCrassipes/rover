@@ -7,9 +7,6 @@
 #include <vector>
 using std::vector;
 
-#include <limits>
-using std::numeric_limits;
-
 namespace generator {
     class MapGenerator {
     public:
@@ -23,8 +20,9 @@ namespace generator {
         double STRETCH = 10;
         size_t COORD_SHIFT = 100000;
 
-        char TILE_VARIATION_MULTIPLIER = 4,
-             DECORATION_VARIATION_MULTIPLIER = 8;
+        char   TILE_VARIATION_MULTIPLIER = 4,
+               DECORATION_VARIATION_MULTIPLIER = 8;
+        double DECORATION_MAX_OFFSET = 1.5;
 
         PerlinNoise *temperature, *humidity, *height, *variation;
         void free_noises_memory() const;

@@ -7,6 +7,7 @@ using std::string;
 namespace generator {
     struct TileDecoration {
         string name;
+        double offset_x, offset_y;
         unsigned char variation;
     };
 
