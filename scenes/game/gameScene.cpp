@@ -51,7 +51,7 @@ Vector2f scene::GameScene::get_move_vector() {
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left))
         x = -1;
 
-    return {x, y};
+    return {x, -y};
 }
 
 void scene::GameScene::handle_player(const Vector2f &move_vector) {
