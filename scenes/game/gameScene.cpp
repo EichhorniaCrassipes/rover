@@ -63,7 +63,8 @@ void scene::GameScene::handle_camera() const {
     << "distance: {" << distance.x << ';' << distance.y << "}\n\t\t"
     << "delta: {" << delta.x << ';' << delta.y << "}\n\n";
 
-    camera->move(delta);
+    if (distance.length() > 1.5)
+        camera->move(delta);
 }
 
 void scene::GameScene::update() {}
