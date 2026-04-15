@@ -5,6 +5,7 @@ using std::cout;
 
 #include <cmath>
 using std::exp;
+using std::abs;
 
 #include <SFML/Window/Keyboard.hpp>
 
@@ -60,17 +61,22 @@ void scene::GameScene::handle_player(const Vector2f &move_vector) {
     player.render(window);
 }
 
-void scene::GameScene::handle_camera(const Vector2f &move_vector) const {
+void scene::GameScene::handle_camera(const Vector2f &move_vector) {
     const auto distance = player.getPosition() - camera->get_current_view().getCenter(),
-               // delta = exp(distance.length() * distance_multiplier) * camera_speed * delta_time * (distance.normalized() + move_vector.normalized() * move_vector_multiplier);
-               delta = exp(distance.length() * distance_multiplier) * camera_speed * delta_time * distance.normalized();
+               distance_norm = distance.normalized();
+    auto delta = Vector2f(0, 0);
+
+    if (abs(distance.x) >= distance_threshold)
+        delta.x = exp(distance.length() * distance_multiplier) * camera_speed * delta_time * distance_norm.x;
+    if (abs(distance.y) >= distance_threshold)
+        delta.y = exp(distance.length() * distance_multiplier) * camera_speed * delta_time * distance_norm.y;
+    // (distance.normalized() + move_vector.normalized() * move_vector_multiplier);
 
     cout << "camera move call:\n\t\t"
     << "distance: {" << distance.x << ';' << distance.y << "}\n\t\t"
     << "delta: {" << delta.x << ';' << delta.y << "}\n\n";
 
-    if (distance.length() > 1.5)
-        camera->move(delta);
+    camera->move(delta);
 }
 
 void scene::GameScene::update() {}

@@ -60,12 +60,13 @@ namespace scene {
         object::Player player;
     private:
         void handle_player(const Vector2f &move_vector);
-        void handle_camera(const Vector2f &move_vector) const;
+        void handle_camera(const Vector2f &move_vector);
 
         static Vector2f get_move_vector();
 
         float camera_speed = 200,
               distance_multiplier = 0.0001,
+              distance_threshold = .05,
               move_vector_multiplier = 30;
     };
 }
