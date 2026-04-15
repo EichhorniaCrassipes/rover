@@ -2,12 +2,13 @@
 #define ROVER_GAME_SCENE_H
 
 #include <SFML/Window/Event.hpp>
-
-#include "../../generator/mapGenerator.h"
 using sf::Event;
 
 #include <SFML/Graphics/RenderWindow.hpp>
 using sf::RenderWindow;
+
+#include <SFML/Graphics/Drawable.hpp>
+using sf::Drawable;
 
 #include <SFML/System/Clock.hpp>
 using sf::Clock;
@@ -18,8 +19,14 @@ using std::vector;
 #include <map>
 using std::map;
 
+#include "../../generator/mapGenerator.h"
+using generator::MapGenerator;
+
 #include "../../engine/stats.h"
 using game::EngineStats;
+
+#include "../../engine/camera.h"
+using game::Camera;
 
 #include "../../objects/map/block.h"
 #include "../../objects/entity.h"
@@ -28,7 +35,7 @@ using game::EngineStats;
 namespace scene {
     class GameScene {
     public:
-        explicit GameScene(RenderWindow* window_link, EngineStats* engine_stats_link);
+        explicit GameScene(RenderWindow* window_link, Camera* camera_link, EngineStats* engine_stats_link);
         virtual ~GameScene();
 
         void render();
@@ -38,7 +45,8 @@ namespace scene {
         void reseed(long long generator_seed);
     protected:
         RenderWindow* window;
-        EngineStats* engine_stats_link;
+        EngineStats* engine_stats;
+        Camera* camera;
 
         Clock FPS_timer;
         float delta_time;
@@ -53,6 +61,10 @@ namespace scene {
         object::Player player;
     private:
         void handle_player();
+        void handle_camera() const;
+
+        float camera_speed = 200,
+              distance_multiplier = 0.0001;
     };
 }
 
