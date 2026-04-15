@@ -23,6 +23,9 @@ namespace generator {
         double STRETCH = 10;
         size_t COORD_SHIFT = 0;
 
+        char TILE_VARIATION_MULTIPLIER = 4,
+             DECORATION_VARIATION_MULTIPLIER = 8;
+
         PerlinNoise *temperature, *humidity, *height;
         double world_size;
         long long seed;

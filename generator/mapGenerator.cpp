@@ -2,6 +2,7 @@
 
 #include "biomes.h"
 #include "deposits.h"
+#include "decorations.h"
 
 #include <random>
 using std::default_random_engine;
@@ -35,7 +36,8 @@ generator::Tile generator::MapGenerator::get_tile(const size_t x, const size_t y
                  he = get_tile_noise_value(relative_x, relative_y, 2, height);
 
     Tile tile;
-    tile.variation = static_cast<unsigned char>(height->noise(relative_x, relative_y) * 4);
+    tile.variation = static_cast<unsigned char>(height->noise(relative_x, relative_y) * TILE_VARIATION_MULTIPLIER);
+    tile.decoration = {"", 0};
 
     for (const auto &b : GLOBAL_BIOMES)
         if (b.temperature_low <= te && te <= b.temperature_high &&
@@ -48,6 +50,16 @@ generator::Tile generator::MapGenerator::get_tile(const size_t x, const size_t y
                d.humidity_low <= hu && hu <= d.humidity_high &&
                  d.height_low <= he && he <= d.height_high) {
             tile.deposit = d.name;
+            break;
+        }
+    for (const auto &d : GLOBAL_DECORATIONS)
+        if (d.temperature_low <= te && te <= d.temperature_high &&
+               d.humidity_low <= hu && hu <= d.humidity_high &&
+                 d.height_low <= he && he <= d.height_high) {
+            tile.decoration = {
+                d.name,
+                static_cast<unsigned char>(height->noise(relative_x, relative_y) * DECORATION_VARIATION_MULTIPLIER)
+            };
             break;
         }
 
