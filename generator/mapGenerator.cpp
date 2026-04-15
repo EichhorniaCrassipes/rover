@@ -41,7 +41,7 @@ generator::Tile generator::MapGenerator::get_tile(const size_t x, const size_t y
 
     Tile tile;
     tile.variation = static_cast<unsigned char>(v1 * TILE_VARIATION_MULTIPLIER);
-    tile.decoration = {"", 0};
+    tile.decoration = {"", 0, 0, 0};
 
     for (const auto &b : GLOBAL_BIOMES)
         if (b.temperature_low <= te && te <= b.temperature_high &&
