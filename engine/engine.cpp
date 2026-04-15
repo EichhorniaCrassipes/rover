@@ -17,13 +17,13 @@ EngineStats game::global_stats {scenes::MAIN_GAME, 0, 0};
 
 game::Engine::Engine() : Engine(DEFAULT_TITLE) {}
 game::Engine::Engine(const string &name) : FPS(default_monospace_font, "", 10),
-                                                                                                    FPS_delta(default_monospace_font, "", 10),
-                                                                                                    TPS(default_monospace_font, "", 10),
-                                                                                                    TPS_delta(default_monospace_font, "", 10),
-                                                                                                    mouse_position(default_monospace_font, "", 10),
-                                                                                                    scene_num(default_monospace_font, "", 10),
-                                                                                                    version(default_monospace_font, "v0.0-indev", 12),
-                                                                                                    exitDialog_text(default_monospace_font, "Are you sure you want to exit?\n[Y]es  [N]o\nWe will miss you", 28){
+                                           FPS_delta(default_monospace_font, "", 10),
+                                           TPS(default_monospace_font, "", 10),
+                                           TPS_delta(default_monospace_font, "", 10),
+                                           mouse_position(default_monospace_font, "", 10),
+                                           scene_num(default_monospace_font, "", 10),
+                                           version(default_monospace_font, "v0.0-indev", 12),
+                                           exitDialog_text(default_monospace_font, "Are you sure you want to exit?\n[Y]es  [N]o\nWe will miss you", 28){
     const auto video_mode = VideoMode::getDesktopMode();
     window = new RenderWindow(
         video_mode,
@@ -160,10 +160,10 @@ void game::Engine::loop() {
 
         info_overdraw();
 
-        window->draw(exitDialog_text);
-
         render(current_game_scene, current_UI_scene, current_camera);
         update(current_game_scene, current_UI_scene);
+
+        window->draw(exitDialog_text);
         window->display();
 
         adjust_tps();
