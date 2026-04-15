@@ -35,10 +35,11 @@ generator::Tile generator::MapGenerator::get_tile(const size_t x, const size_t y
 
     const double te = get_tile_noise_value(relative_x, relative_y, 4, temperature),
                  hu = get_tile_noise_value(relative_x, relative_y, 2, humidity),
-                 he = get_tile_noise_value(relative_x, relative_y, 2, height);
+                 he = get_tile_noise_value(relative_x, relative_y, 2, height),
+                 va = variation->noise(relative_x, relative_y);
 
     Tile tile;
-    tile.variation = static_cast<unsigned char>(variation->noise(relative_x, relative_y) * TILE_VARIATION_MULTIPLIER);
+    tile.variation = static_cast<unsigned char>(va * TILE_VARIATION_MULTIPLIER);
     tile.decoration = {"", 0};
 
     for (const auto &b : GLOBAL_BIOMES)
@@ -60,7 +61,7 @@ generator::Tile generator::MapGenerator::get_tile(const size_t x, const size_t y
                  d.height_low <= he && he <= d.height_high) {
             tile.decoration = {
                 d.name,
-                static_cast<unsigned char>(variation->noise(relative_x, relative_y) * DECORATION_VARIATION_MULTIPLIER)
+                static_cast<unsigned char>(va * DECORATION_VARIATION_MULTIPLIER)
             };
             break;
         }
@@ -111,4 +112,5 @@ void generator::MapGenerator::reseed(const long long new_seed) {
     temperature = new PerlinNoise(seed);
     humidity = new PerlinNoise(seed_shift(1));
     height = new PerlinNoise(seed_shift(2));
+    variation = new PerlinNoise(seed_shift(3));
 }
