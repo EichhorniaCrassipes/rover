@@ -36,6 +36,7 @@ set(SOURCES
         generator/mapGenerator.cpp
         generator/biomes.cpp
         generator/deposits.cpp
+        generator/decorations.cpp
 
         scenes/game/gameScene.cpp
 
