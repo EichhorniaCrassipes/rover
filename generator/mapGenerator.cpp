@@ -12,9 +12,7 @@ using std::uniform_int_distribution;
 using std::string;
 
 
-generator::MapGenerator::MapGenerator(const long long seed, const size_t world_size) {
-    this->world_size = static_cast<double>(world_size);
-
+generator::MapGenerator::MapGenerator(const long long seed) {
     this->seed = seed;
     temperature = new PerlinNoise(seed);
     humidity = new PerlinNoise(seed_shift(1));
@@ -32,8 +30,8 @@ void generator::MapGenerator::free_noises_memory() const {
 
 
 generator::Tile generator::MapGenerator::get_tile(const size_t x, const size_t y) const {
-    const double relative_x = static_cast<double>(x + COORD_SHIFT) / world_size,
-                 relative_y = static_cast<double>(y + COORD_SHIFT) / world_size;
+    const auto relative_x = static_cast<double>(x + COORD_SHIFT),
+               relative_y = static_cast<double>(y + COORD_SHIFT);
 
     const double te = get_tile_noise_value(relative_x, relative_y, 4, temperature),
                  hu = get_tile_noise_value(relative_x, relative_y, 2, humidity),

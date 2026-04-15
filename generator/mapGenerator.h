@@ -13,7 +13,7 @@ using std::numeric_limits;
 namespace generator {
     class MapGenerator {
     public:
-        explicit MapGenerator(long long seed, size_t world_size = numeric_limits<size_t>::max());
+        explicit MapGenerator(long long seed);
         ~MapGenerator();
 
         [[nodiscard]] Tile get_tile(size_t x, size_t y) const;
@@ -29,7 +29,6 @@ namespace generator {
         PerlinNoise *temperature, *humidity, *height, *variation;
         void free_noises_memory() const;
 
-        double world_size;
         long long seed;
 
         double get_tile_noise_value(double x, double y, unsigned char octaves, const PerlinNoise* noise) const;

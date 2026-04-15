@@ -12,7 +12,7 @@ using std::exp;
 #include "../../objects/map/block.h"
 #include "../../objects/map/stone.h"
 
-scene::GameScene::GameScene(RenderWindow* window_link, Camera* camera_link, EngineStats* engine_stats_link) : generator(0, 1),
+scene::GameScene::GameScene(RenderWindow* window_link, Camera* camera_link, EngineStats* engine_stats_link) : generator(0),
                                                                                                               player(camera_link->get_current_view().getCenter()) {
     window             = window_link;
     camera             = camera_link;
