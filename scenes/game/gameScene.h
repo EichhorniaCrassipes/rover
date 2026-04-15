@@ -54,8 +54,9 @@ namespace scene {
         map<int, map<int, object::Block>> upper_decorations, interactive_blocks;
         vector<object::Entity> entities;
 
-        vector<Drawable*> active_chunks;
-        MapGenerator generator;
+        vector<sf::Drawable*> active_chunks;
+        vector<object::Block*> blocks;
+        generator::MapGenerator generator;
 
         object::Player player;
     private:

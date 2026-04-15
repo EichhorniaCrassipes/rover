@@ -25,3 +25,12 @@ void object::Object::render(sf::RenderWindow *window_link) {
     sprite.setScale(scale);
     window_link->draw(sprite);
 }
+
+void object::Object::draw(sf::RenderTarget &target, sf::RenderStates states) const
+{
+    states.transform *= getTransform();// getTransform() is defined by sf::Transformable
+    states.transform.translate(position);
+    states.transform.scale(scale);
+    states.texture = &texture;
+    target.draw(sprite, states);
+}
