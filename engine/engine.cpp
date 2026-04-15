@@ -198,7 +198,7 @@ void game::Engine::render(scene::GameScene* game, scene::UIScene* ui, const Came
     }
     frames++;
 }
-void game::Engine::update(scene::GameScene *game, scene::UIScene *ui) {
+void game::Engine::update(scene::GameScene* game, scene::UIScene* ui) {
     if (TPS_timer.getElapsedTime() >= TPS_delta_time) {
         TPS_timer.restart();
         if (game != nullptr) {
@@ -256,7 +256,6 @@ void game::Engine::info_overdraw() {
         ticks  = static_cast<unsigned short>(current_real_TPS);
 
         const auto window_x_max_coord = window->getView().getCenter().x + static_cast<float>(global_stats.window_width) / 2,
-                   window_y_max_coord = window->getView().getCenter().y + static_cast<float>(global_stats.window_height) / 2,
                    window_y_min_coord = window->getView().getCenter().y - static_cast<float>(global_stats.window_height) / 2;
 
 
@@ -299,14 +298,14 @@ void game::Engine::info_overdraw() {
         mouse_position.setString(
             to_string(local_mouse_position.x)
             + "\n ~\n"
-            + std::to_string(local_mouse_position.y)
+            + to_string(local_mouse_position.y)
             );
         mouse_position.setPosition({window_x_max_coord - 35, window_y_min_coord + 55});
 
         scene_num.setPosition({window_x_max_coord - 30, window_y_min_coord + 90});
         scene_num.setString(to_string(global_stats.current_scene_index));
 
-        version.setPosition({window_x_max_coord - window->getSize().x + 5, window_y_max_coord - 15});
+        version.setPosition({window_x_max_coord - window->getSize().x + 5, window_y_min_coord + window->getSize().y - 15});
     }
 
     window->draw(FPS);
