@@ -34,6 +34,7 @@ set(SOURCES
         generator/PerlinNoise.cpp
         generator/mapGenerator.cpp
         generator/chunk.cpp
+        generator/chunkDecorations.cpp
         generator/biomes.cpp
         generator/deposits.cpp
         generator/decorations.cpp
