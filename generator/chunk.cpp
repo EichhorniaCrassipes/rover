@@ -14,6 +14,7 @@ generator::Chunk::Chunk(MapGenerator* generator_link, const int x, const int y) 
     generator = generator_link;
     cout << "\n[generator/chunk] at x = " << x << ", y = " << y << '\n';
     std::array<int, 256> tiles = {};
+    std::array<unsigned char, 256> var = {};
 
     for (int j = 0; j < size.y; j++)
         for (int i = 0; i < size.x; i++)
@@ -74,11 +75,12 @@ bool generator::Chunk::load(const string &tile_path, const Vector2u tileSize, co
         for (unsigned int j = 0; j < height; ++j) {
             // get the current tile number
             const int tileNumber = tiles[i + j * width];
+            const unsigned char variationOffset = var[i + j * width];
 
             // find its position in the tileset texture
             const int tu = tileNumber % (m_tileset.getSize().x / tileSize.x);
-            const int tv = tileNumber / (m_tileset.getSize().x / tileSize.x);
-
+            const int tv = variationOffset % (128/ tileSize.y);
+            //std::cout <<tileNumber <<" "<<variationOffset<< " " << tu << " " << tv << "\n";
             // get a pointer to the triangles' vertices of the current tile
             sf::Vertex* triangles = &tile_vertices[(i + j * width) * 6];
 
