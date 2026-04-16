@@ -1,11 +1,7 @@
 //
 // Created by Egor on 16.04.2026.
 //
-#include <vector>
-
 #include "gameMenu.h"
-
-std::vector<sf::Text> mainMenu;
 
 // метод настройки текстовых объектов пунктов игрового меню
 void menu::GameMenu::setInitMenuText(sf::Text& text, sf::String str, float xpos, float ypos)
@@ -50,9 +46,12 @@ menu::GameMenu::GameMenu(sf::RenderWindow& window, float menu_x, float menu_y, f
         exit(32);
 
     max_menu = index;
+    mainMenu.reserve(max_menu);
 
-    mainMenu = std::vector<sf::Text>(max_menu, sf::Text(menu_font)).data();
-    for (int i = 0, ypos = menu_y; i < max_menu; i++, ypos += menu_dist) setInitMenuText(mainMenu[i], name[i], menu_x, ypos);
+    for (int i = 0, ypos = menu_y; i < max_menu; i++, ypos += menu_dist) {
+        mainMenu.emplace_back(menu_font);
+        setInitMenuText(mainMenu[i], name[i], menu_x, ypos);
+    }
     selected_menu = 0; // Задаём начальное положения выбраного пункта меню
     mainMenu[selected_menu].setFillColor(menu_border_color);
 }

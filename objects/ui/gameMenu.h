@@ -21,7 +21,7 @@ namespace menu
         int max_menu; // Максимальное число объектов меню
         int selected_menu; // Номер текущего пункта меню
         sf::Font menu_font; // шрифт меню
-        sf::Text* mainMenu;
+        std::vector<sf::Text> mainMenu;
         // цвета для меню (цвет текста, цвет выбранного пункта, цвет обводки текста
         sf::Color menu_text_color = sf::Color::White;
         sf::Color menu_chosen_color = sf::Color::Green;
@@ -34,10 +34,7 @@ namespace menu
     public:
         GameMenu(sf::RenderWindow& window, float menu_x, float menu_y, float menu_width, float menu_height,
             int index, sf::String name[], int size_font = 60, int step = 80);
-        ~GameMenu()
-        {
-            delete[] mainMenu;
-        }
+        ~GameMenu() = default;
 
         void draw(); // отрисовка меню
         void moveUp(); // перемещение выбора меню вверх
