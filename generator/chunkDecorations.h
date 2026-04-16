@@ -1,8 +1,5 @@
-#ifndef CHUNK
-#define CHUNK
-
-#define CHUNK_WIDTH 16
-#define CHUNK_HEIGHT 16
+#ifndef CHUNK_DECORATIONS
+#define CHUNK_DECORATIONS
 
 #include "mapGenerator.h"
 
@@ -33,22 +30,28 @@ using sf::Vector2i;
 
 
 namespace generator {
-    class Chunk : public Drawable, public Transformable {
+    struct ChunkDecorationsDecorationInfo {
+        string biome;
+        TileDecoration decoration;
+        Vector2f global_coordinates;
+    };
+
+    class ChunkDecorations : public Drawable, public Transformable {
     public:
-        Chunk(MapGenerator* generator_link, int x, int y);
+        ChunkDecorations(MapGenerator* generator_link, int x, int y);
     private:
         MapGenerator* generator;
 
-        VertexArray tile_vertices;
+        VertexArray decoration_vertices;
         Vector2i position;
-        Texture m_tileset;
+        Texture m_decorations;
 
         const sf::Vector2<int> size;
 
         void draw(RenderTarget &target, RenderStates states) const override;
-        bool load(const string &tile_path, Vector2u tileSize, const int* tiles, unsigned int width, unsigned int height);
+        bool load(const string &set_path, Vector2u tileSize);
 
-        string get4tiles(int x, int y) const;
+        vector<ChunkDecorationsDecorationInfo> decorations;
     };
 }
 
