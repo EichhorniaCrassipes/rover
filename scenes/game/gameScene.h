@@ -1,6 +1,7 @@
 #ifndef ROVER_GAME_SCENE_H
 #define ROVER_GAME_SCENE_H
 
+#include <deque>
 #include <SFML/Window/Event.hpp>
 using sf::Event;
 
@@ -54,7 +55,7 @@ namespace scene {
         map<int, map<int, object::Block>> upper_decorations, interactive_blocks;
         vector<object::Entity> entities;
 
-        vector<Drawable*> active_chunks, active_decoration_chunks;
+        std::deque<Drawable*> active_chunks, active_decoration_chunks;
         vector<object::Block*> blocks;
         MapGenerator generator;
 
@@ -69,7 +70,8 @@ namespace scene {
               distance_multiplier = 0.0001,
               distance_threshold = 1.5,
               move_vector_multiplier = 30,
-              zoom_coefficient = 0.05;
+              zoom_coefficient = 0.05,
+              render_distance = 30;
     };
 }
 

@@ -21,8 +21,8 @@ scene::GameScene::GameScene(RenderWindow* window_link, Camera* camera_link, Engi
     delta_time         = 0;
     FPS_timer.start();
 
-    for (char i = 0; i < 3; i++)
-        for (char j = 0; j < 3; j++) {
+    for (char i = 0; i < 4; i++)
+        for (char j = 0; j < 4; j++) {
             active_chunks.push_back(new generator::Chunk(&generator, 16 * i, 16 * j));
             active_decoration_chunks.push_back(new generator::ChunkDecorations(&generator, 16 * i, 16 * j));
         }
@@ -86,13 +86,18 @@ void scene::GameScene::handle_camera(const Vector2f &move_vector) {
     camera->move(delta);
 }
 
-void scene::GameScene::update() {}
+void scene::GameScene::update()
+{
+
+
+}
 
 bool scene::GameScene::event(const Event &event) {
     bool updated = false;
     if (const auto* wheelScrolled = event.getIf<sf::Event::MouseWheelScrolled>()) {
         if (wheelScrolled->wheel == sf::Mouse::Wheel::Vertical) {
             camera->zoom(1 - wheelScrolled->delta*zoom_coefficient);
+            render_distance *= (1 - wheelScrolled->delta*zoom_coefficient);
         }
     }
     return updated;
