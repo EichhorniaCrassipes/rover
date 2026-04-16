@@ -19,14 +19,15 @@ generator::Chunk::Chunk(MapGenerator* generator_link, const int x, const int y) 
         for (int i = 0; i < size.x; i++) {
             tiles[i + j * size.x] = texturelist::maptiles[get4tiles(i+position.x, j+position.y)];
             auto tile_result = generator->get_tile(x + i, y + j);
-            for (const auto &d : tile_result.decorations)
+            for (auto &decoration : tile_result.decorations)
                 decorations_raw.push_back({
                     {static_cast<float>(x + i), static_cast<float>(y + j)},
-                    d
+                    decoration
                 });
         }
-    if (!load( {64, 64}, tiles.data(), size.x, size.y))
+    if (!load({64, 64}, tiles.data(), size.x, size.y))
         cerr << "Failed to load tileset.png\n";
+    decorations_load();
     setPosition({static_cast<float>(position.x * size.x * 4), static_cast<float>(position.y * size.y * 4)});
 }
 
@@ -116,8 +117,9 @@ bool generator::Chunk::load(Vector2u tileSize, const int* tiles, const unsigned 
 
 void generator::Chunk::decorations_load() {
     for (const auto &[abs_position, decoration] : decorations_raw) {
+        cout << decoration.name << "\n";
         const auto tile = generator->get_tile(abs_position.x, abs_position.y);
         if (decoration.name == "stone")
-            decorations.push_back(new Stone(abs_position, tile.biome, tile.variation));
+            decorations.push_back(new object::Stone(abs_position, tile.biome, 0)); //tile.variation));
     }
 }
