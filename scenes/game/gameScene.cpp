@@ -79,10 +79,6 @@ void scene::GameScene::handle_camera(const Vector2f &move_vector) {
         delta.y = exp(distance.length() * distance_multiplier) * camera_speed * delta_time * distance_norm.y;
     // (distance.normalized() + move_vector.normalized() * move_vector_multiplier);
 
-    cout << "camera move call:\n\t\t"
-    << "distance: {" << distance.x << ';' << distance.y << "}\n\t\t"
-    << "delta: {" << delta.x << ';' << delta.y << "}\n\n";
-
     camera->move(delta);
 }
 
