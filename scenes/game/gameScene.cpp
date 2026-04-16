@@ -87,14 +87,30 @@ void scene::GameScene::handle_camera(const Vector2f &move_vector) {
     camera->move(delta);
 }
 
-void scene::GameScene::update()
-{
-    /*auto it = std::find_if(active_chunks.begin(), active_chunks.end(),
-                  [](const generator::Chunk c) { return  42; });
-    if (it != active_chunks.end()) {
-        // found
-    }
-*/
+void scene::GameScene::update() {
+   for (int i = - (int)render_distance; i < render_distance; i ++)
+       for (int j = -(int)render_distance; j < render_distance; j ++)
+       {
+           Vector2i playerChunk = {(int)std::floor(player.getPosition().x / 16.0) * 16,(int)std::floor(player.getPosition().x / 16.0) * 16};
+           Vector2i Pos = {i * 16 + playerChunk.x, j * 16 + playerChunk.y};
+           bool flag = false;
+           for (auto it = active_chunks.begin(); it != active_chunks.end() && !flag; ++it)
+           {
+               auto chunk = *it;
+               if ((-Vector2i{8 ,8} + chunk->getCenterPosition()) == Pos) {
+                   flag = true;
+               }
+           }
+           if (!flag)
+           {
+               std::cout << Pos.x/16.0 << " " << Pos.y/16.0 << std::endl;
+               active_chunks.push_back(new generator::Chunk(&generator, Pos.x/16, Pos.y/16));
+               active_chunks.pop_front();
+           }
+
+       }
+
+
 }
 
 bool scene::GameScene::event(const Event &event) {
