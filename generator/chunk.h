@@ -10,9 +10,6 @@
 using std::vector;
 using std::pair;
 
-#include <string>
-using std::string;
-
 #include "SFML/Graphics/Drawable.hpp"
 using sf::Drawable;
 
@@ -38,15 +35,14 @@ namespace generator {
         Chunk(MapGenerator* generator_link, int x, int y);
     private:
         MapGenerator* generator;
-
-        VertexArray tile_vertices;
+        VertexArray vertices;
         Vector2i position;
         Texture m_tileset;
 
-        const sf::Vector2<int> size;
-
         void draw(RenderTarget &target, RenderStates states) const override;
-        bool load(const string &tile_path, Vector2u tileSize, const int* tiles, unsigned int width, unsigned int height);
+        bool load(const string &tile_path, Vector2u tileSize, const int* tiles, const unsigned char* var, unsigned int width, unsigned int height);
+
+        const sf::Vector2<int> size;
 
         string get4tiles(int x, int y) const;
     };

@@ -12,17 +12,18 @@ using std::cerr;
 
 generator::Chunk::Chunk(MapGenerator* generator_link, const int x, const int y) : position{x, y}, size{16, 16} {
     generator = generator_link;
-    cout << "\n[generator/chunk] at x = " << x << ", y = " << y << '\n';
+    cout << "[generator/chunk] at x = " << x << ", y = " << y << '\n';
     std::array<int, 256> tiles = {};
     std::array<unsigned char, 256> var = {};
 
     for (int j = 0; j < size.y; j++)
-        for (int i = 0; i < size.x; i++)
-            tiles[i + j * size.x] = texturelist::maptiles[get4tiles(i+position.x, j+position.y)];
-
-    if (!load("textures/test01.png", {64, 64}, tiles.data(), size.x, size.y))
-        cerr << "Failed to load tile set\n";
-
+        for (int i = 0; i < size.x; i++) {
+            tiles[i + j * size.x] = {texturelist::maptiles[get4tiles(i+position.x, j+position.y)]};
+            var[i + j * size.x] = std::rand() % 256;
+        }
+    if (!load("textures/test01.png", {64, 64}, tiles.data(), var.data(), size.x, size.y))
+        cerr << "Failed to load tileset.png\n";
+    // load_decorations("textures/deco01.png", {64, 64});
     setPosition({static_cast<float>(position.x * size.x * 4), static_cast<float>(position.y * size.y * 4)});
 }
 
@@ -55,20 +56,21 @@ string generator::Chunk::get4tiles(int x, int y) const {
 }
 
 void generator::Chunk::draw(RenderTarget &target, RenderStates states) const {
-    states.transform *= getTransform();
-    states.transform.translate({32, 32});
+    states.transform *= getTransform();// getTransform() is defined by sf::Transformable
+    states.transform.translate(Vector2f(32, 32));
     states.texture = &m_tileset;
-    target.draw(tile_vertices, states);
+    target.draw(vertices, states);
 }
 
-bool generator::Chunk::load(const string &tile_path, const Vector2u tileSize, const int* tiles, const unsigned int width, const unsigned int height) {
-    cout << "[generator/chunk/load] " << tile_path << '\n';
+bool generator::Chunk::load(const string &tile_path, const Vector2u tileSize, const int* tiles, const unsigned char* var, const unsigned int width, const unsigned int height) {
+    //cout << "[generator/chunk/load] tileset: " << tile_path << "\n\n";
     // load the tileset texture
-    if (!m_tileset.loadFromFile(tile_path)) return false;
+    if (!m_tileset.loadFromFile(tile_path))
+        return false;
 
     // resize the vertex array to fit the level size
-    tile_vertices.setPrimitiveType(sf::PrimitiveType::Triangles);
-    tile_vertices.resize(width * height * 6);
+    vertices.setPrimitiveType(sf::PrimitiveType::Triangles);
+    vertices.resize(width * height * 6);
 
     // populate the vertex array, with two triangles per tile
     for (unsigned int i = 0; i < width; ++i) {
@@ -82,7 +84,7 @@ bool generator::Chunk::load(const string &tile_path, const Vector2u tileSize, co
             const int tv = variationOffset % (128/ tileSize.y);
             //std::cout <<tileNumber <<" "<<variationOffset<< " " << tu << " " << tv << "\n";
             // get a pointer to the triangles' vertices of the current tile
-            sf::Vertex* triangles = &tile_vertices[(i + j * width) * 6];
+            sf::Vertex* triangles = &vertices[(i + j * width) * 6];
 
             // define the 6 corners of the two triangles
             triangles[0].position = Vector2f(i * tileSize.x, j * tileSize.y);
