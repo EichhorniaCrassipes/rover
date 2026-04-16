@@ -158,12 +158,12 @@ void game::Engine::loop() {
             }
         }
 
-        info_overdraw();
-
         render(current_game_scene, current_UI_scene, current_camera);
         update(current_game_scene, current_UI_scene);
 
         window->draw(exitDialog_text);
+        info_update_values();
+        info_overdraw();
         window->display();
 
         adjust_tps();
@@ -199,7 +199,7 @@ void game::Engine::render(scene::GameScene* game, scene::UIScene* ui, const Came
     }
     frames++;
 }
-void game::Engine::update(scene::GameScene *game, scene::UIScene *ui) {
+void game::Engine::update(scene::GameScene* game, scene::UIScene* ui) {
     if (TPS_timer.getElapsedTime() >= TPS_delta_time) {
         TPS_timer.restart();
         if (game != nullptr) {
@@ -248,17 +248,13 @@ void game::Engine::adjust_tps() {
     }
 }
 
-void game::Engine::info_overdraw() {
+void game::Engine::info_update_values() {
     if (count_display_timer.getElapsedTime().asMilliseconds() >= 500) {
-        count_display_timer.restart();
-
         frames = static_cast<unsigned short>(static_cast<float>(frames) / count_display_timer.getElapsedTime().asSeconds());
         current_real_TPS = static_cast<float>(ticks) / count_display_timer.getElapsedTime().asSeconds();
+        count_display_timer.restart();
+
         ticks  = static_cast<unsigned short>(current_real_TPS);
-
-        const auto window_x_max_coord = window->getView().getCenter().x + static_cast<float>(global_stats.window_width) / 2,
-                   window_y_max_coord = window->getView().getCenter().y + static_cast<float>(global_stats.window_height) / 2;
-
 
         if (last_fps_update_value < frames)
             FPS_delta.setFillColor({0, 147, 20, 141});
@@ -268,12 +264,10 @@ void game::Engine::info_overdraw() {
             FPS_delta.setFillColor({147, 147, 147, 141});
 
         FPS.setString("FPS:" + to_string(frames));
-        FPS.setPosition({window_x_max_coord - 45, 5});
         FPS_delta.setString(
             (frames - last_fps_update_value > 0 ? "(+" : "(")
             + to_string(frames - last_fps_update_value) + ')'
             );
-        FPS_delta.setPosition({window_x_max_coord - 40, 15});
 
         if (last_tps_update_value < ticks)
             TPS_delta.setFillColor({0, 147, 20, 141});
@@ -283,12 +277,10 @@ void game::Engine::info_overdraw() {
             TPS_delta.setFillColor({147, 147, 147, 141});
 
         TPS.setString("TPS:" + to_string(ticks));
-        TPS.setPosition({window_x_max_coord - 45, 30}); // -10
         TPS_delta.setString(
             (ticks - last_tps_update_value > 0 ? "(+" : "(")
             + to_string(ticks - last_tps_update_value) + ')'
             );
-        TPS_delta.setPosition({window_x_max_coord - 40, 40});
 
         last_fps_update_value = frames;
         last_tps_update_value = ticks;
@@ -299,15 +291,25 @@ void game::Engine::info_overdraw() {
         mouse_position.setString(
             to_string(local_mouse_position.x)
             + "\n ~\n"
-            + std::to_string(local_mouse_position.y)
+            + to_string(local_mouse_position.y)
             );
-        mouse_position.setPosition({window_x_max_coord - 35, 55});
-
-        scene_num.setPosition({window_x_max_coord - 30, 90});
         scene_num.setString(to_string(global_stats.current_scene_index));
-
-        version.setPosition({window_x_max_coord - window->getSize().x + 5, window_y_max_coord - 15});
     }
+}
+
+void game::Engine::info_overdraw() {
+    const auto window_x_max_coord = window->getView().getCenter().x + static_cast<float>(global_stats.window_width) / 2,
+               window_y_min_coord = window->getView().getCenter().y - static_cast<float>(global_stats.window_height) / 2;
+
+    FPS.setPosition({window_x_max_coord - 45, window_y_min_coord + 5});
+    FPS_delta.setPosition({window_x_max_coord - 40, window_y_min_coord + 15});
+
+    TPS.setPosition({window_x_max_coord - 45, window_y_min_coord + 30});
+    TPS_delta.setPosition({window_x_max_coord - 40, window_y_min_coord + 40});
+
+    mouse_position.setPosition({window_x_max_coord - 35, window_y_min_coord + 55});
+    scene_num.setPosition({window_x_max_coord - 30, window_y_min_coord + 90});
+    version.setPosition({window_x_max_coord - window->getSize().x + 5, window_y_min_coord + window->getSize().y - 15});
 
     window->draw(FPS);
     window->draw(FPS_delta);

@@ -5,6 +5,7 @@ using std::cout;
 
 #include <cmath>
 using std::exp;
+using std::abs;
 
 #include <SFML/Window/Keyboard.hpp>
 
@@ -38,11 +39,12 @@ void scene::GameScene::render() {
         block->render(window);
 
 
-    handle_player();
-    handle_camera();
+    const auto move_vector = get_move_vector();
+    handle_player(move_vector);
+    handle_camera(move_vector);
 }
 
-void scene::GameScene::handle_player() {
+Vector2f scene::GameScene::get_move_vector() {
     float x = 0, y = 0;
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up))
@@ -55,14 +57,25 @@ void scene::GameScene::handle_player() {
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left))
         x = -1;
 
-    if (x != 0 || y != 0)
-        player.move({x, -y}, delta_time);
+    return {x, -y};
+}
+
+void scene::GameScene::handle_player(const Vector2f &move_vector) {
+    if (move_vector.length() > 0)
+        player.move(move_vector, delta_time);
     player.render(window);
 }
 
-void scene::GameScene::handle_camera() const {
+void scene::GameScene::handle_camera(const Vector2f &move_vector) {
     const auto distance = player.getPosition() - camera->get_current_view().getCenter(),
-               delta = exp(distance.length() * distance_multiplier) * camera_speed * delta_time * distance.normalized();
+               distance_norm = distance.normalized();
+    auto delta = Vector2f(0, 0);
+
+    if (abs(distance.x) >= distance_threshold)
+        delta.x = exp(distance.length() * distance_multiplier) * camera_speed * delta_time * distance_norm.x;
+    if (abs(distance.y) >= distance_threshold)
+        delta.y = exp(distance.length() * distance_multiplier) * camera_speed * delta_time * distance_norm.y;
+    // (distance.normalized() + move_vector.normalized() * move_vector_multiplier);
 
     camera->move(delta);
 }
