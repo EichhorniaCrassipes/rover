@@ -30,6 +30,10 @@ generator::Chunk::Chunk(MapGenerator* generator_link, const int x, const int y) 
     decorations_load();
     setPosition({static_cast<float>(position.x * size.x * 4), static_cast<float>(position.y * size.y * 4)});
 }
+generator::Chunk::~Chunk() {
+    for (const auto &d : decorations)
+        delete d;
+}
 
 
 string generator::Chunk::get4tiles(int x, int y) const {

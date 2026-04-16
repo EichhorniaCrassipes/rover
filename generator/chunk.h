@@ -33,7 +33,7 @@ namespace generator {
     class Chunk : public Drawable, public Transformable {
     public:
         Chunk(MapGenerator* generator_link, int x, int y);
-        ~Chunk() override = default;
+        ~Chunk() override;
     private:
         MapGenerator* generator;
         VertexArray vertices;
