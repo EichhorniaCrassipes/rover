@@ -2,6 +2,7 @@
 
 #include "biomes.h"
 #include "deposits.h"
+#include "decorations.h"
 
 #include <random>
 using std::default_random_engine;
@@ -11,31 +12,36 @@ using std::uniform_int_distribution;
 using std::string;
 
 
-generator::MapGenerator::MapGenerator(const long long seed, const size_t world_size) {
-    this->world_size = static_cast<double>(world_size);
-
+generator::MapGenerator::MapGenerator(const long long seed) {
     this->seed = seed;
     temperature = new PerlinNoise(seed);
     humidity = new PerlinNoise(seed_shift(1));
     height = new PerlinNoise(seed_shift(2));
+    variation = new PerlinNoise(seed_shift(3));
 }
-generator::MapGenerator::~MapGenerator() {
+generator::MapGenerator::~MapGenerator() { free_noises_memory(); }
+
+void generator::MapGenerator::free_noises_memory() const {
     delete temperature;
     delete humidity;
     delete height;
+    delete variation;
 }
 
 
 generator::Tile generator::MapGenerator::get_tile(const size_t x, const size_t y) const {
-    const double relative_x = static_cast<double>(x + COORD_SHIFT) / world_size,
-                 relative_y = static_cast<double>(y + COORD_SHIFT) / world_size;
+    const auto relative_x = static_cast<double>(x + COORD_SHIFT),
+               relative_y = static_cast<double>(y + COORD_SHIFT);
 
     const double te = get_tile_noise_value(relative_x, relative_y, 4, temperature),
                  hu = get_tile_noise_value(relative_x, relative_y, 2, humidity),
                  he = get_tile_noise_value(relative_x, relative_y, 2, height);
+    const auto v1 = static_cast<float>(variation->noise(relative_x, relative_y)),
+               v2 = static_cast<float>(variation->noise(relative_x + 100, relative_y + 100));
 
     Tile tile;
-    tile.variation = static_cast<unsigned char>(height->noise(relative_x, relative_y) * 4);
+    tile.variation = static_cast<unsigned char>(v1 * TILE_VARIATION_MULTIPLIER);
+    tile.decorations = {};
 
     for (const auto &b : GLOBAL_BIOMES)
         if (b.temperature_low <= te && te <= b.temperature_high &&
@@ -48,6 +54,17 @@ generator::Tile generator::MapGenerator::get_tile(const size_t x, const size_t y
                d.humidity_low <= hu && hu <= d.humidity_high &&
                  d.height_low <= he && he <= d.height_high) {
             tile.deposit = d.name;
+            break;
+        }
+    for (const auto &d : GLOBAL_DECORATIONS)
+        if (d.temperature_low <= te && te <= d.temperature_high &&
+               d.humidity_low <= hu && hu <= d.humidity_high &&
+                 d.height_low <= he && he <= d.height_high) {
+            tile.decorations.push_back({
+                d.name,
+                {(v1 - .5f) * 2.f * DECORATION_MAX_OFFSET, (v2 - .5f) * 2.f * DECORATION_MAX_OFFSET},
+                static_cast<unsigned char>(v1 * DECORATION_VARIATION_MULTIPLIER)
+            });
             break;
         }
 
@@ -94,7 +111,9 @@ long long generator::MapGenerator::seed_shift(const unsigned shift) const {
 
 void generator::MapGenerator::reseed(const long long new_seed) {
     seed = new_seed;
+    free_noises_memory();
     temperature = new PerlinNoise(seed);
     humidity = new PerlinNoise(seed_shift(1));
     height = new PerlinNoise(seed_shift(2));
+    variation = new PerlinNoise(seed_shift(3));
 }

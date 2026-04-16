@@ -9,11 +9,11 @@ using std::abs;
 
 #include <SFML/Window/Keyboard.hpp>
 
-#include "../../objects/map/chunk.h"
+#include "../../generator/chunk.h"
 #include "../../objects/map/block.h"
 #include "../../objects/map/stone.h"
 
-scene::GameScene::GameScene(RenderWindow* window_link, Camera* camera_link, EngineStats* engine_stats_link) : generator(0, 1),
+scene::GameScene::GameScene(RenderWindow* window_link, Camera* camera_link, EngineStats* engine_stats_link) : generator(0),
                                                                                                               player(camera_link->get_current_view().getCenter()) {
     window             = window_link;
     camera             = camera_link;
@@ -23,9 +23,7 @@ scene::GameScene::GameScene(RenderWindow* window_link, Camera* camera_link, Engi
 
     for (char i = 0; i < 2; i++)
         for (char j = 0; j < 2; j++)
-            active_chunks.push_back(new Chunk(generator, 16 * i, 16 * j));
-    blocks.push_back(new Stone({1, 2},"test0", 0));
-    blocks.push_back(new Stone({3.5, 1}, "test1", 0));
+            active_chunks.push_back(new generator::Chunk(&generator, 16 * i, 16 * j));
 }
 scene::GameScene::~GameScene() {
     for (const auto chunk : active_chunks)
