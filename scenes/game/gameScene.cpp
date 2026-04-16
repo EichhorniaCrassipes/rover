@@ -90,7 +90,6 @@ bool scene::GameScene::event(const Event &event) {
         }
     }
     return updated;
-    return updated;
 }
 
 void scene::GameScene::reseed(const long long generator_seed) {
