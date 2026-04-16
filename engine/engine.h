@@ -55,6 +55,7 @@ namespace game {
         inline void render(scene::GameScene* game, scene::UIScene* ui, const Camera* camera);
         inline void update(scene::GameScene* game, scene::UIScene* ui);
 
+        void info_update_values();
         void info_overdraw();
 
         void adjust_tps();
