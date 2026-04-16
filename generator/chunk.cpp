@@ -6,27 +6,37 @@ using std::cout;
 using std::cerr;
 
 #include "mapGenerator.h"
-#include "SFML/Graphics/RenderTarget.hpp"
+
+#include "../objects/map/stone.h"
 
 
-generator::Chunk::Chunk(const MapGenerator &gen, const int x, const int y) : position{x, y}, size{16, 16} {
+generator::Chunk::Chunk(MapGenerator* generator_link, const int x, const int y) : position{x, y}, size{16, 16} {
+    generator = generator_link;
     cout << "[generator/chunk] at x = " << x << ", y = " << y << '\n';
     std::array<int, 256> tiles = {};
 
     for (int j = 0; j < size.y; j++)
-        for (int i = 0; i < size.x; i++)
-            tiles.at(i + j * size.x) = texturelist::maptiles[get4tiles(gen, i+position.x, j+position.y)];
+        for (int i = 0; i < size.x; i++) {
+            tiles[i + j * size.x] = texturelist::maptiles[get4tiles(i+position.x, j+position.y)];
+            auto tile_result = generator->get_tile(x + i, y + j);
+            for (const auto &d : tile_result.decorations)
+                decorations_raw.push_back({
+                    {static_cast<float>(x + i), static_cast<float>(y + j)},
+                    d
+                });
+        }
     if (!load( {64, 64}, tiles.data(), size.x, size.y))
         cerr << "Failed to load tileset.png\n";
     setPosition({static_cast<float>(position.x * size.x * 4), static_cast<float>(position.y * size.y * 4)});
 }
 
 
-string generator::Chunk::get4tiles(const MapGenerator& gen, int x, int y) {
-    Tile tile0 = gen.get_tile(x, y);
-    Tile tile1 = gen.get_tile(x + 1, y);
-    Tile tile2 = gen.get_tile(x, y + 1);
-    Tile tile3 = gen.get_tile(x + 1, y + 1);
+string generator::Chunk::get4tiles(int x, int y) const {
+    Tile tile0 = generator->get_tile(x, y);
+    Tile tile1 = generator->get_tile(x + 1, y);
+    Tile tile2 = generator->get_tile(x, y + 1);
+    Tile tile3 = generator->get_tile(x + 1, y + 1);
+
     string t0 = "0", t1 = "0", t2 = "0", t3 = "0";
     if (tile0.biome == "test1")
         t0 = '1';
@@ -44,6 +54,7 @@ string generator::Chunk::get4tiles(const MapGenerator& gen, int x, int y) {
         t2 = '0';
     if (tile3.biome == "test0")
         t3 = '0';
+
     return t0+t1+t2+t3;
 }
 
@@ -52,9 +63,14 @@ void generator::Chunk::draw(RenderTarget &target, RenderStates states) const {
     states.transform.translate(Vector2f(32, 32));
     states.texture = &m_tileset;
     target.draw(vertices, states);
+
+    for (const auto &d : decorations) {
+        cout << "kamni\n";
+        target.draw(*d);
+    }
 }
 
-bool generator::Chunk::load(sf::Vector2u tileSize, const int* tiles, const unsigned int width, const unsigned int height) {
+bool generator::Chunk::load(Vector2u tileSize, const int* tiles, const unsigned int width, const unsigned int height) {
     cout << "[generator/chunk/load] tileset: test01.png\n\n";
     // load the tileset texture
     if (!m_tileset.loadFromFile("textures/test01.png"))
@@ -96,4 +112,12 @@ bool generator::Chunk::load(sf::Vector2u tileSize, const int* tiles, const unsig
     }
 
     return true;
+}
+
+void generator::Chunk::decorations_load() {
+    for (const auto &[abs_position, decoration] : decorations_raw) {
+        const auto tile = generator->get_tile(abs_position.x, abs_position.y);
+        if (decoration.name == "stone")
+            decorations.push_back(new Stone(abs_position, tile.biome, tile.variation));
+    }
 }

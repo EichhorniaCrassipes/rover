@@ -6,6 +6,10 @@
 
 #include "mapGenerator.h"
 
+#include <vector>
+using std::vector;
+using std::pair;
+
 #include "SFML/Graphics/Drawable.hpp"
 using sf::Drawable;
 
@@ -20,23 +24,32 @@ using sf::VertexArray;
 using sf::RenderStates;
 using sf::RenderTarget;
 
+#include <SFML/System/Vector2.hpp>
+using sf::Vector2u;
+using sf::Vector2i;
+
 
 namespace generator {
     class Chunk : public Drawable, public Transformable {
     public:
-        Chunk(const MapGenerator &gen, int x, int y);
+        Chunk(MapGenerator* generator_link, int x, int y);
         ~Chunk() override = default;
     private:
+        MapGenerator* generator;
         VertexArray vertices;
-        sf::Vector2<int> position;
+        Vector2i position;
         Texture m_tileset;
 
         void draw(RenderTarget &target, RenderStates states) const override;
-        bool load(sf::Vector2u tileSize, const int* tiles, unsigned int width, unsigned int height);
+        bool load(Vector2u tileSize, const int* tiles, unsigned int width, unsigned int height);
+        void decorations_load();
 
         const sf::Vector2<int> size;
 
-        static string get4tiles(const MapGenerator& gen, int x, int y);
+        vector<pair<Vector2f, TileDecoration>> decorations_raw;
+        vector<Drawable*> decorations;
+
+        string get4tiles(int x, int y) const;
     };
 }
 
