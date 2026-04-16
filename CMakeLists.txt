@@ -43,6 +43,7 @@ set(SOURCES
         scenes/UI/testScene.cpp
         objects/map/stone.h
         objects/map/stone.cpp
+        objects/ui/gameMenu.cpp
 )
 
 if (RENDER_ICON)
