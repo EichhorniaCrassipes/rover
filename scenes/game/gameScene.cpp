@@ -1,5 +1,6 @@
 #include "gameScene.h"
 
+#include <algorithm>
 #include <iostream>
 using std::cout;
 
@@ -88,8 +89,12 @@ void scene::GameScene::handle_camera(const Vector2f &move_vector) {
 
 void scene::GameScene::update()
 {
-
-
+    /*auto it = std::find_if(active_chunks.begin(), active_chunks.end(),
+                  [](const generator::Chunk c) { return  42; });
+    if (it != active_chunks.end()) {
+        // found
+    }
+*/
 }
 
 bool scene::GameScene::event(const Event &event) {

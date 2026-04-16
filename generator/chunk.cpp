@@ -106,3 +106,8 @@ bool generator::Chunk::load(const string &tile_path, const Vector2u tileSize, co
 
     return true;
 }
+
+Vector2i generator::Chunk::getCenterPosition() const
+{
+    return {position.x+size.x/2,position.y + size.y/2};
+}
