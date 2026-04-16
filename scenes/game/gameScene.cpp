@@ -84,7 +84,12 @@ void scene::GameScene::update() {}
 
 bool scene::GameScene::event(const Event &event) {
     bool updated = false;
-
+    if (const auto* wheelScrolled = event.getIf<sf::Event::MouseWheelScrolled>()) {
+        if (wheelScrolled->wheel == sf::Mouse::Wheel::Vertical) {
+            camera->zoom(1 - wheelScrolled->delta*zoom_coefficient);
+        }
+    }
+    return updated;
     return updated;
 }
 
