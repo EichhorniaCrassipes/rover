@@ -22,8 +22,8 @@ scene::GameScene::GameScene(RenderWindow* window_link, Camera* camera_link, Engi
     delta_time         = 0;
     FPS_timer.start();
 
-    for (char i = 0; i < 4; i++)
-        for (char j = 0; j < 4; j++) {
+    for (char i = 0; i < render_distance*2 + 2; i++)
+        for (char j = 0; j < render_distance*2 + 2; j++) {
             active_chunks.push_back(new generator::Chunk(&generator, 16 * i, 16 * j));
             active_decoration_chunks.push_back(new generator::ChunkDecorations(&generator, 16 * i, 16 * j));
         }
@@ -88,10 +88,11 @@ void scene::GameScene::handle_camera(const Vector2f &move_vector) {
 }
 
 void scene::GameScene::update() {
+    Vector2i playerChunk = {(int)std::floor(player.getPosition().x/64 / 16.0) * 16,(int)std::floor(player.getPosition().y/64 / 16.0) * 16};
+    std::cout<<"player: " << playerChunk.x << " " << playerChunk.y << std::endl;
    for (int i = - (int)render_distance; i < render_distance; i ++)
        for (int j = -(int)render_distance; j < render_distance; j ++)
        {
-           Vector2i playerChunk = {(int)std::floor(player.getPosition().x / 16.0) * 16,(int)std::floor(player.getPosition().x / 16.0) * 16};
            Vector2i Pos = {i * 16 + playerChunk.x, j * 16 + playerChunk.y};
            bool flag = false;
            for (auto it = active_chunks.begin(); it != active_chunks.end() && !flag; ++it)
@@ -103,9 +104,13 @@ void scene::GameScene::update() {
            }
            if (!flag)
            {
-               std::cout << Pos.x/16.0 << " " << Pos.y/16.0 << std::endl;
-               active_chunks.push_back(new generator::Chunk(&generator, Pos.x/16, Pos.y/16));
+               std::cout << Pos.x << " " << Pos.y << std::endl;
+               active_chunks.push_back(new generator::Chunk(&generator, Pos.x, Pos.y));
+               active_decoration_chunks.push_back(new generator::ChunkDecorations(&generator, Pos.x, Pos.y));
+               delete active_chunks.front();
+               delete active_decoration_chunks.front();
                active_chunks.pop_front();
+               active_decoration_chunks.pop_front();
            }
 
        }
@@ -118,7 +123,7 @@ bool scene::GameScene::event(const Event &event) {
     if (const auto* wheelScrolled = event.getIf<sf::Event::MouseWheelScrolled>()) {
         if (wheelScrolled->wheel == sf::Mouse::Wheel::Vertical) {
             camera->zoom(1 - wheelScrolled->delta*zoom_coefficient);
-            render_distance *= (1 - wheelScrolled->delta*zoom_coefficient);
+            //render_distance *= (1 - wheelScrolled->delta*zoom_coefficient);
         }
     }
     return updated;
