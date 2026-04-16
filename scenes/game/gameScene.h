@@ -67,7 +67,7 @@ namespace scene {
 
         float camera_speed = 200,
               distance_multiplier = 0.0001,
-              distance_threshold = .05,
+              distance_threshold = 1.5,
               move_vector_multiplier = 30;
     };
 }
