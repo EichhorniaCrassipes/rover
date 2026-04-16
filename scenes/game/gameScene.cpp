@@ -10,8 +10,8 @@ using std::abs;
 #include <SFML/Window/Keyboard.hpp>
 
 #include "../../generator/chunk.h"
+#include "../../generator/chunkDecorations.h"
 #include "../../objects/map/block.h"
-#include "../../objects/map/stone.h"
 
 scene::GameScene::GameScene(RenderWindow* window_link, Camera* camera_link, EngineStats* engine_stats_link) : generator(0),
                                                                                                               player(camera_link->get_current_view().getCenter()) {
@@ -21,12 +21,16 @@ scene::GameScene::GameScene(RenderWindow* window_link, Camera* camera_link, Engi
     delta_time         = 0;
     FPS_timer.start();
 
-    for (char i = 0; i < 2; i++)
-        for (char j = 0; j < 2; j++)
+    for (char i = 0; i < 3; i++)
+        for (char j = 0; j < 3; j++) {
             active_chunks.push_back(new generator::Chunk(&generator, 16 * i, 16 * j));
+            active_decoration_chunks.push_back(new generator::ChunkDecorations(&generator, 16 * i, 16 * j));
+        }
 }
 scene::GameScene::~GameScene() {
     for (const auto chunk : active_chunks)
+        delete chunk;
+    for (const auto chunk : active_decoration_chunks)
         delete chunk;
 }
 
@@ -34,6 +38,8 @@ scene::GameScene::~GameScene() {
 void scene::GameScene::render() {
     delta_time = FPS_timer.restart().asSeconds();
     for (const auto chunk : active_chunks)
+        window->draw(*chunk);
+    for (const auto chunk : active_decoration_chunks)
         window->draw(*chunk);
     for (const auto block : blocks)
         block->render(window);

@@ -87,6 +87,7 @@ void game::Engine::run(const short fps) {
     cameras[scenes::MAIN_MENU] = nullptr;
     cameras[scenes::CUTSCENE]  = nullptr;
     cameras[scenes::MAIN_GAME] = new Camera(window);
+    cameras[scenes::MAIN_GAME]->zoom(2);
 
     game_scenes[scenes::LOADING]   = nullptr;
     game_scenes[scenes::MAIN_MENU] = nullptr;

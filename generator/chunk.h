@@ -10,6 +10,9 @@
 using std::vector;
 using std::pair;
 
+#include <string>
+using std::string;
+
 #include "SFML/Graphics/Drawable.hpp"
 using sf::Drawable;
 
@@ -33,21 +36,17 @@ namespace generator {
     class Chunk : public Drawable, public Transformable {
     public:
         Chunk(MapGenerator* generator_link, int x, int y);
-        ~Chunk() override;
     private:
         MapGenerator* generator;
-        VertexArray vertices;
+
+        VertexArray tile_vertices;
         Vector2i position;
         Texture m_tileset;
 
-        void draw(RenderTarget &target, RenderStates states) const override;
-        bool load_tiles(const string &tile_path, Vector2u tileSize, const int* tiles, unsigned int width, unsigned int height);
-        void load_decorations(const string &tile_path, Vector2u tileSize, const int* tiles);
-
         const sf::Vector2<int> size;
 
-        vector<pair<Vector2f, TileDecoration>> decorations_raw;
-        vector<Drawable*> decorations;
+        void draw(RenderTarget &target, RenderStates states) const override;
+        bool load(const string &tile_path, Vector2u tileSize, const int* tiles, unsigned int width, unsigned int height);
 
         string get4tiles(int x, int y) const;
     };

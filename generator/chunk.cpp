@@ -12,27 +12,17 @@ using std::cerr;
 
 generator::Chunk::Chunk(MapGenerator* generator_link, const int x, const int y) : position{x, y}, size{16, 16} {
     generator = generator_link;
-    cout << "[generator/chunk] at x = " << x << ", y = " << y << '\n';
+    cout << "\n[generator/chunk] at x = " << x << ", y = " << y << '\n';
     std::array<int, 256> tiles = {};
 
     for (int j = 0; j < size.y; j++)
-        for (int i = 0; i < size.x; i++) {
+        for (int i = 0; i < size.x; i++)
             tiles[i + j * size.x] = texturelist::maptiles[get4tiles(i+position.x, j+position.y)];
-            auto tile_result = generator->get_tile(x + i, y + j);
-            for (auto &decoration : tile_result.decorations)
-                decorations_raw.push_back({
-                    {static_cast<float>(x + i), static_cast<float>(y + j)},
-                    decoration
-                });
-        }
-    if (!load_tiles("textures/test01.png", {64, 64}, tiles.data(), size.x, size.y))
-        cerr << "Failed to load tileset.png\n";
-    // load_decorations("textures/deco01.png", {64, 64});
+
+    if (!load("textures/test01.png", {64, 64}, tiles.data(), size.x, size.y))
+        cerr << "Failed to load tile set\n";
+
     setPosition({static_cast<float>(position.x * size.x * 4), static_cast<float>(position.y * size.y * 4)});
-}
-generator::Chunk::~Chunk() {
-    for (const auto &d : decorations)
-        delete d;
 }
 
 
@@ -64,24 +54,20 @@ string generator::Chunk::get4tiles(int x, int y) const {
 }
 
 void generator::Chunk::draw(RenderTarget &target, RenderStates states) const {
-    states.transform *= getTransform();// getTransform() is defined by sf::Transformable
-    states.transform.translate(Vector2f(32, 32));
+    states.transform *= getTransform();
+    states.transform.translate({32, 32});
     states.texture = &m_tileset;
-    target.draw(vertices, states);
-
-    for (const auto &d : decorations)
-        target.draw(*d);
+    target.draw(tile_vertices, states);
 }
 
-bool generator::Chunk::load_tiles(const string &tile_path, const Vector2u tileSize, const int* tiles, const unsigned int width, const unsigned int height) {
-    cout << "[generator/chunk/load] tileset: " << tile_path << "\n\n";
+bool generator::Chunk::load(const string &tile_path, const Vector2u tileSize, const int* tiles, const unsigned int width, const unsigned int height) {
+    cout << "[generator/chunk/load] " << tile_path << '\n';
     // load the tileset texture
-    if (!m_tileset.loadFromFile(tile_path))
-        return false;
+    if (!m_tileset.loadFromFile(tile_path)) return false;
 
     // resize the vertex array to fit the level size
-    vertices.setPrimitiveType(sf::PrimitiveType::Triangles);
-    vertices.resize(width * height * 6);
+    tile_vertices.setPrimitiveType(sf::PrimitiveType::Triangles);
+    tile_vertices.resize(width * height * 6);
 
     // populate the vertex array, with two triangles per tile
     for (unsigned int i = 0; i < width; ++i) {
@@ -94,7 +80,7 @@ bool generator::Chunk::load_tiles(const string &tile_path, const Vector2u tileSi
             const int tv = tileNumber / (m_tileset.getSize().x / tileSize.x);
 
             // get a pointer to the triangles' vertices of the current tile
-            sf::Vertex* triangles = &vertices[(i + j * width) * 6];
+            sf::Vertex* triangles = &tile_vertices[(i + j * width) * 6];
 
             // define the 6 corners of the two triangles
             triangles[0].position = Vector2f(i * tileSize.x, j * tileSize.y);
@@ -115,13 +101,4 @@ bool generator::Chunk::load_tiles(const string &tile_path, const Vector2u tileSi
     }
 
     return true;
-}
-
-void generator::Chunk::load_decorations(const string &tile_path, const Vector2u tileSize, const int* tiles) {
-    for (const auto &[abs_position, decoration] : decorations_raw) {
-        cout << decoration.name << "\n";
-        const auto tile = generator->get_tile(abs_position.x, abs_position.y);
-        if (decoration.name == "stone")
-            decorations.push_back(new object::Stone(abs_position, tile.biome, 0)); //tile.variation));
-    }
 }
