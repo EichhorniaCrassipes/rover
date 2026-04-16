@@ -41,8 +41,8 @@ namespace generator {
         Texture m_tileset;
 
         void draw(RenderTarget &target, RenderStates states) const override;
-        bool load(Vector2u tileSize, const int* tiles, unsigned int width, unsigned int height);
-        void decorations_load();
+        bool load_tiles(const string &tile_path, Vector2u tileSize, const int* tiles, unsigned int width, unsigned int height);
+        void load_decorations(const string &tile_path, Vector2u tileSize, const int* tiles);
 
         const sf::Vector2<int> size;
 

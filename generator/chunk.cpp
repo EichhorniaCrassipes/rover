@@ -25,9 +25,9 @@ generator::Chunk::Chunk(MapGenerator* generator_link, const int x, const int y) 
                     decoration
                 });
         }
-    if (!load({64, 64}, tiles.data(), size.x, size.y))
+    if (!load_tiles("textures/test01.png", {64, 64}, tiles.data(), size.x, size.y))
         cerr << "Failed to load tileset.png\n";
-    decorations_load();
+    // load_decorations("textures/deco01.png", {64, 64});
     setPosition({static_cast<float>(position.x * size.x * 4), static_cast<float>(position.y * size.y * 4)});
 }
 generator::Chunk::~Chunk() {
@@ -69,16 +69,14 @@ void generator::Chunk::draw(RenderTarget &target, RenderStates states) const {
     states.texture = &m_tileset;
     target.draw(vertices, states);
 
-    for (const auto &d : decorations) {
-        cout << "kamni\n";
+    for (const auto &d : decorations)
         target.draw(*d);
-    }
 }
 
-bool generator::Chunk::load(Vector2u tileSize, const int* tiles, const unsigned int width, const unsigned int height) {
-    cout << "[generator/chunk/load] tileset: test01.png\n\n";
+bool generator::Chunk::load_tiles(const string &tile_path, const Vector2u tileSize, const int* tiles, const unsigned int width, const unsigned int height) {
+    cout << "[generator/chunk/load] tileset: " << tile_path << "\n\n";
     // load the tileset texture
-    if (!m_tileset.loadFromFile("textures/test01.png"))
+    if (!m_tileset.loadFromFile(tile_path))
         return false;
 
     // resize the vertex array to fit the level size
@@ -119,7 +117,7 @@ bool generator::Chunk::load(Vector2u tileSize, const int* tiles, const unsigned 
     return true;
 }
 
-void generator::Chunk::decorations_load() {
+void generator::Chunk::load_decorations(const string &tile_path, const Vector2u tileSize, const int* tiles) {
     for (const auto &[abs_position, decoration] : decorations_raw) {
         cout << decoration.name << "\n";
         const auto tile = generator->get_tile(abs_position.x, abs_position.y);
