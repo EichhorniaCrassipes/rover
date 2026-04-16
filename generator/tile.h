@@ -4,17 +4,23 @@
 #include <string>
 using std::string;
 
+#include <vector>
+using std::vector;
+
+#include <SFML/System/Vector2.hpp>
+using sf::Vector2f;
+
 namespace generator {
     struct TileDecoration {
         string name;
-        double offset_x, offset_y;
+        Vector2f offset;
         unsigned char variation;
     };
 
     struct Tile {
         unsigned char variation;
         string biome, deposit;
-        TileDecoration decoration;
+        vector<TileDecoration> decorations;
     };
 }
 

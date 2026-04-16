@@ -35,13 +35,13 @@ generator::Tile generator::MapGenerator::get_tile(const size_t x, const size_t y
 
     const double te = get_tile_noise_value(relative_x, relative_y, 4, temperature),
                  hu = get_tile_noise_value(relative_x, relative_y, 2, humidity),
-                 he = get_tile_noise_value(relative_x, relative_y, 2, height),
-                 v1 = variation->noise(relative_x, relative_y),
-                 v2 = variation->noise(relative_x + 100, relative_y + 100);
+                 he = get_tile_noise_value(relative_x, relative_y, 2, height);
+    const auto v1 = static_cast<float>(variation->noise(relative_x, relative_y)),
+               v2 = static_cast<float>(variation->noise(relative_x + 100, relative_y + 100));
 
     Tile tile;
     tile.variation = static_cast<unsigned char>(v1 * TILE_VARIATION_MULTIPLIER);
-    tile.decoration = {"", 0, 0, 0};
+    tile.decorations = {};
 
     for (const auto &b : GLOBAL_BIOMES)
         if (b.temperature_low <= te && te <= b.temperature_high &&
@@ -60,12 +60,11 @@ generator::Tile generator::MapGenerator::get_tile(const size_t x, const size_t y
         if (d.temperature_low <= te && te <= d.temperature_high &&
                d.humidity_low <= hu && hu <= d.humidity_high &&
                  d.height_low <= he && he <= d.height_high) {
-            tile.decoration = {
+            tile.decorations.push_back({
                 d.name,
-                (v1 - .5) * 2 * DECORATION_MAX_OFFSET,
-                (v2 - .5) * 2 * DECORATION_MAX_OFFSET,
+                {(v1 - .5f) * 2.f * DECORATION_MAX_OFFSET, (v2 - .5f) * 2.f * DECORATION_MAX_OFFSET},
                 static_cast<unsigned char>(v1 * DECORATION_VARIATION_MULTIPLIER)
-            };
+            });
             break;
         }
 
