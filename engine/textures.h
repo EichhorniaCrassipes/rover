@@ -11,8 +11,6 @@ using sf::Texture;
 
 namespace game {
     extern map<string, Texture*> textures;
-
-
 }
 
 #endif
