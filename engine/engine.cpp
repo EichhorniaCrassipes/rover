@@ -177,7 +177,7 @@ void game::Engine::render(scene::GameScene* game, scene::UIScene* ui, const Came
             game->render();
         }
         catch (const runtime_error &e) {
-            cout << "[game render] got an error while trying to render a scene:\n";
+            cerr << "[game render] got an error while trying to render a scene:\n";
             cerr << e.what() << '\n';
         }
     }
@@ -186,7 +186,7 @@ void game::Engine::render(scene::GameScene* game, scene::UIScene* ui, const Came
             ui->render();
         }
         catch (const runtime_error &e) {
-            cout << "[UI render] got an error while trying to render a scene:\n";
+            cerr << "[UI render] got an error while trying to render a scene:\n";
             cerr << e.what() << '\n';
         }
     }
