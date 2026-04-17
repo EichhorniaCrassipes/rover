@@ -22,6 +22,14 @@ namespace inventory
         sf::Color inventory_border_color = sf::Color::Black;
         sf::Color inventory_chosen_color = sf::Color::Green;
 
+    public:
+        ~GameInventory() = default;
+        void draw();
+        void setColorTextInventory(sf::Color menColor, sf::Color ChoColor,
+                              sf::Color BordColor);
+        void AlignInventory(int pos_x);
+        int getSelectedInventory();
+
     };
 }
 
