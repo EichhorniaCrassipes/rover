@@ -123,14 +123,16 @@ void game::Engine::loop() {
                 window->close();
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape))
             {
-                //window->close();
                 exit_flag = true;
                 exitDialog_text.setFillColor({255, 255, 255, 255});
                 exitDialog_text.setOutlineColor({0, 0, 0, 255});
             }
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Y) && (exit_flag == true))
             {
-                window->close();
+                exit_flag = false;
+                exitDialog_text.setFillColor({255, 255, 255, 0});
+                exitDialog_text.setOutlineColor({0, 0, 0, 0});
+                global_stats.current_scene_index = scenes::MAIN_MENU;
             }
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::N) && (exit_flag == true))
             {
