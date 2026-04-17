@@ -32,17 +32,19 @@ using sf::Vector2i;
 namespace generator {
     class Chunk : public Drawable, public Transformable {
     public:
-        Chunk(MapGenerator* generator_link, int x, int y);
+        Chunk(MapGenerator* generator_link, int x, int y, Texture* texture);
+        ~Chunk() override;
+        Vector2i getCenterPosition() const;
     private:
         MapGenerator* generator;
         VertexArray vertices;
         Vector2i position;
-        Texture m_tileset;
+        Texture* m_tileset;
 
         void draw(RenderTarget &target, RenderStates states) const override;
-        bool load(const string &tile_path, Vector2u tileSize, const int* tiles, const unsigned char* var, unsigned int width, unsigned int height);
+        bool load( Vector2u tileSize, const int* tiles, const unsigned char* var, unsigned int width, unsigned int height);
 
-        const sf::Vector2<int> size;
+        const sf::Vector2i size;
 
         string get4tiles(int x, int y) const;
     };

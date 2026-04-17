@@ -1,5 +1,6 @@
 #include "gameScene.h"
 
+#include <algorithm>
 #include <iostream>
 using std::cout;
 
@@ -13,18 +14,20 @@ using std::abs;
 #include "../../generator/chunkDecorations.h"
 #include "../../objects/map/block.h"
 
-scene::GameScene::GameScene(RenderWindow* window_link, Camera* camera_link, EngineStats* engine_stats_link) : generator(0),
-                                                                                                              player(camera_link->get_current_view().getCenter()) {
+scene::GameScene::GameScene(RenderWindow* window_link, Camera* camera_link, EngineStats* engine_stats_link,  map<string, Texture*>* textures) : generator(0),
+                                                                                                            player(camera_link->get_current_view().getCenter()),
+                                                                                                            scene_textures(textures)
+{
     window             = window_link;
     camera             = camera_link;
     this->engine_stats = engine_stats_link;
     delta_time         = 0;
     FPS_timer.start();
 
-    for (char i = 0; i < 3; i++)
-        for (char j = 0; j < 3; j++) {
-            active_chunks.push_back(new generator::Chunk(&generator, 16 * i, 16 * j));
-            active_decoration_chunks.push_back(new generator::ChunkDecorations(&generator, 16 * i, 16 * j));
+    for (char i = 0; i < render_distance*2; i++)
+        for (char j = 0; j < render_distance*2; j++) {
+            active_chunks.push_back(new generator::Chunk(&generator, 16 * i, 16 * j, (*scene_textures)["textures/test01.png"]));
+            active_decoration_chunks.push_back(new generator::ChunkDecorations(&generator, 16 * i, 16 * j, (*scene_textures)["textures/deco01.png"]));
         }
 }
 scene::GameScene::~GameScene() {
@@ -41,9 +44,9 @@ void scene::GameScene::render() {
         window->draw(*chunk);
     for (const auto chunk : active_decoration_chunks)
         window->draw(*chunk);
-    for (const auto block : blocks)
+    /*for (const auto block : blocks)
         block->render(window);
-
+    */
 
     const auto move_vector = get_move_vector();
     handle_player(move_vector);
@@ -86,13 +89,48 @@ void scene::GameScene::handle_camera(const Vector2f &move_vector) {
     camera->move(delta);
 }
 
-void scene::GameScene::update() {}
+void scene::GameScene::update() {
+    sf::Clock timer1;
+    timer1.start();
+    Vector2i playerChunk = {(int)std::floor(player.getPosition().x/64 / 16.0) * 16,(int)std::floor(player.getPosition().y/64 / 16.0) * 16};
+    //std::cout<<"player: " << playerChunk.x << " " << playerChunk.y << std::endl;
+    for (int i = - (int)render_distance; i < render_distance; i ++)
+        for (int j = -(int)render_distance; j < render_distance; j ++)
+            {
+            Vector2i Pos = {i * 16 + playerChunk.x, j * 16 + playerChunk.y};
+           bool flag = false;
+           for (auto it = active_chunks.begin(); it != active_chunks.end() && !flag; ++it)
+           {
+               auto chunk = *it;
+               if ((-Vector2i{8 ,8} + chunk->getCenterPosition()) == Pos) {
+                   flag = true;
+               }
+           }
+           if (!flag)
+           {
+               //std::cout << Pos.x << " " << Pos.y << std::endl;
+               active_chunks.push_back(new generator::Chunk(&generator, Pos.x, Pos.y, (*scene_textures)["textures/test01.png"]));
+               active_decoration_chunks.push_back(new generator::ChunkDecorations(&generator, Pos.x, Pos.y, (*scene_textures)["textures/deco01.png"]));
+
+               delete active_chunks.front();
+               delete active_decoration_chunks.front();
+
+               active_chunks.pop_front();
+               active_decoration_chunks.pop_front();
+           }
+
+       }
+
+    std::cout << "[timer1] " << timer1.getElapsedTime().asSeconds() << std::endl;
+
+}
 
 bool scene::GameScene::event(const Event &event) {
     bool updated = false;
     if (const auto* wheelScrolled = event.getIf<sf::Event::MouseWheelScrolled>()) {
         if (wheelScrolled->wheel == sf::Mouse::Wheel::Vertical) {
             camera->zoom(1 - wheelScrolled->delta*zoom_coefficient);
+            //render_distance *= (1 - wheelScrolled->delta*zoom_coefficient);
         }
     }
     return updated;

@@ -1,7 +1,14 @@
 #ifndef ROVER_GAME_SCENE_H
 #define ROVER_GAME_SCENE_H
 
+#include <deque>
 #include <SFML/Window/Event.hpp>
+
+namespace generator {
+    class ChunkDecorations;
+    class Chunk;
+}
+
 using sf::Event;
 
 #include <SFML/Graphics/RenderWindow.hpp>
@@ -35,7 +42,7 @@ using game::Camera;
 namespace scene {
     class GameScene {
     public:
-        explicit GameScene(RenderWindow* window_link, Camera* camera_link, EngineStats* engine_stats_link);
+        explicit GameScene(RenderWindow* window_link, Camera* camera_link, EngineStats* engine_stats_link, map<string, Texture*>* textures);
         virtual ~GameScene();
 
         void render();
@@ -54,8 +61,9 @@ namespace scene {
         map<int, map<int, object::Block>> upper_decorations, interactive_blocks;
         vector<object::Entity> entities;
 
-        vector<Drawable*> active_chunks, active_decoration_chunks;
-        vector<object::Block*> blocks;
+        std::deque<generator::Chunk*> active_chunks;
+        std::deque<generator::ChunkDecorations*> active_decoration_chunks;
+        //vector<object::Block*> blocks;
         MapGenerator generator;
 
         object::Player player;
@@ -69,7 +77,9 @@ namespace scene {
               distance_multiplier = 0.0001,
               distance_threshold = 1.5,
               move_vector_multiplier = 30,
-              zoom_coefficient = 0.05;
+              zoom_coefficient = 0.05,
+              render_distance = 10;
+        map<string, Texture*>* scene_textures;
     };
 }
 
