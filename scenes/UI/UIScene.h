@@ -24,9 +24,9 @@ namespace scene {
         explicit UIScene(RenderWindow* window_link, EngineStats* scene_index_link);
         virtual ~UIScene();
 
-        void render();
-        void update();
-        bool event(const Event &event); // возвращает true, если произошла какая-либо обработка
+        virtual void render();
+        virtual void update();
+        virtual bool event(const Event &event); // возвращает true, если произошла какая-либо обработка
     protected:
         RenderWindow* window;
         EngineStats* scene_index;

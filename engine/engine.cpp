@@ -10,9 +10,10 @@ using std::runtime_error;
 
 #include "enums.h"
 #include "stats.h"
-EngineStats game::global_stats {scenes::MAIN_GAME, 0, 0};
+EngineStats game::global_stats {scenes::MAIN_MENU, 0, 0};
 
 #include "../scenes/UI/testScene.h"
+#include "../scenes/UI/menuScene.h"
 
 
 game::Engine::Engine() : Engine(DEFAULT_TITLE) {}
@@ -53,7 +54,7 @@ game::Engine::Engine(const string &name) : FPS(default_monospace_font, "", 10),
     exitDialog_text.setPosition({
         static_cast<float>(window->getSize().x) / 2.f,
         static_cast<float>(window->getSize().y) / 2.f
-    }  //todo сделать центровку (done) и перенести в testScene
+    }  //todo сделать центровку (done)
     );
 
     FPS.setFillColor({147, 147, 147, 241});
@@ -94,7 +95,7 @@ void game::Engine::run(const short fps) {
     game_scenes[scenes::MAIN_GAME] = new scene::GameScene(window, cameras[scenes::MAIN_GAME], &global_stats);
 
     UI_scenes[scenes::LOADING]   = new scene::UIScene(window, &global_stats);
-    UI_scenes[scenes::MAIN_MENU] = new scene::UIScene(window, &global_stats);
+    UI_scenes[scenes::MAIN_MENU] = new scene::MenuScene(window, &global_stats);
     UI_scenes[scenes::CUTSCENE]  = new scene::TestScene(window, &global_stats);
     UI_scenes[scenes::MAIN_GAME] = new scene::UIScene(window, &global_stats);
 
