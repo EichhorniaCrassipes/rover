@@ -14,10 +14,13 @@ using std::abs;
 #include "../../generator/chunkDecorations.h"
 #include "../../objects/map/block.h"
 
-scene::GameScene::GameScene(RenderWindow* window_link, Camera* camera_link, EngineStats* engine_stats_link,  map<string, Texture*>* textures) : generator(0),
-                                                                                                            player(camera_link->get_current_view().getCenter()),
-                                                                                                            scene_textures(textures)
-{
+scene::GameScene::GameScene(
+    RenderWindow* window_link,
+    Camera* camera_link,
+    EngineStats* engine_stats_link,
+    map<string, Texture*>* textures) : generator(0),
+                                       player((*textures)["textures/player.png"], camera_link->get_current_view().getCenter()),
+                                       scene_textures(textures) {
     window             = window_link;
     camera             = camera_link;
     this->engine_stats = engine_stats_link;
