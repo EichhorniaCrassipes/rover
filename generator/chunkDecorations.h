@@ -38,18 +38,18 @@ namespace generator {
 
     class ChunkDecorations : public Drawable, public Transformable {
     public:
-        ChunkDecorations(MapGenerator* generator_link, int x, int y);
+        ChunkDecorations(MapGenerator* generator_link, int x, int y, Texture* texture);
     private:
         MapGenerator* generator;
 
         VertexArray decoration_vertices;
         Vector2i position;
-        Texture m_decorations;
+        Texture* m_decorations;
 
         const sf::Vector2<int> size;
 
         void draw(RenderTarget &target, RenderStates states) const override;
-        bool load(const string &set_path, Vector2u tileSize);
+        void load( Vector2u tileSize);
 
         vector<ChunkDecorationsDecorationInfo> decorations;
     };
