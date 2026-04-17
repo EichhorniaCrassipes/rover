@@ -19,9 +19,6 @@ object::Player::Player(const Vector2f &null_position) : Mob() {
 
 
 void object::Player::move(const Vector2f vector, const float delta_time) {
-    cout << "[player/move]\n\t"
-    << "moved with vector: {" << vector.x << ';' << vector.y << "}\n\t";
-
     const auto delta = vector.normalized() * speed * delta_time;
     position += delta;
 }

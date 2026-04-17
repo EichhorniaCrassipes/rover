@@ -1,15 +1,17 @@
 #ifndef ROVER_STONE_H
 #define ROVER_STONE_H
+
 #include "block.h"
+
 #include <string>
 using std::string;
 
-class Stone : public object::Block
-{
-public:
-    Stone(sf::Vector2f pos,string biome, char variation);
-    ~Stone() = default;
+namespace object {
+    class Stone : public Block {
+    public:
+        Stone(Vector2f pos, const string &biome, unsigned char variation = 0);
+        ~Stone() override = default;
+    };
+}
 
-};
-
-#endif //ROVER_STONE_H
+#endif

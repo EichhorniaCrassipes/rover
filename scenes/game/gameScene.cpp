@@ -9,11 +9,11 @@ using std::abs;
 
 #include <SFML/Window/Keyboard.hpp>
 
-#include "../../objects/map/chunk.h"
+#include "../../generator/chunk.h"
+#include "../../generator/chunkDecorations.h"
 #include "../../objects/map/block.h"
-#include "../../objects/map/stone.h"
 
-scene::GameScene::GameScene(RenderWindow* window_link, Camera* camera_link, EngineStats* engine_stats_link) : generator(0, 1),
+scene::GameScene::GameScene(RenderWindow* window_link, Camera* camera_link, EngineStats* engine_stats_link) : generator(0),
                                                                                                               player(camera_link->get_current_view().getCenter()) {
     window             = window_link;
     camera             = camera_link;
@@ -21,14 +21,16 @@ scene::GameScene::GameScene(RenderWindow* window_link, Camera* camera_link, Engi
     delta_time         = 0;
     FPS_timer.start();
 
-    for (char i = 0; i < 2; i++)
-        for (char j = 0; j < 2; j++)
-            active_chunks.push_back(new Chunk(generator, 16 * i, 16 * j));
-    blocks.push_back(new Stone({1, 2},"test0", 0));
-    blocks.push_back(new Stone({3.5, 1}, "test1", 0));
+    for (char i = 0; i < 3; i++)
+        for (char j = 0; j < 3; j++) {
+            active_chunks.push_back(new generator::Chunk(&generator, 16 * i, 16 * j));
+            active_decoration_chunks.push_back(new generator::ChunkDecorations(&generator, 16 * i, 16 * j));
+        }
 }
 scene::GameScene::~GameScene() {
     for (const auto chunk : active_chunks)
+        delete chunk;
+    for (const auto chunk : active_decoration_chunks)
         delete chunk;
 }
 
@@ -36,6 +38,8 @@ scene::GameScene::~GameScene() {
 void scene::GameScene::render() {
     delta_time = FPS_timer.restart().asSeconds();
     for (const auto chunk : active_chunks)
+        window->draw(*chunk);
+    for (const auto chunk : active_decoration_chunks)
         window->draw(*chunk);
     for (const auto block : blocks)
         block->render(window);
@@ -79,10 +83,6 @@ void scene::GameScene::handle_camera(const Vector2f &move_vector) {
         delta.y = exp(distance.length() * distance_multiplier) * camera_speed * delta_time * distance_norm.y;
     // (distance.normalized() + move_vector.normalized() * move_vector_multiplier);
 
-    cout << "camera move call:\n\t\t"
-    << "distance: {" << distance.x << ';' << distance.y << "}\n\t\t"
-    << "delta: {" << delta.x << ';' << delta.y << "}\n\n";
-
     camera->move(delta);
 }
 
@@ -90,7 +90,11 @@ void scene::GameScene::update() {}
 
 bool scene::GameScene::event(const Event &event) {
     bool updated = false;
-
+    if (const auto* wheelScrolled = event.getIf<sf::Event::MouseWheelScrolled>()) {
+        if (wheelScrolled->wheel == sf::Mouse::Wheel::Vertical) {
+            camera->zoom(1 - wheelScrolled->delta*zoom_coefficient);
+        }
+    }
     return updated;
 }
 

@@ -54,9 +54,9 @@ namespace scene {
         map<int, map<int, object::Block>> upper_decorations, interactive_blocks;
         vector<object::Entity> entities;
 
-        vector<sf::Drawable*> active_chunks;
+        vector<Drawable*> active_chunks, active_decoration_chunks;
         vector<object::Block*> blocks;
-        generator::MapGenerator generator;
+        MapGenerator generator;
 
         object::Player player;
     private:
@@ -67,8 +67,9 @@ namespace scene {
 
         float camera_speed = 200,
               distance_multiplier = 0.0001,
-              distance_threshold = .05,
-              move_vector_multiplier = 30;
+              distance_threshold = 1.5,
+              move_vector_multiplier = 30,
+              zoom_coefficient = 0.05;
     };
 }
 
