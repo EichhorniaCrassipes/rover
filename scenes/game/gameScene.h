@@ -42,7 +42,7 @@ using game::Camera;
 namespace scene {
     class GameScene {
     public:
-        explicit GameScene(RenderWindow* window_link, Camera* camera_link, EngineStats* engine_stats_link);
+        explicit GameScene(RenderWindow* window_link, Camera* camera_link, EngineStats* engine_stats_link, map<string, Texture*>* textures);
         virtual ~GameScene();
 
         void render();
@@ -63,7 +63,7 @@ namespace scene {
 
         std::deque<generator::Chunk*> active_chunks;
         std::deque<generator::ChunkDecorations*> active_decoration_chunks;
-        vector<object::Block*> blocks;
+        //vector<object::Block*> blocks;
         MapGenerator generator;
 
         object::Player player;
@@ -78,7 +78,8 @@ namespace scene {
               distance_threshold = 1.5,
               move_vector_multiplier = 30,
               zoom_coefficient = 0.05,
-              render_distance = 2;
+              render_distance = 30;
+        map<string, Texture*>* scene_textures;
     };
 }
 

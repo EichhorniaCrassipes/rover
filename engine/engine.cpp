@@ -13,7 +13,7 @@ using std::runtime_error;
 EngineStats game::global_stats {scenes::MAIN_GAME, 0, 0};
 
 #include "../scenes/UI/testScene.h"
-
+#include "textures.h"
 
 game::Engine::Engine() : Engine(DEFAULT_TITLE) {}
 game::Engine::Engine(const string &name) : FPS(default_monospace_font, "", 10),
@@ -38,6 +38,10 @@ game::Engine::Engine(const string &name) : FPS(default_monospace_font, "", 10),
 
     game_scenes = new scene::GameScene*[scenes::CAP];
     UI_scenes   = new scene::UIScene*[scenes::CAP];
+
+    for (const auto&[fst, snd] : textures)
+        if (!snd->loadFromFile(fst))
+            std::cerr << "Failed to load " << fst << std::endl;
 
     if (!default_monospace_font.openFromFile("fonts/OCR A Extended Regular.ttf")) {}
 
@@ -92,7 +96,7 @@ void game::Engine::run(const short fps) {
     game_scenes[scenes::LOADING]   = nullptr;
     game_scenes[scenes::MAIN_MENU] = nullptr;
     game_scenes[scenes::CUTSCENE]  = nullptr;
-    game_scenes[scenes::MAIN_GAME] = new scene::GameScene(window, cameras[scenes::MAIN_GAME], &global_stats);
+    game_scenes[scenes::MAIN_GAME] = new scene::GameScene(window, cameras[scenes::MAIN_GAME], &global_stats, &textures);
 
     UI_scenes[scenes::LOADING]   = new scene::UIScene(window, &global_stats);
     UI_scenes[scenes::MAIN_MENU] = new scene::UIScene(window, &global_stats);
