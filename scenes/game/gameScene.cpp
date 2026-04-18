@@ -99,16 +99,13 @@ void scene::GameScene::handle_camera(const Vector2f &move_vector) {
 
 void scene::GameScene::update() {
     update_chunks();
-
 }
 
 scene::Status scene::GameScene::event(const Event &event) {
-    if (const auto* wheelScrolled = event.getIf<Event::MouseWheelScrolled>()) {
-        if (wheelScrolled->wheel == sf::Mouse::Wheel::Vertical) {
+    if (const auto* wheelScrolled = event.getIf<Event::MouseWheelScrolled>())
+        if (wheelScrolled->wheel == sf::Mouse::Wheel::Vertical)
             camera->zoom(1 - wheelScrolled->delta*zoom_coefficient);
-            //render_distance *= (1 - wheelScrolled->delta*zoom_coefficient);
-        }
-    }
+
     return {false, game::scenes::DO_NOT_UPDATE_SCENE};
 }
 
@@ -116,44 +113,36 @@ void scene::GameScene::reseed(const long long generator_seed) {
     generator.reseed(generator_seed);
 }
 
-void scene::GameScene::update_chunks()
-{
-    const Vector2i playerChunk = {static_cast<int>(std::floor(player.getPosition().x / 64 / 16.0)) * 16,static_cast<int>(std::floor(player.getPosition().y / 64 / 16.0)) * 16};
-    for (int i = - static_cast<int>(render_distance) + 1; i < static_cast<int>(render_distance); i ++)
-        for (int j = - static_cast<int>(render_distance) + 1; j < static_cast<int>(render_distance); j ++)
-        {
+void scene::GameScene::update_chunks() {
+    const Vector2i playerChunk = {
+        static_cast<int>(std::floor(player.getPosition().x / 64 / 16.0)) * 16,
+        static_cast<int>(std::floor(player.getPosition().y / 64 / 16.0)) * 16
+    };
+    for (int i = -static_cast<int>(render_distance) + 1; i < static_cast<int>(render_distance); i++)
+        for (int j = -static_cast<int>(render_distance) + 1; j < static_cast<int>(render_distance); j++) {
             const Vector2i Pos = {i * 16 + playerChunk.x, j * 16 + playerChunk.y};
             bool flag = false;
+
             for (auto it = active_chunks.begin(); it != active_chunks.end() && !flag; ++it)
-            {
-                auto chunk = *it;
-                if ((chunk->getAbsolutePosition()) == Pos) {
+                if (const auto chunk = *it; chunk->getAbsolutePosition() == Pos)
                     flag = true;
-                }
-            }
-            if (!flag)
-            {
-                //std::cout << Pos.x << " " << Pos.y << std::endl;
+
+            if (!flag) {
                 active_chunks.push_back(new generator::Chunk(&generator, Pos.x, Pos.y, (*scene_textures)["textures/test01.png"]));
                 active_decoration_chunks.push_back(new generator::ChunkDecorations(&generator, Pos.x, Pos.y, (*scene_textures)["textures/deco01.png"]));
-
             }
 
         }
 
-    for (auto it = active_chunks.begin(); it != active_chunks.end(); ++it)
-    {
-        auto chunk = *it;
-        if ((static_cast<Vector2f>((chunk->getAbsolutePosition()) - playerChunk)).length() > render_distance * 2 * 16) {
-            std::cout << "distance between player and deleted chunk" << (static_cast<Vector2f>((chunk->getAbsolutePosition()) - playerChunk)).length();
+    for (auto it = active_chunks.begin(); it != active_chunks.end(); ++it) {
+        if (const auto chunk = *it; static_cast<Vector2f>(chunk->getAbsolutePosition() - playerChunk).lengthSquared() > render_distance_squared * 4 * 256) {
+            std::cout << "distance between player and deleted chunk" << static_cast<Vector2f>(chunk->getAbsolutePosition() - playerChunk).length();
             delete chunk;
             active_chunks.erase(it);
         }
     }
-    for (auto it = active_decoration_chunks.begin(); it != active_decoration_chunks.end(); ++it)
-    {
-        auto chunk = *it;
-        if ((static_cast<Vector2f>((chunk->getAbsolutePosition()) - playerChunk)).length() > render_distance * 2 * 16) {
+    for (auto it = active_decoration_chunks.begin(); it != active_decoration_chunks.end(); ++it) {
+        if (const auto chunk = *it; static_cast<Vector2f>(chunk->getAbsolutePosition() - playerChunk).lengthSquared() > render_distance_squared * 4 * 256) {
             delete chunk;
             active_decoration_chunks.erase(it);
         }
