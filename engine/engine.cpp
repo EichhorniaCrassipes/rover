@@ -161,19 +161,21 @@ void game::Engine::loop() {
                 exitDialog_text.setOutlineColor({0, 0, 0, 0});
             }
 
-            bool UI_event_update = false;
+            scene::Status UI_event_update{};
             if (current_UI_scene != nullptr) {
                 try {
                     UI_event_update = current_UI_scene->event(*event);
+                    change_scene(UI_event_update.next_scene);
                 }
                 catch (const runtime_error &e) {
                     cout << "[UI event update] got an error while handling an event:\n";
                     cerr << e.what() << '\n';
                 }
             }
-            if (!UI_event_update && current_game_scene != nullptr) {
+            if (!UI_event_update.updated && current_game_scene != nullptr) {
                 try {
-                    current_game_scene->event(*event);
+                    const auto &[updated, next_scene] = current_game_scene->event(*event);
+                    change_scene(next_scene);
                 }
                 catch (const runtime_error &e) {
                     cout << "[game event update] got an error while handling an event:\n";
@@ -249,15 +251,20 @@ void game::Engine::update() {
 }
 
 void game::Engine::change_scene(const unsigned short next) {
-    if (current_game_scene != nullptr)
-        current_game_scene->on_end();
-    if (current_UI_scene != nullptr)
-        current_UI_scene->on_end();
+    if (next == scenes::EXIT)
+        window->close();
 
-    current_camera = cameras[next];
-    current_UI_scene = UI_scenes[next];
-    current_game_scene = game_scenes[next];
-    current_scene_index = next;
+    else if (next != scenes::DO_NOT_UPDATE_SCENE) {
+        if (current_game_scene != nullptr)
+            current_game_scene->on_end();
+        if (current_UI_scene != nullptr)
+            current_UI_scene->on_end();
+
+        current_camera = cameras[next];
+        current_UI_scene = UI_scenes[next];
+        current_game_scene = game_scenes[next];
+        current_scene_index = next;
+    }
 }
 
 
