@@ -60,7 +60,7 @@ void scene::MenuScene::render() {
 }
 
 void scene::MenuScene::update() {
-    // No per-frame update needed for menu
+    // No per-tick update needed for menu
 }
 
 scene::Status scene::MenuScene::event(const Event &event) {
