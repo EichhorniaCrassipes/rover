@@ -47,6 +47,7 @@ namespace game {
         Camera* current_camera;
         scene::GameScene* current_game_scene;
         scene::UIScene* current_UI_scene;
+        unsigned short current_scene_index;
 
         Clock TPS_timer, count_display_timer;
         Time last_tps_time_value;
