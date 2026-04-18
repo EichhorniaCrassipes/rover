@@ -36,6 +36,7 @@ namespace scene {
         void update() override;
         Status event(const Event &event) override;
 
+        void on_start() override;
         void on_end() override;
 
         void reseed(long long generator_seed);
@@ -66,7 +67,8 @@ namespace scene {
               distance_threshold = 1.5,
               move_vector_multiplier = 30,
               zoom_coefficient = 0.05,
-              render_distance = 2;
+              render_distance = 2,
+              render_distance_squared = render_distance * render_distance;
         map<string, Texture*>* scene_textures;
     };
 }
