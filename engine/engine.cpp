@@ -263,6 +263,11 @@ void game::Engine::change_scene(const unsigned short next) {
         current_UI_scene = UI_scenes[next];
         current_game_scene = game_scenes[next];
         current_scene_index = next;
+
+        if (current_game_scene != nullptr)
+            current_game_scene->on_start();
+        if (current_UI_scene != nullptr)
+            current_UI_scene->on_start();
     }
 }
 
