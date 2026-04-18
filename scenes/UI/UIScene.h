@@ -1,11 +1,8 @@
 #ifndef ROVER_UI_SCENE_H
 #define ROVER_UI_SCENE_H
 
-#include <SFML/Window/Event.hpp>
+#include "../scene.h"
 using sf::Event;
-
-#include <SFML/Graphics/RenderWindow.hpp>
-using sf::RenderWindow;
 
 #include <vector>
 using std::vector;
@@ -19,18 +16,15 @@ using game::EngineStats;
 #include "../../objects/object.h"
 
 namespace scene {
-    class UIScene {
+    class UIScene : public Scene {
     public:
         explicit UIScene(RenderWindow* window_link, EngineStats* scene_index_link);
-        virtual ~UIScene();
+        ~UIScene() override;
 
-        virtual void render();
-        virtual void update();
-        virtual bool event(const Event &event); // возвращает true, если произошла какая-либо обработка
+        void render() override;
+        void update() override;
+        bool event(const Event &event) override; // возвращает true, если произошла какая-либо обработка
     protected:
-        RenderWindow* window;
-        EngineStats* scene_index;
-
         vector<sf::Drawable*> test_pull;
         // std::map<int, map<int, UIObject>> objects;
         // media (OST + ...)

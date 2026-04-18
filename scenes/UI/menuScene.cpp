@@ -14,8 +14,8 @@ scene::MenuScene::MenuScene(RenderWindow* window_link, EngineStats* scene_index_
         return;
     }
     background.setTexture(&background_texture);
-    background.setSize({static_cast<float>(scene_index->window_width),
-                        static_cast<float>(scene_index->window_height)});
+    background.setSize({static_cast<float>(engine_stats->window_width),
+                        static_cast<float>(engine_stats->window_height)});
 
     // Load font
     if (!font.openFromFile("fonts/OCR A Extended Regular.ttf")) {
@@ -81,7 +81,7 @@ bool scene::MenuScene::event(const sf::Event& event) {
 void scene::MenuScene::handleMenuAction(int selected_menu) {
     switch (selected_menu) {
     case 0: // Play
-        scene_index->current_scene_index = game::scenes::MAIN_GAME;
+        engine_stats->current_scene_index = game::scenes::MAIN_GAME;
         break;
     case 1: // Settings
         // TODO: Open settings scene
