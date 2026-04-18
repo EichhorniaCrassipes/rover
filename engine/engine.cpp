@@ -307,8 +307,10 @@ void game::Engine::info_update_values() {
 }
 
 void game::Engine::info_overdraw() {
-    const auto window_x_max_coord = window->getView().getCenter().x + static_cast<float>(global_stats.window_width) / 2,
-               window_y_min_coord = window->getView().getCenter().y - static_cast<float>(global_stats.window_height) / 2;
+    const View current_view          = window->getView();
+    const Vector2f current_view_size = current_view.getSize();
+    const float window_x_max_coord   = current_view.getCenter().x + current_view_size.x / 2,
+                window_y_min_coord   = current_view.getCenter().y - current_view_size.y / 2;
 
     FPS.setPosition({window_x_max_coord - 45, window_y_min_coord + 5});
     FPS_delta.setPosition({window_x_max_coord - 40, window_y_min_coord + 15});
@@ -318,7 +320,7 @@ void game::Engine::info_overdraw() {
 
     mouse_position.setPosition({window_x_max_coord - 35, window_y_min_coord + 55});
     scene_num.setPosition({window_x_max_coord - 30, window_y_min_coord + 90});
-    version.setPosition({window_x_max_coord - window->getSize().x + 5, window_y_min_coord + window->getSize().y - 15});
+    version.setPosition({window_x_max_coord - current_view_size.x + 5, window_y_min_coord + current_view_size.y - 15});
 
     window->draw(FPS);
     window->draw(FPS_delta);
