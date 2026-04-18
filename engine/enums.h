@@ -24,15 +24,17 @@ namespace game {
     inline unsigned short DO_NOT_UPDATE_SCENE = -1,
                           EXIT_SCENE          = -2;
     namespace game_scenes {
-        inline unsigned short CAP                 = 1,
+        inline unsigned short CAP                 = 2,
 
-                              MAIN                = 0;
+                              RESET               = 0,
+                              MAIN                = 1;
     }
     namespace UI_scenes {
         inline unsigned short CAP                 = 2,
 
-                              MENU                = 0,
-                              CUTSCENE            = 1;
+                              RESET               = 0,
+                              MENU                = 1,
+                              CUTSCENE            = 2;
     }
 }
 
