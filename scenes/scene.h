@@ -8,6 +8,9 @@ using sf::Event;
 #include "../engine/stats.h"
 using game::EngineStats;
 
+#include "status.h"
+
+
 namespace scene {
     class Scene {
     public:
@@ -16,7 +19,7 @@ namespace scene {
 
         virtual void render() = 0;
         virtual void update() = 0;
-        virtual bool event(const Event &event) = 0;
+        virtual Status event(const Event &event) = 0;
 
         virtual void on_start();
         virtual void on_end();
