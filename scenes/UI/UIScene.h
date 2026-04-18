@@ -23,7 +23,7 @@ namespace scene {
 
         void render() override;
         void update() override;
-        bool event(const Event &event) override; // возвращает true, если произошла какая-либо обработка
+        Status event(const Event &event) override;
     protected:
         vector<sf::Drawable*> test_pull;
         // std::map<int, map<int, UIObject>> objects;

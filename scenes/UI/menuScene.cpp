@@ -6,6 +6,9 @@
 #include <iostream>
 using std::cout;
 
+#include "../../engine/enums.h"
+
+
 scene::MenuScene::MenuScene(RenderWindow* window_link, EngineStats* scene_index_link)
     : UIScene(window_link, scene_index_link), title(nullptr), menu(nullptr) {
     // Load background texture
@@ -57,40 +60,42 @@ void scene::MenuScene::update() {
     // No per-frame update needed for menu
 }
 
-bool scene::MenuScene::event(const sf::Event& event) {
-    if (event.is<sf::Event::KeyReleased>()) {
-        const auto* keyEvent = event.getIf<sf::Event::KeyReleased>();
-        if (!keyEvent) return false;
+scene::Status scene::MenuScene::event(const Event &event) {
+    if (event.is<Event::KeyReleased>()) {
+        const auto* keyEvent = event.getIf<Event::KeyReleased>();
+        if (!keyEvent) return {false, game::scenes::DO_NOT_UPDATE_SCENE};
 
         if (keyEvent->scancode == sf::Keyboard::Scancode::Up) {
             menu->moveUp();
-            return true;
+            return {true, game::scenes::DO_NOT_UPDATE_SCENE};
         }
         if (keyEvent->scancode == sf::Keyboard::Scancode::Down) {
             menu->moveDown();
-            return true;
+            return {true, game::scenes::DO_NOT_UPDATE_SCENE};
         }
         if (keyEvent->scancode == sf::Keyboard::Scancode::Enter) {
-            handleMenuAction(menu->getSelectedMenu());
-            return true;
+            unsigned short code = handleMenuAction(menu->getSelectedMenu());
+            return {false, code};
         }
     }
-    return false;
+    return {false, game::scenes::DO_NOT_UPDATE_SCENE};
 }
 
-void scene::MenuScene::handleMenuAction(int selected_menu) {
+unsigned short scene::MenuScene::handleMenuAction(int selected_menu) {
     switch (selected_menu) {
-    case 0: // Play
-        engine_stats->current_scene_index = game::scenes::MAIN_GAME;
-        break;
+        case 0: // Play
+        return game::scenes::MAIN_GAME;
     case 1: // Settings
         // TODO: Open settings scene
+        return game::scenes::DO_NOT_UPDATE_SCENE;
         break;
     case 2: // About
         // TODO: Open about scene
+        return game::scenes::DO_NOT_UPDATE_SCENE;
         break;
     case 3: // Exit
-        window->close();
-        break;
+        return game::scenes::EXIT;
+    default:
+        return game::scenes::DO_NOT_UPDATE_SCENE;
     }
 }
