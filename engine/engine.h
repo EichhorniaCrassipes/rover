@@ -20,6 +20,9 @@ using sf::Text;
 #include <string>
 using std::string;
 
+#include <array>
+using std::array;
+
 
 namespace game {
     class Engine {
@@ -40,11 +43,14 @@ namespace game {
         Time last_tps_time_value;
 
         Font default_monospace_font;
-        Text FPS, FPS_delta, TPS, TPS_delta;
+        Text *FPS, *FPS_delta, *TPS, *TPS_delta;
         unsigned short frames, last_fps_update_value,
                        ticks, last_tps_update_value;
 
-        Text mouse_position, scene_num, version;
+        Text *mouse_position, *scene_num, *version;
+        array<Text*, 7> info_texts{};
+        array<float, 7> info_texts_sizes{};
+
         Text exitDialog_text;
 
         float current_real_TPS;
@@ -57,6 +63,7 @@ namespace game {
 
         void info_update_values();
         void info_overdraw();
+        void info_size_adjustment();
 
         void adjust_tps();
         bool adjustment_proceeding = false;

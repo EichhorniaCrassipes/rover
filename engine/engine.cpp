@@ -18,14 +18,12 @@ EngineStats game::global_stats {scenes::MAIN_MENU, 0, 0};
 #include "textures.h"
 
 game::Engine::Engine() : Engine(DEFAULT_TITLE) {}
-game::Engine::Engine(const string &name) : FPS(default_monospace_font, "", 10),
-                                           FPS_delta(default_monospace_font, "", 10),
-                                           TPS(default_monospace_font, "", 10),
-                                           TPS_delta(default_monospace_font, "", 10),
-                                           mouse_position(default_monospace_font, "", 10),
-                                           scene_num(default_monospace_font, "", 10),
-                                           version(default_monospace_font, "v0.0-indev", 12),
-                                           exitDialog_text(default_monospace_font, "Are you sure you want to exit?\n[Y]es  [N]o\nWe will miss you", 28){
+game::Engine::Engine(const string &name) : exitDialog_text(
+                                               default_monospace_font,
+                                               "Are you sure you want to exit?\n[Y]es  [N]o\nWe will miss you",
+                                               28
+                                           )
+{
     const auto video_mode = VideoMode::getDesktopMode();
     window = new RenderWindow(
         video_mode,
@@ -53,7 +51,6 @@ game::Engine::Engine(const string &name) : FPS(default_monospace_font, "", 10),
     exitDialog_text.setFillColor({255, 255, 255, 0});
     exitDialog_text.setOutlineColor({0, 0, 0, 0});
 
-
     auto bounds = exitDialog_text.getLocalBounds();
     exitDialog_text.setOrigin({bounds.size.x, bounds.size.y / 2.0f});
     exitDialog_text.setPosition({
@@ -62,28 +59,51 @@ game::Engine::Engine(const string &name) : FPS(default_monospace_font, "", 10),
     }  //todo сделать центровку (done)
     );
 
-    FPS.setFillColor({147, 147, 147, 241});
+    FPS = new Text(default_monospace_font, "", 10);
+    FPS_delta = new Text(default_monospace_font, "", 10);
+    TPS = new Text(default_monospace_font, "", 10);
+    TPS_delta = new Text(default_monospace_font, "", 10);
+    mouse_position = new Text(default_monospace_font, "", 10);
+    scene_num = new Text(default_monospace_font, "", 10);
+    version = new Text(default_monospace_font, "v0.0-indev", 12);
+
+    FPS->setFillColor({147, 147, 147, 241});
     frames = 0;
     last_fps_update_value = 0;
 
-    TPS.setFillColor({147, 147, 147, 241});
+    TPS->setFillColor({147, 147, 147, 241});
     ticks = 0;
     last_tps_update_value = 0;
     current_real_TPS = 0;
 
-    mouse_position.setFillColor({147, 147, 147, 141});
-    scene_num.setFillColor({147, 147, 147, 141});
-    version.setFillColor({147, 147, 147, 141});
+    mouse_position->setFillColor({147, 147, 147, 141});
+    scene_num->setFillColor({147, 147, 147, 141});
+    version->setFillColor({147, 147, 147, 141});
+
+    info_texts = {FPS, FPS_delta, TPS, TPS_delta, mouse_position, scene_num, version};
+    info_texts_sizes = {
+        FPS->getGlobalBounds().size.x,
+        FPS_delta->getGlobalBounds().size.x,
+        TPS->getGlobalBounds().size.x,
+        TPS_delta->getGlobalBounds().size.x,
+        mouse_position->getGlobalBounds().size.x,
+        scene_num->getGlobalBounds().size.x,
+        version->getGlobalBounds().size.x
+    };
 }
 
 game::Engine::~Engine() {
-    for (unsigned short i = 0; i < scenes::CAP; i++) {
+    for (unsigned char i = 0; i < scenes::CAP; i++) {
         delete game_scenes[i];
         delete UI_scenes[i];
         delete cameras[i];
     }
     delete[] game_scenes;
     delete[] UI_scenes;
+    delete[] cameras;
+
+    for (const auto t : info_texts)
+        delete t;
 
     delete window;
 }
@@ -266,27 +286,27 @@ void game::Engine::info_update_values() {
         ticks  = static_cast<unsigned short>(current_real_TPS);
 
         if (last_fps_update_value < frames)
-            FPS_delta.setFillColor({0, 147, 20, 141});
+            FPS_delta->setFillColor({0, 147, 20, 141});
         else if (last_fps_update_value > frames)
-            FPS_delta.setFillColor({255, 29, 0, 141});
+            FPS_delta->setFillColor({255, 29, 0, 141});
         else
-            FPS_delta.setFillColor({147, 147, 147, 141});
+            FPS_delta->setFillColor({147, 147, 147, 141});
 
-        FPS.setString("FPS:" + to_string(frames));
-        FPS_delta.setString(
+        FPS->setString("FPS:" + to_string(frames));
+        FPS_delta->setString(
             (frames - last_fps_update_value > 0 ? "(+" : "(")
             + to_string(frames - last_fps_update_value) + ')'
             );
 
         if (last_tps_update_value < ticks)
-            TPS_delta.setFillColor({0, 147, 20, 141});
+            TPS_delta->setFillColor({0, 147, 20, 141});
         else if (last_tps_update_value > ticks)
-            TPS_delta.setFillColor({255, 29, 0, 141});
+            TPS_delta->setFillColor({255, 29, 0, 141});
         else
-            TPS_delta.setFillColor({147, 147, 147, 141});
+            TPS_delta->setFillColor({147, 147, 147, 141});
 
-        TPS.setString("TPS:" + to_string(ticks));
-        TPS_delta.setString(
+        TPS->setString("TPS:" + to_string(ticks));
+        TPS_delta->setString(
             (ticks - last_tps_update_value > 0 ? "(+" : "(")
             + to_string(ticks - last_tps_update_value) + ')'
             );
@@ -297,12 +317,12 @@ void game::Engine::info_update_values() {
         ticks = 0;
 
         const auto local_mouse_position = sf::Mouse::getPosition(*window);
-        mouse_position.setString(
+        mouse_position->setString(
             to_string(local_mouse_position.x)
             + "\n ~\n"
             + to_string(local_mouse_position.y)
             );
-        scene_num.setString(to_string(global_stats.current_scene_index));
+        scene_num->setString(to_string(global_stats.current_scene_index));
     }
 }
 
@@ -312,21 +332,24 @@ void game::Engine::info_overdraw() {
     const float window_x_max_coord   = current_view.getCenter().x + current_view_size.x / 2,
                 window_y_min_coord   = current_view.getCenter().y - current_view_size.y / 2;
 
-    FPS.setPosition({window_x_max_coord - 45, window_y_min_coord + 5});
-    FPS_delta.setPosition({window_x_max_coord - 40, window_y_min_coord + 15});
+    FPS->setPosition({window_x_max_coord - 45, window_y_min_coord + 5});
+    FPS_delta->setPosition({window_x_max_coord - 40, window_y_min_coord + 15});
 
-    TPS.setPosition({window_x_max_coord - 45, window_y_min_coord + 30});
-    TPS_delta.setPosition({window_x_max_coord - 40, window_y_min_coord + 40});
+    TPS->setPosition({window_x_max_coord - 45, window_y_min_coord + 30});
+    TPS_delta->setPosition({window_x_max_coord - 40, window_y_min_coord + 40});
 
-    mouse_position.setPosition({window_x_max_coord - 35, window_y_min_coord + 55});
-    scene_num.setPosition({window_x_max_coord - 30, window_y_min_coord + 90});
-    version.setPosition({window_x_max_coord - current_view_size.x + 5, window_y_min_coord + current_view_size.y - 15});
+    mouse_position->setPosition({window_x_max_coord - 35, window_y_min_coord + 55});
+    scene_num->setPosition({window_x_max_coord - 30, window_y_min_coord + 90});
+    version->setPosition({window_x_max_coord - current_view_size.x + 5, window_y_min_coord + current_view_size.y - 15});
 
-    window->draw(FPS);
-    window->draw(FPS_delta);
-    window->draw(TPS);
-    window->draw(TPS_delta);
-    window->draw(mouse_position);
-    window->draw(scene_num);
-    window->draw(version);
+    info_size_adjustment();
+
+    for (const auto t : info_texts)
+        window->draw(*t);
+}
+
+void game::Engine::info_size_adjustment() {
+    for (unsigned i = 0; i < info_texts.size(); i++) {
+        // pass
+    }
 }
