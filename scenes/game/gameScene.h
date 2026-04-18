@@ -61,8 +61,8 @@ namespace scene {
         map<int, map<int, object::Block>> upper_decorations, interactive_blocks;
         vector<object::Entity> entities;
 
-        std::deque<generator::Chunk*> active_chunks;
-        std::deque<generator::ChunkDecorations*> active_decoration_chunks;
+        std::vector<generator::Chunk*> active_chunks;
+        std::vector<generator::ChunkDecorations*> active_decoration_chunks;
         //vector<object::Block*> blocks;
         MapGenerator generator;
 
@@ -70,6 +70,7 @@ namespace scene {
     private:
         void handle_player(const Vector2f &move_vector);
         void handle_camera(const Vector2f &move_vector);
+        void update_chunks();
 
         static Vector2f get_move_vector();
 
@@ -78,7 +79,7 @@ namespace scene {
               distance_threshold = 1.5,
               move_vector_multiplier = 30,
               zoom_coefficient = 0.05,
-              render_distance = 10;
+              render_distance = 2;
         map<string, Texture*>* scene_textures;
     };
 }

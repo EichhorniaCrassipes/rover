@@ -39,6 +39,7 @@ namespace generator {
     class ChunkDecorations : public Drawable, public Transformable {
     public:
         ChunkDecorations(MapGenerator* generator_link, int x, int y, Texture* texture);
+        sf::Vector2i getAbsolutePosition() const;
     private:
         MapGenerator* generator;
 
