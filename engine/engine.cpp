@@ -110,17 +110,17 @@ game::Engine::~Engine() {
 
 void game::Engine::run(const short fps) {
     cameras[game_scenes::RESET] = nullptr;
-    cameras[game_scenes::MAIN] = new Camera(window);
+    cameras[game_scenes::MAIN]  = new Camera(window);
 
     cameras[game_scenes::MAIN]->zoom(32 * 64 / static_cast<float>(global_stats.window_width));
 
     game_scenes[game_scenes::RESET] = nullptr;
-    game_scenes[game_scenes::MAIN] = new scene::GameScene(window, cameras[game_scenes::MAIN], &global_stats, &textures);
+    game_scenes[game_scenes::MAIN]  = new scene::GameScene(window, cameras[game_scenes::MAIN], &global_stats, &textures);
 
-    UI_scenes[UI_scenes::RESET] = nullptr;
-    UI_scenes[UI_scenes::MENU] = new scene::MenuScene(window, &global_stats);
+    UI_scenes[UI_scenes::RESET]    = nullptr;
+    UI_scenes[UI_scenes::MENU]     = new scene::MenuScene(window, &global_stats);
     UI_scenes[UI_scenes::CUTSCENE] = new scene::CutScene(window, &global_stats, &default_monospace_font);
-    UI_scenes[UI_scenes::GAME] = nullptr;
+    UI_scenes[UI_scenes::GAME]     = nullptr;
 
     if (fps > 0) window->setFramerateLimit(fps);
     else window->setVerticalSyncEnabled(true);

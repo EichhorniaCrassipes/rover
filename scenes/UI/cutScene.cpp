@@ -37,12 +37,12 @@ void scene::CutScene::update() {
 scene::Status scene::CutScene::event(const Event &event) {
     if (event.is<Event::KeyReleased>()) {
         const auto* keyEvent = event.getIf<Event::KeyReleased>();
-        if (!keyEvent) return {false, game::scenes::DO_NOT_UPDATE_SCENE};
+        if (!keyEvent) return {false, game::DO_NOT_UPDATE_SCENE, game::DO_NOT_UPDATE_SCENE};
 
         if (keyEvent->scancode == sf::Keyboard::Scancode::Space) {
             // skip cutscene
-            return {true, game::scenes::MAIN_MENU};
+            return {true, game::game_scenes::MAIN, game::UI_scenes::GAME};
         }
     }
-    return {false, game::scenes::DO_NOT_UPDATE_SCENE};
+    return {false, game::DO_NOT_UPDATE_SCENE, game::DO_NOT_UPDATE_SCENE};
 }
