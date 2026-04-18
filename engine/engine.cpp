@@ -10,11 +10,13 @@ using std::runtime_error;
 
 #include "enums.h"
 #include "stats.h"
+#include "textures.h"
+
 EngineStats game::global_stats {0, 0};
 
 #include "../scenes/UI/menuScene.h"
+#include "../scenes/UI/cutScene.h"
 
-#include "textures.h"
 
 game::Engine::Engine() : Engine(DEFAULT_TITLE) {}
 game::Engine::Engine(const string &name) : exitDialog_text(
@@ -104,21 +106,19 @@ game::Engine::~Engine() {
 }
 
 void game::Engine::run(const short fps) {
-    cameras[scenes::LOADING]   = nullptr;
     cameras[scenes::MAIN_MENU] = nullptr;
     cameras[scenes::CUTSCENE]  = nullptr;
     cameras[scenes::MAIN_GAME] = new Camera(window);
+
     cameras[scenes::MAIN_GAME]->zoom(32 * 64 / static_cast<float>(global_stats.window_width));
 
-    game_scenes[scenes::LOADING]   = nullptr;
     game_scenes[scenes::MAIN_MENU] = nullptr;
     game_scenes[scenes::CUTSCENE]  = nullptr;
     game_scenes[scenes::MAIN_GAME] = new scene::GameScene(window, cameras[scenes::MAIN_GAME], &global_stats, &textures);
 
-    UI_scenes[scenes::LOADING]   = nullptr;
     UI_scenes[scenes::MAIN_MENU] = new scene::MenuScene(window, &global_stats);
-    UI_scenes[scenes::CUTSCENE]  = nullptr;
-    UI_scenes[scenes::MAIN_GAME] = new scene::UIScene(window, &global_stats);
+    UI_scenes[scenes::CUTSCENE]  = new scene::CutScene(window, &global_stats, &default_monospace_font);
+    UI_scenes[scenes::MAIN_GAME] = nullptr;
 
     if (fps > 0) window->setFramerateLimit(fps);
     else window->setVerticalSyncEnabled(true);
