@@ -49,7 +49,6 @@ namespace game {
 
         Text *mouse_position, *scene_num, *version;
         array<Text*, 7> info_texts{};
-        array<float, 7> info_texts_sizes{};
 
         Text exitDialog_text;
 
@@ -62,8 +61,7 @@ namespace game {
         inline void update(scene::GameScene* game, scene::UIScene* ui);
 
         void info_update_values();
-        void info_overdraw();
-        void info_size_adjustment();
+        void info_overdraw() const;
 
         void adjust_tps();
         bool adjustment_proceeding = false;

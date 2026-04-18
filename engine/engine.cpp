@@ -65,7 +65,9 @@ game::Engine::Engine(const string &name) : exitDialog_text(
     TPS_delta = new Text(default_monospace_font, "", 10);
     mouse_position = new Text(default_monospace_font, "", 10);
     scene_num = new Text(default_monospace_font, "", 10);
-    version = new Text(default_monospace_font, "v0.0-indev", 12);
+    version = new Text(default_monospace_font, "v0.1-indev", 12);
+
+    info_texts = {FPS, FPS_delta, TPS, TPS_delta, mouse_position, scene_num, version};
 
     FPS->setFillColor({147, 147, 147, 241});
     frames = 0;
@@ -79,21 +81,10 @@ game::Engine::Engine(const string &name) : exitDialog_text(
     mouse_position->setFillColor({147, 147, 147, 141});
     scene_num->setFillColor({147, 147, 147, 141});
     version->setFillColor({147, 147, 147, 141});
-
-    info_texts = {FPS, FPS_delta, TPS, TPS_delta, mouse_position, scene_num, version};
-    info_texts_sizes = {
-        FPS->getGlobalBounds().size.x,
-        FPS_delta->getGlobalBounds().size.x,
-        TPS->getGlobalBounds().size.x,
-        TPS_delta->getGlobalBounds().size.x,
-        mouse_position->getGlobalBounds().size.x,
-        scene_num->getGlobalBounds().size.x,
-        version->getGlobalBounds().size.x
-    };
 }
 
 game::Engine::~Engine() {
-    for (unsigned char i = 0; i < scenes::CAP; i++) {
+    for (unsigned i = 0; i < scenes::CAP; i++) {
         delete game_scenes[i];
         delete UI_scenes[i];
         delete cameras[i];
@@ -113,7 +104,7 @@ void game::Engine::run(const short fps) {
     cameras[scenes::MAIN_MENU] = nullptr;
     cameras[scenes::CUTSCENE]  = nullptr;
     cameras[scenes::MAIN_GAME] = new Camera(window);
-    cameras[scenes::MAIN_GAME]->zoom(32.0*64/global_stats.window_width);
+    cameras[scenes::MAIN_GAME]->zoom(32 * 64 / static_cast<float>(global_stats.window_width));
 
     game_scenes[scenes::LOADING]   = nullptr;
     game_scenes[scenes::MAIN_MENU] = nullptr;
@@ -326,7 +317,7 @@ void game::Engine::info_update_values() {
     }
 }
 
-void game::Engine::info_overdraw() {
+void game::Engine::info_overdraw() const {
     const View current_view          = window->getView();
     const Vector2f current_view_size = current_view.getSize();
     const float window_x_max_coord   = current_view.getCenter().x + current_view_size.x / 2,
@@ -342,14 +333,6 @@ void game::Engine::info_overdraw() {
     scene_num->setPosition({window_x_max_coord - 30, window_y_min_coord + 90});
     version->setPosition({window_x_max_coord - current_view_size.x + 5, window_y_min_coord + current_view_size.y - 15});
 
-    info_size_adjustment();
-
     for (const auto t : info_texts)
         window->draw(*t);
-}
-
-void game::Engine::info_size_adjustment() {
-    for (unsigned i = 0; i < info_texts.size(); i++) {
-        // pass
-    }
 }
