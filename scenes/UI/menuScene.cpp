@@ -25,17 +25,19 @@ scene::MenuScene::MenuScene(RenderWindow* window_link, EngineStats* scene_index_
         cout << "[MenuScene] error loading font" << std::endl;
         return;
     }
-
-    initTitle();
-    initMenu();
 }
-
 scene::MenuScene::~MenuScene() {
     delete title;
     delete menu;
 }
 
+void scene::MenuScene::on_start() {
+    initTitle();
+    initMenu();
+}
+
 void scene::MenuScene::initTitle() {
+    delete title;
     title = new Text(font, L"Re!", 150);
     title->setPosition({480, 50});
     title->setFillColor(sf::Color(237, 147, 0));
@@ -45,6 +47,7 @@ void scene::MenuScene::initTitle() {
 
 void scene::MenuScene::initMenu() {
     sf::String menu_items[] = {L"Play", L"Settings", L"About", L"Exit"};
+    delete menu;
     menu = new GameMenu(*window, 950, 350, 450, 300, 4, menu_items, 120, 100);
     menu->setColorTextMenu(sf::Color(237, 147, 0), sf::Color::Red, sf::Color::Black);
     menu->AlignMenu(2);

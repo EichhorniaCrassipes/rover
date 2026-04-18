@@ -31,6 +31,8 @@ namespace scene {
         explicit MenuScene(RenderWindow* window_link, EngineStats* scene_index_link);
         ~MenuScene() override;
 
+        void on_start() override;
+
         void render() override;
         void update() override;
         Status event(const Event &event) override;
