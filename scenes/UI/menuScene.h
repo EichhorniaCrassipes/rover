@@ -9,6 +9,8 @@
 
 #include <SFML/Graphics/RenderWindow.hpp>
 using sf::RenderWindow;
+using sf::Text;
+using sf::Font;
 
 #include <SFML/Graphics/RectangleShape.hpp>
 using sf::RectangleShape;
@@ -16,14 +18,10 @@ using sf::RectangleShape;
 #include <SFML/Graphics/Texture.hpp>
 using sf::Texture;
 
-#include <SFML/Graphics/Font.hpp>
-using sf::Font;
-
-#include <SFML/Graphics/Text.hpp>
-using sf::Text;
-
 #include "../../objects/ui/gameMenu.h"
 using menu::GameMenu;
+
+using std::pair;
 
 namespace scene {
     class MenuScene : public UIScene {
@@ -46,7 +44,7 @@ namespace scene {
 
         void initTitle();
         void initMenu();
-        static unsigned short handleMenuAction(int selected_menu);
+        static pair<unsigned short, unsigned short> handleMenuAction(int selected_menu);
     };
 }
 

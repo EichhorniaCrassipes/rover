@@ -19,15 +19,23 @@ namespace game {
                           TPS_adjuster_delta_time_flag = sf::seconds(1);
     inline double         epsilon = .1;
 
-    namespace scenes {
-        inline unsigned short CAP                 = 4,
-                              DO_NOT_UPDATE_SCENE = -1,
-                              EXIT                = -2,
+    inline unsigned short SCENES_CAP = 3;
 
-                              LOADING             = 0,
-                              MAIN_MENU           = 1,
+    inline unsigned short DO_NOT_UPDATE_SCENE = -1,
+                          EXIT_SCENE          = -2;
+    namespace game_scenes {
+        inline unsigned short CAP                 = 2,
+
+                              RESET               = 0,
+                              MAIN                = 1;
+    }
+    namespace UI_scenes {
+        inline unsigned short CAP                 = 4,
+
+                              RESET               = 0,
+                              MENU                = 1,
                               CUTSCENE            = 2,
-                              MAIN_GAME           = 3;
+                              GAME                = 3;
     }
 }
 
