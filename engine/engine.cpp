@@ -30,18 +30,19 @@ game::Engine::Engine(const string &name) : exitDialog_text(
         sf::Style::Default,
         sf::State::Fullscreen
     );
-    cameras = new Camera*[scenes::CAP];
+    cameras = new Camera*[game_scenes::CAP];
 
     global_stats.window_width = video_mode.size.x;
     global_stats.window_height = video_mode.size.y;
 
-    game_scenes = new scene::GameScene*[scenes::CAP];
-    UI_scenes   = new scene::UIScene*[scenes::CAP];
+    game_scenes = new scene::GameScene*[game_scenes::CAP];
+    UI_scenes   = new scene::UIScene*[UI_scenes::CAP];
 
     current_game_scene = nullptr;
     current_UI_scene = nullptr;
     current_camera = nullptr;
-    current_scene_index = -1;
+    current_game_scene_index = -1;
+    current_UI_scene_index = -1;
 
     for (const auto&[fst, snd] : textures)
         if (!snd->loadFromFile(fst))
@@ -88,11 +89,13 @@ game::Engine::Engine(const string &name) : exitDialog_text(
 }
 
 game::Engine::~Engine() {
-    for (unsigned i = 0; i < scenes::CAP; i++) {
+    for (unsigned i = 0; i < game_scenes::CAP; i++) {
         delete game_scenes[i];
-        delete UI_scenes[i];
         delete cameras[i];
     }
+    for (unsigned i = 0; i < UI_scenes::CAP; i++)
+        delete UI_scenes[i];
+
     delete[] game_scenes;
     delete[] UI_scenes;
     delete[] cameras;
@@ -104,26 +107,22 @@ game::Engine::~Engine() {
 }
 
 void game::Engine::run(const short fps) {
-    cameras[scenes::LOADING]   = nullptr;
-    cameras[scenes::MAIN_MENU] = nullptr;
-    cameras[scenes::CUTSCENE]  = nullptr;
-    cameras[scenes::MAIN_GAME] = new Camera(window);
-    cameras[scenes::MAIN_GAME]->zoom(32 * 64 / static_cast<float>(global_stats.window_width));
+    cameras[game_scenes::RESET] = nullptr;
+    cameras[game_scenes::MAIN] = new Camera(window);
 
-    game_scenes[scenes::LOADING]   = nullptr;
-    game_scenes[scenes::MAIN_MENU] = nullptr;
-    game_scenes[scenes::CUTSCENE]  = nullptr;
-    game_scenes[scenes::MAIN_GAME] = new scene::GameScene(window, cameras[scenes::MAIN_GAME], &global_stats, &textures);
+    cameras[game_scenes::MAIN]->zoom(32 * 64 / static_cast<float>(global_stats.window_width));
 
-    UI_scenes[scenes::LOADING]   = nullptr;
-    UI_scenes[scenes::MAIN_MENU] = new scene::MenuScene(window, &global_stats);
-    UI_scenes[scenes::CUTSCENE]  = nullptr;
-    UI_scenes[scenes::MAIN_GAME] = new scene::UIScene(window, &global_stats);
+    game_scenes[game_scenes::RESET] = nullptr;
+    game_scenes[game_scenes::MAIN] = new scene::GameScene(window, cameras[game_scenes::MAIN], &global_stats, &textures);
+
+    UI_scenes[UI_scenes::RESET] = nullptr;
+    UI_scenes[UI_scenes::MENU] = new scene::MenuScene(window, &global_stats);
+    UI_scenes[UI_scenes::CUTSCENE]  = nullptr;
 
     if (fps > 0) window->setFramerateLimit(fps);
     else window->setVerticalSyncEnabled(true);
 
-    change_scene(scenes::MAIN_MENU);
+    change_scene(game_scenes::RESET, UI_scenes::MENU);
 
     TPS_timer.start();
     TPS_adjuster_timer.start();
@@ -151,7 +150,7 @@ void game::Engine::loop() {
                 exit_flag = false;
                 exitDialog_text.setFillColor({255, 255, 255, 0});
                 exitDialog_text.setOutlineColor({0, 0, 0, 0});
-                change_scene(scenes::MAIN_MENU);
+                change_scene(game_scenes::RESET, UI_scenes::MENU);
             }
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::N) && (exit_flag == true))
             {
@@ -249,25 +248,32 @@ void game::Engine::update() {
     }
 }
 
-void game::Engine::change_scene(const unsigned short next) {
-    if (next == scenes::EXIT)
+void game::Engine::change_scene(const unsigned short next_game, const unsigned short next_UI) {
+    if (next_game == EXIT_SCENE || next_UI == EXIT_SCENE)
         window->close();
 
-    else if (next != scenes::DO_NOT_UPDATE_SCENE) {
-        if (current_game_scene != nullptr)
-            current_game_scene->on_end();
-        if (current_UI_scene != nullptr)
-            current_UI_scene->on_end();
+    else {
+        if (next_game != DO_NOT_UPDATE_SCENE) {
+            if (current_game_scene != nullptr)
+                current_game_scene->on_end();
 
-        current_camera = cameras[next];
-        current_UI_scene = UI_scenes[next];
-        current_game_scene = game_scenes[next];
-        current_scene_index = next;
+            current_camera           = cameras[next_game];
+            current_game_scene       = game_scenes[next_game];
+            current_game_scene_index = next_game;
 
-        if (current_game_scene != nullptr)
-            current_game_scene->on_start();
-        if (current_UI_scene != nullptr)
-            current_UI_scene->on_start();
+            if (current_game_scene != nullptr)
+                current_game_scene->on_start();
+        }
+        if (next_UI != DO_NOT_UPDATE_SCENE) {
+            if (current_UI_scene != nullptr)
+                current_UI_scene->on_end();
+
+            current_UI_scene = UI_scenes[next_UI];
+            current_UI_scene_index = next_UI;
+
+            if (current_UI_scene != nullptr)
+                current_UI_scene->on_start();
+        }
     }
 }
 
@@ -340,7 +346,7 @@ void game::Engine::info_update_values() {
             + "\n ~\n"
             + to_string(local_mouse_position.y)
             );
-        scene_num->setString(to_string(current_scene_index));
+        scene_num->setString(to_string(current_game_scene_index) + ", " + to_string(current_UI_scene_index));
     }
 }
 
