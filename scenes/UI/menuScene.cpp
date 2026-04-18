@@ -66,39 +66,37 @@ void scene::MenuScene::update() {
 scene::Status scene::MenuScene::event(const Event &event) {
     if (event.is<Event::KeyReleased>()) {
         const auto* keyEvent = event.getIf<Event::KeyReleased>();
-        if (!keyEvent) return {false, game::scenes::DO_NOT_UPDATE_SCENE};
+        if (!keyEvent) return {false, game::DO_NOT_UPDATE_SCENE, game::DO_NOT_UPDATE_SCENE};
 
         if (keyEvent->scancode == sf::Keyboard::Scancode::Up) {
             menu->moveUp();
-            return {true, game::scenes::DO_NOT_UPDATE_SCENE};
+            return {true, game::DO_NOT_UPDATE_SCENE, game::DO_NOT_UPDATE_SCENE};
         }
         if (keyEvent->scancode == sf::Keyboard::Scancode::Down) {
             menu->moveDown();
-            return {true, game::scenes::DO_NOT_UPDATE_SCENE};
+            return {true, game::DO_NOT_UPDATE_SCENE, game::DO_NOT_UPDATE_SCENE};
         }
         if (keyEvent->scancode == sf::Keyboard::Scancode::Enter) {
-            unsigned short code = handleMenuAction(menu->getSelectedMenu());
-            return {false, code};
+            const auto &[game_scene, ui_scene] = handleMenuAction(menu->getSelectedMenu());
+            return {false, game_scene, ui_scene};
         }
     }
-    return {false, game::scenes::DO_NOT_UPDATE_SCENE};
+    return {false, game::DO_NOT_UPDATE_SCENE, game::DO_NOT_UPDATE_SCENE};
 }
 
-unsigned short scene::MenuScene::handleMenuAction(int selected_menu) {
+pair<unsigned short, unsigned short> scene::MenuScene::handleMenuAction(int selected_menu) {
     switch (selected_menu) {
         case 0: // Play
-        return game::scenes::MAIN_GAME;
-    case 1: // Settings
-        // TODO: Open settings scene
-        return game::scenes::DO_NOT_UPDATE_SCENE;
-        break;
-    case 2: // About
-        // TODO: Open about scene
-        return game::scenes::DO_NOT_UPDATE_SCENE;
-        break;
-    case 3: // Exit
-        return game::scenes::EXIT;
-    default:
-        return game::scenes::DO_NOT_UPDATE_SCENE;
+            return {game::game_scenes::MAIN, game::UI_scenes::GAME};
+        case 1: // Settings
+            // TODO: Open settings scene
+            return {game::DO_NOT_UPDATE_SCENE, game::DO_NOT_UPDATE_SCENE};
+        case 2: // About
+            // TODO: Open about scene
+            return {game::DO_NOT_UPDATE_SCENE, game::DO_NOT_UPDATE_SCENE};
+        case 3: // Exit
+            return {game::EXIT_SCENE, game::EXIT_SCENE};
+        default:
+            return {game::DO_NOT_UPDATE_SCENE, game::DO_NOT_UPDATE_SCENE};
     }
 }

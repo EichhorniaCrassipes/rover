@@ -106,7 +106,7 @@ scene::Status scene::GameScene::event(const Event &event) {
         if (wheelScrolled->wheel == sf::Mouse::Wheel::Vertical)
             camera->zoom(1 - wheelScrolled->delta*zoom_coefficient);
 
-    return {false, game::scenes::DO_NOT_UPDATE_SCENE};
+    return {false, game::DO_NOT_UPDATE_SCENE, game::DO_NOT_UPDATE_SCENE};
 }
 
 void scene::GameScene::reseed(const long long generator_seed) {

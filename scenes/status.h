@@ -4,7 +4,7 @@
 namespace scene {
     struct Status {
         bool updated;
-        unsigned short next_scene;
+        unsigned short next_game_scene, next_UI_scene;
     };
 }
 

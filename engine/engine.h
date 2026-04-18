@@ -33,7 +33,7 @@ namespace game {
 
         void run(short fps = 0);
 
-        void change_scene(unsigned short next);
+        void change_scene(unsigned short next_game, unsigned short next_UI);
 
         void render();
         void update();
@@ -47,7 +47,7 @@ namespace game {
         Camera* current_camera;
         scene::GameScene* current_game_scene;
         scene::UIScene* current_UI_scene;
-        unsigned short current_scene_index;
+        unsigned short current_game_scene_index, current_UI_scene_index;
 
         Clock TPS_timer, count_display_timer;
         Time last_tps_time_value;
