@@ -1,20 +1,7 @@
 #ifndef ROVER_GAME_SCENE_H
 #define ROVER_GAME_SCENE_H
 
-#include <deque>
-#include <SFML/Window/Event.hpp>
-
-namespace generator {
-    class ChunkDecorations;
-    class Chunk;
-}
-
-using sf::Event;
-
-#include <SFML/Graphics/RenderWindow.hpp>
-using sf::RenderWindow;
-
-#include <SFML/Graphics/Drawable.hpp>
+#include "../scene.h"
 using sf::Drawable;
 
 #include <SFML/System/Clock.hpp>
@@ -29,30 +16,30 @@ using std::map;
 #include "../../generator/mapGenerator.h"
 using generator::MapGenerator;
 
-#include "../../engine/stats.h"
-using game::EngineStats;
-
 #include "../../engine/camera.h"
 using game::Camera;
+
+#include "../../generator/chunk.h"
+#include "../../generator/chunkDecorations.h"
 
 #include "../../objects/map/block.h"
 #include "../../objects/entity.h"
 #include "../../objects/entity/player.h"
 
 namespace scene {
-    class GameScene {
+    class GameScene : public Scene {
     public:
         explicit GameScene(RenderWindow* window_link, Camera* camera_link, EngineStats* engine_stats_link, map<string, Texture*>* textures);
-        virtual ~GameScene();
+        ~GameScene() override;
 
-        void render();
-        void update();
-        bool event(const Event &event); // возвращает true, если произошла какая-либо обработка
+        void render() override;
+        void update() override;
+        Status event(const Event &event) override;
+
+        void on_end() override;
 
         void reseed(long long generator_seed);
     protected:
-        RenderWindow* window;
-        EngineStats* engine_stats;
         Camera* camera;
 
         Clock FPS_timer;

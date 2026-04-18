@@ -1,6 +1,5 @@
 #include "gameScene.h"
 
-#include <algorithm>
 #include <iostream>
 using std::cout;
 
@@ -10,21 +9,22 @@ using std::abs;
 
 #include <SFML/Window/Keyboard.hpp>
 
+#include "../../engine/enums.h"
+
 #include "../../generator/chunk.h"
 #include "../../generator/chunkDecorations.h"
-#include "../../objects/map/block.h"
+
 
 scene::GameScene::GameScene(
     RenderWindow* window_link,
     Camera* camera_link,
     EngineStats* engine_stats_link,
-    map<string, Texture*>* textures) : generator(0),
+    map<string, Texture*>* textures) : Scene(window_link, engine_stats_link),
+                                       generator(0),
                                        player((*textures)["textures/player.png"], camera_link->get_current_view().getCenter()),
                                        scene_textures(textures) {
-    window             = window_link;
-    camera             = camera_link;
-    this->engine_stats = engine_stats_link;
-    delta_time         = 0;
+    camera     = camera_link;
+    delta_time = 0;
     FPS_timer.start();
 
     for (int i = - static_cast<int>(render_distance); i < static_cast<int>(render_distance)*2; i++)
@@ -38,6 +38,10 @@ scene::GameScene::~GameScene() {
         delete chunk;
     for (const auto chunk : active_decoration_chunks)
         delete chunk;
+}
+
+void scene::GameScene::on_end() {
+    window->setView(window->getDefaultView());
 }
 
 
@@ -97,15 +101,14 @@ void scene::GameScene::update() {
 
 }
 
-bool scene::GameScene::event(const Event &event) {
-    bool updated = false;
-    if (const auto* wheelScrolled = event.getIf<sf::Event::MouseWheelScrolled>()) {
+scene::Status scene::GameScene::event(const Event &event) {
+    if (const auto* wheelScrolled = event.getIf<Event::MouseWheelScrolled>()) {
         if (wheelScrolled->wheel == sf::Mouse::Wheel::Vertical) {
             camera->zoom(1 - wheelScrolled->delta*zoom_coefficient);
             //render_distance *= (1 - wheelScrolled->delta*zoom_coefficient);
         }
     }
-    return updated;
+    return {false, game::scenes::DO_NOT_UPDATE_SCENE};
 }
 
 void scene::GameScene::reseed(const long long generator_seed) {
@@ -140,8 +143,8 @@ void scene::GameScene::update_chunks()
     for (auto it = active_chunks.begin(); it != active_chunks.end(); ++it)
     {
         auto chunk = *it;
-        if ((static_cast<sf::Vector2f>((chunk->getAbsolutePosition()) - playerChunk)).length() > render_distance * 2 * 16) {
-            std::cout << "distance between player and deleted chunk" << (static_cast<sf::Vector2f>((chunk->getAbsolutePosition()) - playerChunk)).length();
+        if ((static_cast<Vector2f>((chunk->getAbsolutePosition()) - playerChunk)).length() > render_distance * 2 * 16) {
+            std::cout << "distance between player and deleted chunk" << (static_cast<Vector2f>((chunk->getAbsolutePosition()) - playerChunk)).length();
             delete chunk;
             active_chunks.erase(it);
         }
@@ -149,7 +152,7 @@ void scene::GameScene::update_chunks()
     for (auto it = active_decoration_chunks.begin(); it != active_decoration_chunks.end(); ++it)
     {
         auto chunk = *it;
-        if ((static_cast<sf::Vector2f>((chunk->getAbsolutePosition()) - playerChunk)).length() > render_distance * 2 * 16) {
+        if ((static_cast<Vector2f>((chunk->getAbsolutePosition()) - playerChunk)).length() > render_distance * 2 * 16) {
             delete chunk;
             active_decoration_chunks.erase(it);
         }

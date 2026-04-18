@@ -31,6 +31,7 @@ set(SOURCES
         objects/map/decoration.cpp
         objects/map/deposit.cpp
         objects/map/loot.cpp
+        objects/map/stone.cpp
 
         generator/PerlinNoise.cpp
         generator/mapGenerator.cpp
@@ -40,14 +41,14 @@ set(SOURCES
         generator/deposits.cpp
         generator/decorations.cpp
 
+        scenes/scene.cpp
         scenes/game/gameScene.cpp
-
         scenes/UI/UIScene.cpp
         scenes/UI/testScene.cpp
-        objects/map/stone.h
-        objects/map/stone.cpp
-        objects/ui/gameMenu.cpp
         scenes/UI/menuScene.cpp
+
+        objects/ui/gameMenu.cpp
+
 )
 
 if (RENDER_ICON)

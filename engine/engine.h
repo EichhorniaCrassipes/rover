@@ -32,12 +32,22 @@ namespace game {
         ~Engine();
 
         void run(short fps = 0);
+
+        void change_scene(unsigned short next);
+
+        void render();
+        void update();
     private:
         RenderWindow* window;
         Camera** cameras;
 
         scene::GameScene** game_scenes;
         scene::UIScene** UI_scenes;
+
+        Camera* current_camera;
+        scene::GameScene* current_game_scene;
+        scene::UIScene* current_UI_scene;
+        unsigned short current_scene_index;
 
         Clock TPS_timer, count_display_timer;
         Time last_tps_time_value;
@@ -56,9 +66,6 @@ namespace game {
         Clock TPS_adjuster_timer;
 
         void loop();
-
-        inline void render(scene::GameScene* game, scene::UIScene* ui, const Camera* camera);
-        inline void update(scene::GameScene* game, scene::UIScene* ui);
 
         void info_update_values();
         void info_overdraw() const;

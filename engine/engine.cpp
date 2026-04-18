@@ -10,7 +10,7 @@ using std::runtime_error;
 
 #include "enums.h"
 #include "stats.h"
-EngineStats game::global_stats {scenes::MAIN_MENU, 0, 0};
+EngineStats game::global_stats {0, 0};
 
 #include "../scenes/UI/testScene.h"
 #include "../scenes/UI/menuScene.h"
@@ -38,6 +38,11 @@ game::Engine::Engine(const string &name) : exitDialog_text(
 
     game_scenes = new scene::GameScene*[scenes::CAP];
     UI_scenes   = new scene::UIScene*[scenes::CAP];
+
+    current_game_scene = nullptr;
+    current_UI_scene = nullptr;
+    current_camera = nullptr;
+    current_scene_index = -1;
 
     for (const auto&[fst, snd] : textures)
         if (!snd->loadFromFile(fst))
@@ -119,6 +124,8 @@ void game::Engine::run(const short fps) {
     if (fps > 0) window->setFramerateLimit(fps);
     else window->setVerticalSyncEnabled(true);
 
+    change_scene(scenes::MAIN_MENU);
+
     TPS_timer.start();
     TPS_adjuster_timer.start();
     count_display_timer.start();
@@ -130,9 +137,6 @@ bool exit_flag = false;
 void game::Engine::loop() {
     while (window->isOpen()) {
         window->clear();
-        const auto current_camera = cameras[global_stats.current_scene_index];
-        const auto current_UI_scene = UI_scenes[global_stats.current_scene_index];
-        const auto current_game_scene = game_scenes[global_stats.current_scene_index];
 
         while (const auto event = window->pollEvent()) {
             if (event->is<Event::Closed>())
@@ -148,7 +152,7 @@ void game::Engine::loop() {
                 exit_flag = false;
                 exitDialog_text.setFillColor({255, 255, 255, 0});
                 exitDialog_text.setOutlineColor({0, 0, 0, 0});
-                global_stats.current_scene_index = scenes::MAIN_MENU;
+                change_scene(scenes::MAIN_MENU);
             }
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::N) && (exit_flag == true))
             {
@@ -157,19 +161,21 @@ void game::Engine::loop() {
                 exitDialog_text.setOutlineColor({0, 0, 0, 0});
             }
 
-            bool UI_event_update = false;
+            scene::Status UI_event_update{};
             if (current_UI_scene != nullptr) {
                 try {
                     UI_event_update = current_UI_scene->event(*event);
+                    change_scene(UI_event_update.next_scene);
                 }
                 catch (const runtime_error &e) {
                     cout << "[UI event update] got an error while handling an event:\n";
                     cerr << e.what() << '\n';
                 }
             }
-            if (!UI_event_update && current_game_scene != nullptr) {
+            if (!UI_event_update.updated && current_game_scene != nullptr) {
                 try {
-                    current_game_scene->event(*event);
+                    const auto &[updated, next_scene] = current_game_scene->event(*event);
+                    change_scene(next_scene);
                 }
                 catch (const runtime_error &e) {
                     cout << "[game event update] got an error while handling an event:\n";
@@ -178,8 +184,8 @@ void game::Engine::loop() {
             }
         }
 
-        render(current_game_scene, current_UI_scene, current_camera);
-        update(current_game_scene, current_UI_scene);
+        render();
+        update();
 
         window->draw(exitDialog_text);
         info_update_values();
@@ -189,28 +195,28 @@ void game::Engine::loop() {
         adjust_tps();
     }
 }
-void game::Engine::render(scene::GameScene* game, scene::UIScene* ui, const Camera* camera) {
-    if (game != nullptr) {
+void game::Engine::render() {
+    if (current_game_scene != nullptr) {
         try {
-            game->render();
+            current_game_scene->render();
         }
         catch (const runtime_error &e) {
             cerr << "[game render] got an error while trying to render a scene:\n";
             cerr << e.what() << '\n';
         }
     }
-    if (ui != nullptr) {
+    if (current_UI_scene != nullptr) {
         try {
-            ui->render();
+            current_UI_scene->render();
         }
         catch (const runtime_error &e) {
             cerr << "[UI render] got an error while trying to render a scene:\n";
             cerr << e.what() << '\n';
         }
     }
-    if (camera != nullptr) {
+    if (current_camera != nullptr) {
         try {
-            camera->apply();
+            current_camera->apply();
         }
         catch (const runtime_error &e) {
             cout << "[camera apply call] got an error while trying to apply camera settings:\n";
@@ -219,21 +225,21 @@ void game::Engine::render(scene::GameScene* game, scene::UIScene* ui, const Came
     }
     frames++;
 }
-void game::Engine::update(scene::GameScene* game, scene::UIScene* ui) {
+void game::Engine::update() {
     if (TPS_timer.getElapsedTime() >= TPS_delta_time) {
         TPS_timer.restart();
-        if (game != nullptr) {
+        if (current_game_scene != nullptr) {
             try {
-                game->update();
+                current_game_scene->update();
             }
             catch (const runtime_error &e) {
                 cout << "[game updater] got an error while trying to update a scene:\n";
                 cerr << e.what() << '\n';
             }
         }
-        if (ui != nullptr) {
+        if (current_UI_scene != nullptr) {
             try {
-                ui->update();
+                current_UI_scene->update();
             }
             catch (const runtime_error &e) {
                 cout << "[UI updater] got an error while trying to update a scene:\n";
@@ -241,6 +247,23 @@ void game::Engine::update(scene::GameScene* game, scene::UIScene* ui) {
             }
         }
         ticks++;
+    }
+}
+
+void game::Engine::change_scene(const unsigned short next) {
+    if (next == scenes::EXIT)
+        window->close();
+
+    else if (next != scenes::DO_NOT_UPDATE_SCENE) {
+        if (current_game_scene != nullptr)
+            current_game_scene->on_end();
+        if (current_UI_scene != nullptr)
+            current_UI_scene->on_end();
+
+        current_camera = cameras[next];
+        current_UI_scene = UI_scenes[next];
+        current_game_scene = game_scenes[next];
+        current_scene_index = next;
     }
 }
 
@@ -313,7 +336,7 @@ void game::Engine::info_update_values() {
             + "\n ~\n"
             + to_string(local_mouse_position.y)
             );
-        scene_num->setString(to_string(global_stats.current_scene_index));
+        scene_num->setString(to_string(current_scene_index));
     }
 }
 

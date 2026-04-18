@@ -33,7 +33,7 @@ namespace scene {
 
         void render() override;
         void update() override;
-        bool event(const sf::Event& event) override;
+        Status event(const Event &event) override;
 
     private:
         RectangleShape background;
@@ -44,7 +44,7 @@ namespace scene {
 
         void initTitle();
         void initMenu();
-        void handleMenuAction(int selected_menu);
+        static unsigned short handleMenuAction(int selected_menu);
     };
 }
 

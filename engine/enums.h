@@ -20,11 +20,14 @@ namespace game {
     inline double         epsilon = .1;
 
     namespace scenes {
-        inline unsigned short CAP       = 4,
-                              LOADING   = 0,
-                              MAIN_MENU = 1,
-                              CUTSCENE  = 2,
-                              MAIN_GAME = 3;
+        inline unsigned short CAP                 = 4,
+                              DO_NOT_UPDATE_SCENE = -1,
+                              EXIT                = -2,
+
+                              LOADING             = 0,
+                              MAIN_MENU           = 1,
+                              CUTSCENE            = 2,
+                              MAIN_GAME           = 3;
     }
 }
 
