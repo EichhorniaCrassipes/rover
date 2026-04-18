@@ -26,12 +26,6 @@ scene::GameScene::GameScene(
     camera     = camera_link;
     delta_time = 0;
     FPS_timer.start();
-
-    for (int i = - static_cast<int>(render_distance); i < static_cast<int>(render_distance)*2; i++)
-        for (int j = - static_cast<int>(render_distance); j < static_cast<int>(render_distance); j++) {
-            active_chunks.push_back(new generator::Chunk(&generator, 16 * i, 16 * j, (*scene_textures)["textures/test01.png"]));
-            active_decoration_chunks.push_back(new generator::ChunkDecorations(&generator, 16 * i, 16 * j, (*scene_textures)["textures/deco01.png"]));
-        }
 }
 scene::GameScene::~GameScene() {
     for (const auto chunk : active_chunks)
@@ -40,6 +34,13 @@ scene::GameScene::~GameScene() {
         delete chunk;
 }
 
+void scene::GameScene::on_start() {
+    for (int i = - static_cast<int>(render_distance); i < static_cast<int>(render_distance)*2; i++)
+        for (int j = - static_cast<int>(render_distance); j < static_cast<int>(render_distance); j++) {
+            active_chunks.push_back(new generator::Chunk(&generator, 16 * i, 16 * j, (*scene_textures)["textures/test01.png"]));
+            active_decoration_chunks.push_back(new generator::ChunkDecorations(&generator, 16 * i, 16 * j, (*scene_textures)["textures/deco01.png"]));
+        }
+}
 void scene::GameScene::on_end() {
     window->setView(window->getDefaultView());
 }

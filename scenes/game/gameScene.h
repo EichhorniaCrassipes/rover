@@ -36,6 +36,7 @@ namespace scene {
         void update() override;
         Status event(const Event &event) override;
 
+        void on_start() override;
         void on_end() override;
 
         void reseed(long long generator_seed);
