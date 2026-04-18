@@ -118,6 +118,7 @@ void game::Engine::run(const short fps) {
     UI_scenes[UI_scenes::RESET] = nullptr;
     UI_scenes[UI_scenes::MENU] = new scene::MenuScene(window, &global_stats);
     UI_scenes[UI_scenes::CUTSCENE]  = nullptr;
+    UI_scenes[UI_scenes::GAME] = nullptr;
 
     if (fps > 0) window->setFramerateLimit(fps);
     else window->setVerticalSyncEnabled(true);
@@ -145,14 +146,14 @@ void game::Engine::loop() {
                 exitDialog_text.setFillColor({255, 255, 255, 255});
                 exitDialog_text.setOutlineColor({0, 0, 0, 255});
             }
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Y) && (exit_flag == true))
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Y) && exit_flag)
             {
                 exit_flag = false;
                 exitDialog_text.setFillColor({255, 255, 255, 0});
                 exitDialog_text.setOutlineColor({0, 0, 0, 0});
                 change_scene(game_scenes::RESET, UI_scenes::MENU);
             }
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::N) && (exit_flag == true))
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::N) && exit_flag)
             {
                 exit_flag = false;
                 exitDialog_text.setFillColor({255, 255, 255, 0});
@@ -163,7 +164,7 @@ void game::Engine::loop() {
             if (current_UI_scene != nullptr) {
                 try {
                     UI_event_update = current_UI_scene->event(*event);
-                    change_scene(UI_event_update.next_scene);
+                    change_scene(UI_event_update.next_game_scene, UI_event_update.next_UI_scene);
                 }
                 catch (const runtime_error &e) {
                     cout << "[UI event update] got an error while handling an event:\n";
@@ -172,8 +173,8 @@ void game::Engine::loop() {
             }
             if (!UI_event_update.updated && current_game_scene != nullptr) {
                 try {
-                    const auto &[updated, next_scene] = current_game_scene->event(*event);
-                    change_scene(next_scene);
+                    const auto &[updated, next_game, next_UI] = current_game_scene->event(*event);
+                    change_scene(next_game, next_UI);
                 }
                 catch (const runtime_error &e) {
                     cout << "[game event update] got an error while handling an event:\n";
