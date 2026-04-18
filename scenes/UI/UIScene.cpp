@@ -17,4 +17,6 @@ void scene::UIScene::render() {
 
 void scene::UIScene::update() {}
 
-scene::Status scene::UIScene::event(const Event &event) { return {false, game::scenes::DO_NOT_UPDATE_SCENE}; }
+scene::Status scene::UIScene::event(const Event &event) {
+    return {false, game::DO_NOT_UPDATE_SCENE, game::DO_NOT_UPDATE_SCENE};
+}
