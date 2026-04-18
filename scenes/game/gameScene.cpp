@@ -1,6 +1,5 @@
 #include "gameScene.h"
 
-#include <algorithm>
 #include <iostream>
 using std::cout;
 
@@ -10,9 +9,11 @@ using std::abs;
 
 #include <SFML/Window/Keyboard.hpp>
 
+#include "../../engine/enums.h"
+
 #include "../../generator/chunk.h"
 #include "../../generator/chunkDecorations.h"
-#include "../../objects/map/block.h"
+
 
 scene::GameScene::GameScene(
     RenderWindow* window_link,
@@ -100,15 +101,14 @@ void scene::GameScene::update() {
 
 }
 
-bool scene::GameScene::event(const Event &event) {
-    bool updated = false;
+scene::Status scene::GameScene::event(const Event &event) {
     if (const auto* wheelScrolled = event.getIf<Event::MouseWheelScrolled>()) {
         if (wheelScrolled->wheel == sf::Mouse::Wheel::Vertical) {
             camera->zoom(1 - wheelScrolled->delta*zoom_coefficient);
             //render_distance *= (1 - wheelScrolled->delta*zoom_coefficient);
         }
     }
-    return updated;
+    return {false, game::scenes::DO_NOT_UPDATE_SCENE};
 }
 
 void scene::GameScene::reseed(const long long generator_seed) {
