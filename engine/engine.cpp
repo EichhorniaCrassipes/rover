@@ -12,7 +12,6 @@ using std::runtime_error;
 #include "stats.h"
 EngineStats game::global_stats {0, 0};
 
-#include "../scenes/UI/testScene.h"
 #include "../scenes/UI/menuScene.h"
 
 #include "textures.h"
@@ -116,9 +115,9 @@ void game::Engine::run(const short fps) {
     game_scenes[scenes::CUTSCENE]  = nullptr;
     game_scenes[scenes::MAIN_GAME] = new scene::GameScene(window, cameras[scenes::MAIN_GAME], &global_stats, &textures);
 
-    UI_scenes[scenes::LOADING]   = new scene::UIScene(window, &global_stats);
+    UI_scenes[scenes::LOADING]   = nullptr;
     UI_scenes[scenes::MAIN_MENU] = new scene::MenuScene(window, &global_stats);
-    UI_scenes[scenes::CUTSCENE]  = new scene::TestScene(window, &global_stats);
+    UI_scenes[scenes::CUTSCENE]  = nullptr;
     UI_scenes[scenes::MAIN_GAME] = new scene::UIScene(window, &global_stats);
 
     if (fps > 0) window->setFramerateLimit(fps);

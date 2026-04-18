@@ -44,7 +44,6 @@ set(SOURCES
         scenes/scene.cpp
         scenes/game/gameScene.cpp
         scenes/UI/UIScene.cpp
-        scenes/UI/testScene.cpp
         scenes/UI/menuScene.cpp
 
         objects/ui/gameMenu.cpp
