@@ -66,3 +66,7 @@ void generator::ChunkDecorations::load(const Vector2u tileSize) {
     }
 
 }
+
+sf::Vector2i generator::ChunkDecorations::getAbsolutePosition() const {
+    return position;
+}

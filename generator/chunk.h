@@ -34,7 +34,7 @@ namespace generator {
     public:
         Chunk(MapGenerator* generator_link, int x, int y, Texture* texture);
         ~Chunk() override;
-        Vector2i getCenterPosition() const;
+        Vector2i getAbsolutePosition() const;
     private:
         MapGenerator* generator;
         VertexArray vertices;

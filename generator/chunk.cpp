@@ -112,12 +112,10 @@ bool generator::Chunk::load( const Vector2u tileSize, const int* tiles, const un
     return true;
 }
 
-Vector2i generator::Chunk::getCenterPosition() const
+Vector2i generator::Chunk::getAbsolutePosition() const
 {
-    return {position.x+size.x/2,position.y + size.y/2};
+    return position;
 }
 
 generator::Chunk::~Chunk()
-{
-
-}
+= default;
