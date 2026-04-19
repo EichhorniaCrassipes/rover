@@ -3,7 +3,7 @@
 #include <iostream>
 using std::cout;
 
-#include "../../engine/enums.h"
+#include "../../../engine/enums.h"
 
 
 scene::CutScene::CutScene(RenderWindow* window_link, EngineStats* scene_index_link, const Font* font_link)

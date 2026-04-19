@@ -15,7 +15,7 @@ using std::runtime_error;
 EngineStats game::global_stats {0, 0};
 
 #include "../scenes/UI/menuScene.h"
-#include "../scenes/UI/cutScene.h"
+#include "../scenes/UI/cutscene/cutScene.h"
 
 
 game::Engine::Engine() : Engine(DEFAULT_TITLE) {}

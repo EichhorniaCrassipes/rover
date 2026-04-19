@@ -1,7 +1,7 @@
 #ifndef CUTSCENE_H
 #define CUTSCENE_H
 
-#include "UIScene.h"
+#include "../UIScene.h"
 
 #include <SFML/Audio/Music.hpp>
 using sf::Music;
