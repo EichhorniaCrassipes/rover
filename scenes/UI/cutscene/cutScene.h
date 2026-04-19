@@ -3,7 +3,7 @@
 
 #include "../UIScene.h"
 
-#define CANVASES 4
+#define CANVASES 5
 
 #include <SFML/Audio/Music.hpp>
 using sf::Music;
@@ -49,6 +49,8 @@ namespace scene {
         bool go_next = false;
         Text go_next_text;
 
+        Text current_time;
+
         void scheduler();
         array<Time, CANVASES> breakers{};
 
@@ -56,6 +58,8 @@ namespace scene {
         array<vector<Texture*>, CANVASES> textures;
         array<vector<Sprite*>, CANVASES> sprites;
         array<vector<Vector2f>, CANVASES> velocities;
+
+        bool shattered;
     };
 }
 
