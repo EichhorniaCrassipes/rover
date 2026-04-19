@@ -3,6 +3,8 @@
 
 #include "../UIScene.h"
 
+#define CANVASES 3
+
 #include <SFML/Audio/Music.hpp>
 using sf::Music;
 
@@ -51,8 +53,9 @@ namespace scene {
         array<Time, 3> breakers{};
 
         unsigned current_canvas;
-        array<vector<Sprite*>, 3> sprites;
-        array<vector<Vector2f>, 3> velocities;
+        array<vector<Texture*>, CANVASES> textures;
+        array<vector<Sprite*>, CANVASES> sprites;
+        array<vector<Vector2f>, CANVASES> velocities;
     };
 }
 

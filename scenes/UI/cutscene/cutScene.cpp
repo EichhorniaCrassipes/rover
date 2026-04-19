@@ -14,50 +14,58 @@ scene::CutScene::CutScene(RenderWindow* window_link, EngineStats* scene_index_li
     current_canvas = 0;
 
 
+    textures[0] = {};
     sprites[0] = {};
     velocities[0] = {};
 
     breakers[0] = seconds(10);
 
 
-    auto texture = Texture("cutscene/1-1.jpg");
-    auto* sprite = new Sprite(texture);
+    auto* texture = new Texture("cutscene/1-1.jpg");
+    auto* sprite = new Sprite(*texture);
     sprite->setPosition({0, 0});
     velocities[1].emplace_back(0, 0);
+    textures[1].push_back(texture);
     sprites[1].push_back(sprite);
 
-    texture = Texture("cutscene/1-2.png");
-    sprite = new Sprite(texture);
+    texture = new Texture("cutscene/1-2.png");
+    sprite = new Sprite(*texture);
     sprite->setPosition({1170, 870});
     sprite->setScale({.45, .45});
-    velocities[1].emplace_back(0, 0);
+    velocities[1].emplace_back(8, -5);
+    textures[1].push_back(texture);
     sprites[1].push_back(sprite);
 
-    texture = Texture("cutscene/1-3.png");
-    sprite = new Sprite(texture);
+    texture = new Texture("cutscene/1-3.png");
+    sprite = new Sprite(*texture);
     sprite->setPosition({1870, 450});
     sprite->setScale({.3, .3});
-    velocities[1].emplace_back(0, 0);
+    velocities[1].emplace_back(-4, -1);
+    textures[1].push_back(texture);
     sprites[1].push_back(sprite);
 
     breakers[1] = seconds(16);
 
 
-    texture = Texture("cutscene/1-3.png");
-    sprite = new Sprite(texture);
+    texture = new Texture("cutscene/2-1.jpg");
+    sprite = new Sprite(*texture);
     sprite->setPosition({0, 0});
     velocities[2].emplace_back(0, 0);
+    textures[2].push_back(texture);
     sprites[2].push_back(sprite);
 
     breakers[2] = seconds(22);
 }
 scene::CutScene::~CutScene() {
-    for (const auto &vs : sprites)
-        for (const auto s : vs)
-            delete s;
+    for (unsigned i = 0; i < CANVASES; i++)
+        for (unsigned j = 0; j < sprites[i].size(); j++) {
+            delete sprites[i][j];
+            delete textures[i][j];
+        }
 }
 
 void scene::CutScene::on_start() {
+    window->setView(window->getDefaultView());
     main_theme.play();
     timer.start();
 }
@@ -74,8 +82,9 @@ void scene::CutScene::render() {
 
     const float delta_time = timer.restart().asSeconds();
     for (unsigned i = 0; i < sprites[current_canvas].size(); i++) {
-        sprites[current_canvas][i]->move(velocities[current_canvas][i] * delta_time);
-        window->draw(*sprites[current_canvas][i]);
+        const auto current = sprites[current_canvas][i];
+        current->move(velocities[current_canvas][i] * delta_time);
+        window->draw(*current);
     }
 }
 void scene::CutScene::update() {
@@ -89,7 +98,7 @@ scene::Status scene::CutScene::event(const Event &event) {
         if (!keyEvent) return {false, game::DO_NOT_UPDATE_SCENE, game::DO_NOT_UPDATE_SCENE};
 
         if (keyEvent->scancode == sf::Keyboard::Scancode::Space)
-            return {true, game::game_scenes::RESET, game::UI_scenes::MENU};
+            return {true, game::DO_NOT_UPDATE_SCENE, game::UI_scenes::MENU};
     }
     return {false, game::DO_NOT_UPDATE_SCENE, game::DO_NOT_UPDATE_SCENE};
 }
