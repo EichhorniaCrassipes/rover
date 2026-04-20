@@ -55,7 +55,6 @@ generator::Tile generator::MapGenerator::get_tile(const size_t x, const size_t y
     reseed_variations(x, y);
     const auto v1 = normal_distribution(*variation),
                v2 = normal_distribution(*variation);
-    std::cout << v1 << ' ' << v2 << '\n';
 
     Tile tile;
     tile.variation = static_cast<unsigned char>(v1 * TILE_VARIATION_MULTIPLIER);

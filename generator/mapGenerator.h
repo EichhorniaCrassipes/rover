@@ -30,7 +30,7 @@ namespace generator {
 
         float TILE_VARIATION_MULTIPLIER = 4,
               DECORATION_VARIATION_MULTIPLIER = 8,
-              DECORATION_MAX_OFFSET = 1.5;
+              DECORATION_MAX_OFFSET = .6;
 
         uniform_real_distribution<float> normal_distribution{0, 1};
 
