@@ -50,25 +50,47 @@ generator::Tile generator::MapGenerator::get_tile(const size_t x, const size_t y
     tile.variation = static_cast<unsigned char>(v1 * TILE_VARIATION_MULTIPLIER);
     tile.decorations = {};
 
-    for (const auto &b : GLOBAL_BIOMES)
-        if (b.temperature_low <= te && te <= b.temperature_high &&
-               b.humidity_low <= hu && hu <= b.humidity_high) {
-            tile.biome = b.name;
+    for (const auto &[
+                        name,
+                        temperature_low,
+                        temperature_high,
+                        humidity_low,
+                        humidity_high
+                     ] : GLOBAL_BIOMES)
+        if (temperature_low <= te && te <= temperature_high &&
+               humidity_low <= hu && hu <= humidity_high) {
+            tile.biome = name;
             break;
         }
-    for (const auto &d : GLOBAL_DEPOSITS)
-        if (d.temperature_low <= te && te <= d.temperature_high &&
-               d.humidity_low <= hu && hu <= d.humidity_high &&
-                 d.height_low <= he && he <= d.height_high) {
-            tile.deposit = d.name;
+    for (const auto &[
+                        name,
+                        temperature_low,
+                        temperature_high,
+                        humidity_low,
+                        humidity_high,
+                        height_low,
+                        height_high
+                     ] : GLOBAL_DEPOSITS)
+        if (temperature_low <= te && te <= temperature_high &&
+               humidity_low <= hu && hu <= humidity_high &&
+                 height_low <= he && he <= height_high) {
+            tile.deposit = name;
             break;
         }
-    for (const auto &d : GLOBAL_DECORATIONS)
-        if (d.temperature_low <= te && te <= d.temperature_high &&
-               d.humidity_low <= hu && hu <= d.humidity_high &&
-                 d.height_low <= he && he <= d.height_high) {
+    for (const auto &[
+                        name,
+                        temperature_low,
+                        temperature_high,
+                        humidity_low,
+                        humidity_high,
+                        height_low,
+                        height_high
+                     ] : GLOBAL_DECORATIONS)
+        if (temperature_low <= te && te <= temperature_high &&
+               humidity_low <= hu && hu <= humidity_high &&
+                 height_low <= he && he <= height_high) {
             tile.decorations.push_back({
-                d.name,
+                name,
                 {(v1 - .5f) * 2.f * DECORATION_MAX_OFFSET, (v2 - .5f) * 2.f * DECORATION_MAX_OFFSET},
                 static_cast<unsigned char>(v1 * DECORATION_VARIATION_MULTIPLIER)
             });
