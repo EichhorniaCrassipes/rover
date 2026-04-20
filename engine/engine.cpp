@@ -125,7 +125,7 @@ void game::Engine::run(const short fps) {
     if (fps > 0) window->setFramerateLimit(fps);
     else window->setVerticalSyncEnabled(true);
 
-    change_scene(game_scenes::RESET, UI_scenes::MENU);
+    change_scene(game_scenes::RESET, UI_scenes::CUTSCENE);
 
     TPS_timer.start();
     TPS_adjuster_timer.start();
@@ -190,7 +190,8 @@ void game::Engine::loop() {
 
         window->draw(exitDialog_text);
         info_update_values();
-        info_overdraw();
+        if (current_UI_scene_index != UI_scenes::CUTSCENE)
+            info_overdraw();
         window->display();
 
         adjust_tps();
