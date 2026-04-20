@@ -24,6 +24,7 @@ scene::CutScene::CutScene(RenderWindow* window_link, EngineStats* scene_index_li
     textures[0] = {};
     sprites[0] = {};
     velocities[0] = {};
+    size_deltas[0] = {};
 
     breakers[0] = seconds(0);
 
@@ -33,6 +34,7 @@ scene::CutScene::CutScene(RenderWindow* window_link, EngineStats* scene_index_li
     sprite->setPosition({0, -250});
     sprite->setScale({1.4, 1.4});
     velocities[1].emplace_back(-5, 0);
+    size_deltas[1].emplace_back(0, 0);
     textures[1].push_back(texture);
     sprites[1].push_back(sprite);
 
@@ -41,6 +43,7 @@ scene::CutScene::CutScene(RenderWindow* window_link, EngineStats* scene_index_li
     sprite->setPosition({570, 400});
     sprite->setScale({.75, .75});
     velocities[1].emplace_back(8, 4);
+    size_deltas[1].emplace_back(.001, .001);
     textures[1].push_back(texture);
     sprites[1].push_back(sprite);
 
@@ -49,6 +52,7 @@ scene::CutScene::CutScene(RenderWindow* window_link, EngineStats* scene_index_li
     sprite->setPosition({1870, 450});
     sprite->setScale({.3, .3});
     velocities[1].emplace_back(-4, -1);
+    size_deltas[1].emplace_back(0, 0);
     textures[1].push_back(texture);
     sprites[1].push_back(sprite);
 
@@ -60,6 +64,7 @@ scene::CutScene::CutScene(RenderWindow* window_link, EngineStats* scene_index_li
     sprite->setPosition({-20, 0});
     sprite->setScale({1.1, 1.1});
     velocities[2].emplace_back(3, 1);
+    size_deltas[2].emplace_back(0, 0);
     textures[2].push_back(texture);
     sprites[2].push_back(sprite);
 
@@ -71,6 +76,7 @@ scene::CutScene::CutScene(RenderWindow* window_link, EngineStats* scene_index_li
     sprite->setPosition({0, -250});
     sprite->setScale({1.4, 1.4});
     velocities[3].emplace_back(-5, 0);
+    size_deltas[3].emplace_back(0, 0);
     textures[3].push_back(texture);
     sprites[3].push_back(sprite);
 
@@ -78,6 +84,7 @@ scene::CutScene::CutScene(RenderWindow* window_link, EngineStats* scene_index_li
     sprite = new Sprite(*texture);
     sprite->setPosition({0, 0});
     velocities[3].emplace_back(0, 0);
+    size_deltas[3].emplace_back(0, 0);
     textures[3].push_back(texture);
     sprites[3].push_back(sprite);
 
@@ -87,6 +94,7 @@ scene::CutScene::CutScene(RenderWindow* window_link, EngineStats* scene_index_li
     sprite->setScale({.15, .15});
     sprite->setRotation(degrees(50));
     velocities[3].emplace_back(1, -3);
+    size_deltas[3].emplace_back(-.001, -.001);
     textures[3].push_back(texture);
     sprites[3].push_back(sprite);
 
@@ -98,6 +106,7 @@ scene::CutScene::CutScene(RenderWindow* window_link, EngineStats* scene_index_li
     sprite->setPosition({0, -250});
     sprite->setScale({1.4, 1.4});
     velocities[4].emplace_back(-5, 0);
+    size_deltas[4].emplace_back(0, 0);
     textures[4].push_back(texture);
     sprites[4].push_back(sprite);
 
@@ -105,6 +114,7 @@ scene::CutScene::CutScene(RenderWindow* window_link, EngineStats* scene_index_li
     sprite = new Sprite(*texture);
     sprite->setPosition({0, 0});
     velocities[4].emplace_back(0, 0);
+    size_deltas[4].emplace_back(0, 0);
     textures[4].push_back(texture);
     sprites[4].push_back(sprite);
 
@@ -114,6 +124,7 @@ scene::CutScene::CutScene(RenderWindow* window_link, EngineStats* scene_index_li
     sprite->setScale({.5, .5});
     sprite->setTextureRect({{0, 0}, {540, 460}});
     velocities[4].emplace_back(10, 2);
+    size_deltas[4].emplace_back(0, 0);
     textures[4].push_back(texture);
     sprites[4].push_back(sprite);
     shattered = false;
@@ -127,6 +138,7 @@ scene::CutScene::CutScene(RenderWindow* window_link, EngineStats* scene_index_li
     sprite->setPosition({-250, -50});
     sprite->setScale({1.4, 1.2});
     velocities[5].emplace_back(5, 0);
+    size_deltas[5].emplace_back(0, 0);
     textures[5].push_back(texture);
     sprites[5].push_back(sprite);
 
@@ -134,6 +146,7 @@ scene::CutScene::CutScene(RenderWindow* window_link, EngineStats* scene_index_li
     sprite = new Sprite(*texture);
     sprite->setPosition({0, 0});
     velocities[5].emplace_back(0, 0);
+    size_deltas[5].emplace_back(0, 0);
     textures[5].push_back(texture);
     sprites[5].push_back(sprite);
 
@@ -143,6 +156,7 @@ scene::CutScene::CutScene(RenderWindow* window_link, EngineStats* scene_index_li
     sprite->setScale({.6, .6});
     sprite->setRotation(degrees(-20));
     velocities[5].emplace_back(1, 46);
+    size_deltas[5].emplace_back(0, 0);
     textures[5].push_back(texture);
     sprites[5].push_back(sprite);
 
@@ -159,7 +173,7 @@ scene::CutScene::~CutScene() {
 void scene::CutScene::on_start() {
     window->setView(window->getDefaultView());
     main_theme.play();
-    // main_theme.setVolume(0);
+    main_theme.setVolume(0);
     timer.start();
 }
 void scene::CutScene::on_end() {
@@ -174,6 +188,7 @@ void scene::CutScene::render() {
     for (unsigned i = 0; i < sprites[current_canvas].size(); i++) {
         const auto current = sprites[current_canvas][i];
         current->move(velocities[current_canvas][i] * delta_time);
+        current->setScale(current->getScale() + size_deltas[current_canvas][i] * delta_time);
         window->draw(*current);
     }
 
