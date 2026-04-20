@@ -3,7 +3,7 @@
 
 #include "../UIScene.h"
 
-#define CANVASES 6
+#define CANVASES 7
 
 #include <SFML/Audio/Music.hpp>
 using sf::Music;
@@ -62,6 +62,8 @@ namespace scene {
 
         bool shattered;
         Time shattered_time;
+
+        bool default_view_reset;
     };
 }
 

@@ -161,6 +161,38 @@ scene::CutScene::CutScene(RenderWindow* window_link, EngineStats* scene_index_li
     sprites[5].push_back(sprite);
 
     breakers[5] = seconds(41); // 41
+
+
+    texture = new Texture("cutscene/6-1.jpg");
+    sprite = new Sprite(*texture);
+    sprite->setPosition({-1500, -800});
+    sprite->setScale({2, 2});
+    velocities[6].emplace_back(105, 0);
+    size_deltas[6].emplace_back(0, 0);
+    textures[6].push_back(texture);
+    sprites[6].push_back(sprite);
+
+    texture = new Texture("cutscene/6-2.png");
+    sprite = new Sprite(*texture);
+    sprite->setPosition({-512, -320});
+    sprite->setScale({1.4, 1.4});
+    velocities[6].emplace_back(0, 0);
+    size_deltas[6].emplace_back(0, 0);
+    textures[6].push_back(texture);
+    sprites[6].push_back(sprite);
+
+    texture = new Texture("cutscene/6-3.png");
+    sprite = new Sprite(*texture);
+    sprite->setPosition({1050, 500});
+    sprite->setScale({.6, .6});
+    velocities[6].emplace_back(0, 0);
+    size_deltas[6].emplace_back(-.06, -.06);
+    textures[6].push_back(texture);
+    sprites[6].push_back(sprite);
+
+    default_view_reset = true;
+
+    breakers[6] = seconds(46); // 46
 }
 scene::CutScene::~CutScene() {
     for (unsigned i = 0; i < CANVASES; i++)
@@ -173,7 +205,7 @@ scene::CutScene::~CutScene() {
 void scene::CutScene::on_start() {
     window->setView(window->getDefaultView());
     main_theme.play();
-    main_theme.setVolume(0);
+    // main_theme.setVolume(0);
     timer.start();
 }
 void scene::CutScene::on_end() {
@@ -206,6 +238,13 @@ void scene::CutScene::update() {
     if (!shattered && local_time >= shattered_time) {
         shattered = true;
         sprites[4].back()->setTextureRect({{0, 510}, {540, 921 - 510}});
+    }
+
+    if (local_time >= breakers[6]) {
+        auto view = window->getView();
+        view.setSize(view.getSize() + Vector2f{3, 3});
+        view.setCenter(window->getDefaultView().getCenter());
+        window->setView(view);
     }
 }
 
