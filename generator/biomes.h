@@ -1,8 +1,12 @@
 #ifndef BIOMES
-#define BIOMES
+#define BIOMES 2
 
 #include <string>
 using std::string;
+
+#include <array>
+using std::array;
+
 
 namespace generator {
     struct Biome {
@@ -11,7 +15,7 @@ namespace generator {
                humidity_low, humidity_high;
     };
 
-    extern Biome GLOBAL_BIOMES[2];
+    extern array<Biome, BIOMES> GLOBAL_BIOMES;
 }
 
 #endif

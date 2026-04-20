@@ -1,8 +1,12 @@
 #ifndef DEPOSITS
-#define DEPOSITS
+#define DEPOSITS 3
 
 #include <string>
 using std::string;
+
+#include <array>
+using std::array;
+
 
 namespace generator {
     struct Deposit {
@@ -12,7 +16,7 @@ namespace generator {
                height_low, height_high;
     };
 
-    extern Deposit GLOBAL_DEPOSITS[3];
+    extern array<Deposit, DEPOSITS> GLOBAL_DEPOSITS;
 }
 
 #endif
