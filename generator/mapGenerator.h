@@ -4,6 +4,10 @@
 #include "PerlinNoise.h"
 #include "tile.h"
 
+using std::uniform_int_distribution;
+using std::uniform_real_distribution;
+using std::seed_seq;
+
 #include <vector>
 using std::vector;
 
@@ -17,7 +21,7 @@ namespace generator {
         explicit MapGenerator(long long seed);
         ~MapGenerator();
 
-        [[nodiscard]] Tile get_tile(size_t x, size_t y) const;
+        [[nodiscard]] Tile get_tile(size_t x, size_t y);
 
         void reseed(long long new_seed);
     private:
@@ -27,6 +31,8 @@ namespace generator {
         float TILE_VARIATION_MULTIPLIER = 4,
               DECORATION_VARIATION_MULTIPLIER = 8,
               DECORATION_MAX_OFFSET = 1.5;
+
+        uniform_real_distribution<float> normal_distribution{0, 1};
 
         long long initial_seed;
         array<default_random_engine*, 4> random_engines{};

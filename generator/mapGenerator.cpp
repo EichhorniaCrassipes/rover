@@ -4,10 +4,7 @@
 #include "deposits.h"
 #include "decorations.h"
 
-#include <random>
-using std::default_random_engine;
-using std::uniform_int_distribution;
-using std::seed_seq;
+#include <iostream>
 
 
 generator::MapGenerator::MapGenerator(const long long seed) {
@@ -17,7 +14,7 @@ generator::MapGenerator::MapGenerator(const long long seed) {
     random_engines[3] = new default_random_engine(0);
     variation = random_engines[3];
 
-    this->initial_seed = seed;
+    initial_seed = seed;
 
     temperature = new PerlinNoise(random_engines[0]);
     humidity = new PerlinNoise(random_engines[1]);
@@ -48,7 +45,7 @@ void generator::MapGenerator::reseed_variations(size_t x, size_t y) const {
 }
 
 
-generator::Tile generator::MapGenerator::get_tile(const size_t x, const size_t y) const {
+generator::Tile generator::MapGenerator::get_tile(const size_t x, const size_t y) {
     const auto relative_x = static_cast<double>(x + COORD_SHIFT),
                relative_y = static_cast<double>(y + COORD_SHIFT);
 
@@ -56,8 +53,9 @@ generator::Tile generator::MapGenerator::get_tile(const size_t x, const size_t y
                  hu = get_tile_noise_value(relative_x, relative_y, 2, humidity),
                  he = get_tile_noise_value(relative_x, relative_y, 2, height);
     reseed_variations(x, y);
-    const auto v1 = static_cast<float>((*variation)()),
-               v2 = static_cast<float>((*variation)());
+    const auto v1 = normal_distribution(*variation),
+               v2 = normal_distribution(*variation);
+    std::cout << v1 << ' ' << v2 << '\n';
 
     Tile tile;
     tile.variation = static_cast<unsigned char>(v1 * TILE_VARIATION_MULTIPLIER);
