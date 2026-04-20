@@ -84,7 +84,7 @@ void scene::GameScene::handle_player(const Vector2f &move_vector) {
 }
 
 void scene::GameScene::handle_camera(const Vector2f &move_vector) {
-    const auto distance = player.getPosition() - camera->get_current_view().getCenter(),
+    const auto distance = player.getPosition() + (player.getSprite().getGlobalBounds().size) / 2.f - camera->get_current_view().getCenter(),
                distance_norm = distance.normalized();
     auto delta = Vector2f(0, 0);
 
