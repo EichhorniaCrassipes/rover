@@ -193,6 +193,16 @@ scene::CutScene::CutScene(RenderWindow* window_link, EngineStats* scene_index_li
     default_view_reset = true;
 
     breakers[6] = seconds(46); // 46
+
+
+    textures[7] = {};
+    sprites[7] = {};
+    velocities[7] = {};
+    size_deltas[7] = {};
+
+    is_7_canvas = false;
+
+    breakers[7] = seconds(51.7); // 51.7
 }
 scene::CutScene::~CutScene() {
     for (unsigned i = 0; i < CANVASES; i++)
@@ -240,11 +250,21 @@ void scene::CutScene::update() {
         sprites[4].back()->setTextureRect({{0, 510}, {540, 921 - 510}});
     }
 
-    if (local_time >= breakers[6]) {
+    if (breakers[7] > local_time && local_time >= breakers[6]) {
         auto view = window->getView();
         view.setSize(view.getSize() + Vector2f{3, 3});
         view.setCenter(window->getDefaultView().getCenter());
         window->setView(view);
+    }
+
+    if (!default_view_reset) {
+        default_view_reset = true;
+        window->setView(window->getDefaultView());
+    }
+
+    if (!is_7_canvas && local_time >= breakers[7]) {
+        is_7_canvas = true;
+        default_view_reset = false;
     }
 }
 
