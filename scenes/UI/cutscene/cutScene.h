@@ -53,9 +53,11 @@ namespace scene {
 
         unsigned current_canvas;
         array<vector<Texture*>, CANVASES> textures;
-        array<vector<Sprite*>, CANVASES>  sprites;
+        array<vector<Sprite*>,  CANVASES> sprites;
         array<vector<Vector2f>, CANVASES> velocities,
                                           size_deltas;
+
+        Text RE, EngiLabs, authors, media_info, concept_trailer;
 
         bool shattered;
         Time shattered_time;

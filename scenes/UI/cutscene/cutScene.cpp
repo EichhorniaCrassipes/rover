@@ -12,8 +12,24 @@ using sf::degrees;
 scene::CutScene::CutScene(RenderWindow* window_link, EngineStats* scene_index_link, const Font* font_link)
                          : UIScene(window_link, scene_index_link),
                            main_theme("music/Sand Planet.mp3"),
-                           go_next_text(*font_link, "Press [Space] to continue", 20) {
+                           go_next_text(*font_link, "Press [Space] to continue", 20),
+                           RE(*font_link, "Re!", 150),
+                           EngiLabs(*font_link, "by EngiLabs", 80),
+                           authors(*font_link, "@GriB28\n@ArsenyKenunen\n@EichhorniaCrassipes", 45),
+                           media_info(*font_link, "music: Sati Akura - Sand Planet\narts: @Ogonyok", 35),
+                           concept_trailer(*font_link, "concept trailer", 20) {
     go_next_text.setFillColor({147, 147, 147});
+
+    RE.setFillColor({237, 147, 0});
+    RE.setPosition({(2560 - RE.getGlobalBounds().size.x) / 2, 450});
+    EngiLabs.setFillColor({170, 170, 170});
+    EngiLabs.setPosition({(2560 - EngiLabs.getGlobalBounds().size.x) / 2, 680});
+    authors.setFillColor({147, 174, 74, 141});
+    authors.setPosition({2000, 1350});
+    media_info.setFillColor({147, 147, 147, 141});
+    media_info.setPosition({10, 1510});
+    concept_trailer.setFillColor({147, 147, 147, 141});
+    concept_trailer.setPosition({2560 - concept_trailer.getGlobalBounds().size.x - 10, 1510});
 
     current_canvas = 0;
 
@@ -222,6 +238,23 @@ void scene::CutScene::on_end() {
 
 void scene::CutScene::render() {
     scheduler();
+
+    if (current_canvas == 0) {
+        const auto local_time = main_theme.getPlayingOffset();
+
+        window->draw(RE);
+
+        if (local_time.asSeconds() >= 3.5)
+            window->draw(EngiLabs);
+
+        if (local_time.asSeconds() >= 6.1)
+            window->draw(authors);
+
+        if (local_time.asSeconds() >= 8.7) {
+            window->draw(media_info);
+            window->draw(concept_trailer);
+        }
+    }
 
     const float delta_time = timer.restart().asSeconds();
     for (unsigned i = 0; i < sprites[current_canvas].size(); i++) {
