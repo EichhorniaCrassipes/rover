@@ -13,19 +13,26 @@ using std::string;
 
 
 generator::MapGenerator::MapGenerator(const long long seed) {
-    this->seed = seed;
-    temperature = new PerlinNoise(seed);
-    humidity = new PerlinNoise(seed_shift(1));
-    height = new PerlinNoise(seed_shift(2));
-    variation = new PerlinNoise(seed_shift(3));
-}
-generator::MapGenerator::~MapGenerator() { free_noises_memory(); }
+    random_engines[0] = new default_random_engine(seed);
+    random_engines[1] = new default_random_engine(seed_shift(1));
+    random_engines[2] = new default_random_engine(seed_shift(2));
+    random_engines[3] = new default_random_engine(seed_shift(3));
+    variation = random_engines[3];
 
-void generator::MapGenerator::free_noises_memory() const {
+    this->initial_seed = seed;
+
+    temperature = new PerlinNoise(random_engines[0]);
+    humidity = new PerlinNoise(random_engines[1]);
+    height = new PerlinNoise(random_engines[2]);
+}
+generator::MapGenerator::~MapGenerator() { free_memory(); }
+
+void generator::MapGenerator::free_memory() const {
     delete temperature;
     delete humidity;
     delete height;
-    delete variation;
+    for (const auto r : random_engines)
+        delete r;
 }
 
 
@@ -36,8 +43,8 @@ generator::Tile generator::MapGenerator::get_tile(const size_t x, const size_t y
     const double te = get_tile_noise_value(relative_x, relative_y, 4, temperature),
                  hu = get_tile_noise_value(relative_x, relative_y, 2, humidity),
                  he = get_tile_noise_value(relative_x, relative_y, 2, height);
-    const auto v1 = static_cast<float>(variation->noise(relative_x, relative_y)),
-               v2 = static_cast<float>(variation->noise(relative_x + 100, relative_y + 100));
+    const auto v1 = static_cast<float>((*variation)()),
+               v2 = static_cast<float>((*variation)());
 
     Tile tile;
     tile.variation = static_cast<unsigned char>(v1 * TILE_VARIATION_MULTIPLIER);
@@ -87,12 +94,12 @@ double generator::MapGenerator::get_tile_noise_value(const double x, const doubl
 }
 
 long long generator::MapGenerator::seed_shift(const unsigned shift) const {
-    default_random_engine random(seed);
+    default_random_engine random(initial_seed);
 
     for (unsigned i = 0; i < shift; i++) random();
 
     string seed_string;
-    long long tmp = seed;
+    long long tmp = initial_seed;
 
     while (tmp > 0 && seed_string.length() < 20) {
         auto digit = static_cast<int>(tmp % 10);
@@ -110,10 +117,16 @@ long long generator::MapGenerator::seed_shift(const unsigned shift) const {
 }
 
 void generator::MapGenerator::reseed(const long long new_seed) {
-    seed = new_seed;
-    free_noises_memory();
-    temperature = new PerlinNoise(seed);
-    humidity = new PerlinNoise(seed_shift(1));
-    height = new PerlinNoise(seed_shift(2));
-    variation = new PerlinNoise(seed_shift(3));
+    free_memory();
+
+    initial_seed = new_seed;
+
+    random_engines[0] = new default_random_engine(new_seed);
+    random_engines[1] = new default_random_engine(seed_shift(1));
+    random_engines[2] = new default_random_engine(seed_shift(2));
+    random_engines[3] = new default_random_engine(seed_shift(3));
+
+    temperature = new PerlinNoise(random_engines[0]);
+    humidity = new PerlinNoise(random_engines[1]);
+    height = new PerlinNoise(random_engines[2]);
 }
