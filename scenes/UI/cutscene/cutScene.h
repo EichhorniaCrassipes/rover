@@ -3,7 +3,7 @@
 
 #include "../UIScene.h"
 
-#define CANVASES 5
+#define CANVASES 6
 
 #include <SFML/Audio/Music.hpp>
 using sf::Music;
@@ -60,6 +60,7 @@ namespace scene {
         array<vector<Vector2f>, CANVASES> velocities;
 
         bool shattered;
+        Time shattered_time;
     };
 }
 

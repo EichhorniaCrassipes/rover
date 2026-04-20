@@ -117,8 +117,36 @@ scene::CutScene::CutScene(RenderWindow* window_link, EngineStats* scene_index_li
     textures[4].push_back(texture);
     sprites[4].push_back(sprite);
     shattered = false;
+    shattered_time = seconds(35.75);
 
     breakers[4] = seconds(31); // 31
+
+
+    texture = new Texture("cutscene/1-1.jpg");
+    sprite = new Sprite(*texture);
+    sprite->setPosition({-250, -50});
+    sprite->setScale({1.4, 1.2});
+    velocities[5].emplace_back(5, 0);
+    textures[5].push_back(texture);
+    sprites[5].push_back(sprite);
+
+    texture = new Texture("cutscene/5-2.png");
+    sprite = new Sprite(*texture);
+    sprite->setPosition({0, 0});
+    velocities[5].emplace_back(0, 0);
+    textures[5].push_back(texture);
+    sprites[5].push_back(sprite);
+
+    texture = new Texture("cutscene/5-3.png");
+    sprite = new Sprite(*texture);
+    sprite->setPosition({1340, 720});
+    sprite->setScale({.6, .6});
+    sprite->setRotation(degrees(-20));
+    velocities[5].emplace_back(1, 46);
+    textures[5].push_back(texture);
+    sprites[5].push_back(sprite);
+
+    breakers[5] = seconds(41); // 41
 }
 scene::CutScene::~CutScene() {
     for (unsigned i = 0; i < CANVASES; i++)
@@ -157,10 +185,10 @@ void scene::CutScene::render() {
 }
 void scene::CutScene::update() {
     const auto local_time = main_theme.getPlayingOffset();
-    if (local_time == main_theme.getDuration())
+    if (shattered && local_time.asMilliseconds() == 0)
         go_next = true;
 
-    if (local_time >= seconds(35.75) && !shattered) {
+    if (!shattered && local_time >= shattered_time) {
         shattered = true;
         sprites[4].back()->setTextureRect({{0, 510}, {540, 921 - 510}});
     }
