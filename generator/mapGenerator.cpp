@@ -7,16 +7,14 @@
 #include <random>
 using std::default_random_engine;
 using std::uniform_int_distribution;
-
-#include <string>
-using std::string;
+using std::seed_seq;
 
 
 generator::MapGenerator::MapGenerator(const long long seed) {
     random_engines[0] = new default_random_engine(seed);
     random_engines[1] = new default_random_engine(seed_shift(1));
     random_engines[2] = new default_random_engine(seed_shift(2));
-    random_engines[3] = new default_random_engine(seed_shift(3));
+    random_engines[3] = new default_random_engine(0);
     variation = random_engines[3];
 
     this->initial_seed = seed;
@@ -35,6 +33,20 @@ void generator::MapGenerator::free_memory() const {
         delete r;
 }
 
+void generator::MapGenerator::reseed_variations(size_t x, size_t y) const {
+    array<seed_seq::result_type, 3> seeds = {
+        static_cast<seed_seq::result_type>(initial_seed),
+        static_cast<seed_seq::result_type>(x),
+        static_cast<seed_seq::result_type>(y)
+    };
+    seed_seq seq(seeds.begin(), seeds.end());
+
+    array<seed_seq::result_type, 1> final_seed{};
+    seq.generate(final_seed.begin(), final_seed.end());
+
+    variation->seed(final_seed[0]);
+}
+
 
 generator::Tile generator::MapGenerator::get_tile(const size_t x, const size_t y) const {
     const auto relative_x = static_cast<double>(x + COORD_SHIFT),
@@ -43,6 +55,7 @@ generator::Tile generator::MapGenerator::get_tile(const size_t x, const size_t y
     const double te = get_tile_noise_value(relative_x, relative_y, 4, temperature),
                  hu = get_tile_noise_value(relative_x, relative_y, 2, humidity),
                  he = get_tile_noise_value(relative_x, relative_y, 2, height);
+    reseed_variations(x, y);
     const auto v1 = static_cast<float>((*variation)()),
                v2 = static_cast<float>((*variation)());
 
@@ -146,7 +159,7 @@ void generator::MapGenerator::reseed(const long long new_seed) {
     random_engines[0] = new default_random_engine(new_seed);
     random_engines[1] = new default_random_engine(seed_shift(1));
     random_engines[2] = new default_random_engine(seed_shift(2));
-    random_engines[3] = new default_random_engine(seed_shift(3));
+    random_engines[3] = new default_random_engine(0);
 
     temperature = new PerlinNoise(random_engines[0]);
     humidity = new PerlinNoise(random_engines[1]);

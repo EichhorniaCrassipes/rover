@@ -34,6 +34,8 @@ namespace generator {
         PerlinNoise *temperature, *humidity, *height;
         void free_memory() const;
 
+        void reseed_variations(size_t x, size_t y) const;
+
         double get_tile_noise_value(double x, double y, unsigned char octaves, const PerlinNoise* noise) const;
 
         [[nodiscard]] long long seed_shift(unsigned shift) const;
