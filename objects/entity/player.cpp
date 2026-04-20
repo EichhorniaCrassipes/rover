@@ -15,7 +15,7 @@ object::Player::Player(const Texture* texture_link, const Vector2f &null_positio
 
     texture = *texture_link;
     sprite.setTextureRect({{0, 0}, {256, 256}});
-    position = null_position - sprite.getGlobalBounds().size / 2.f;
+    position = null_position - static_cast<sf::Vector2f>(spriteSize) / 2.f;
     setScale({.5, .5});
 }
 
@@ -25,20 +25,20 @@ void object::Player::move(const Vector2f vector, const float delta_time) {
     position += delta;
 
     if (vector == Vector2f{0, -1})
-        sprite.setTextureRect({{0, 0}, {256, 256}});
+        sprite.setTextureRect({{0, 0}, spriteSize});
     else if (vector == Vector2f{1, -1})
-        sprite.setTextureRect({{256, 0}, {256, 256}});
+        sprite.setTextureRect({{spriteSize.x, 0}, spriteSize});
     else if (vector == Vector2f{1, 0})
-        sprite.setTextureRect({{512, 0}, {256, 256}});
+        sprite.setTextureRect({{spriteSize.x*2, 0}, spriteSize});
     else if (vector == Vector2f{1, 1})
-        sprite.setTextureRect({{768, 0}, {256, 256}});
+        sprite.setTextureRect({{spriteSize.x*3, 0}, spriteSize});
 
     else if (vector == Vector2f{0, 1})
-        sprite.setTextureRect({{1024, 0}, {256, 256}});
+        sprite.setTextureRect({{spriteSize.x*4, 0}, spriteSize});
     else if (vector == Vector2f{-1, 1})
-        sprite.setTextureRect({{1280, 0}, {256, 256}});
+        sprite.setTextureRect({{spriteSize.x*5, 0}, spriteSize});
     else if (vector == Vector2f{-1, 0})
-        sprite.setTextureRect({{1536, 0}, {256, 256}});
+        sprite.setTextureRect({{spriteSize.x*6, 0}, spriteSize});
     else if (vector == Vector2f{-1, -1})
-        sprite.setTextureRect({{1796, 0}, {256, 256}});
+        sprite.setTextureRect({{spriteSize.x*7, 0}, spriteSize});
 }

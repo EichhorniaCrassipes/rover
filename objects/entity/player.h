@@ -15,6 +15,7 @@ namespace object {
         void move(Vector2f vector, float delta_time);
     private:
         float speed = 250;
+        sf::Vector2i spriteSize = {512,512};
     };
 }
 
