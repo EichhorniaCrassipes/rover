@@ -1,8 +1,12 @@
 #ifndef DECORATIONS
-#define DECORATIONS
+#define DECORATIONS 3
 
 #include <string>
 using std::string;
+
+#include <array>
+using std::array;
+
 
 namespace generator {
     struct Decoration {
@@ -12,7 +16,7 @@ namespace generator {
                height_low, height_high;
     };
 
-    extern Decoration GLOBAL_DECORATIONS[1];
+    extern array<Decoration, DECORATIONS> GLOBAL_DECORATIONS;
 }
 
 #endif

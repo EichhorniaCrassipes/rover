@@ -49,13 +49,12 @@ generator::Tile generator::MapGenerator::get_tile(const size_t x, const size_t y
     const auto relative_x = static_cast<double>(x + COORD_SHIFT),
                relative_y = static_cast<double>(y + COORD_SHIFT);
 
-    const double te = get_tile_noise_value(relative_x, relative_y, 4, temperature),
-                 hu = get_tile_noise_value(relative_x, relative_y, 2, humidity),
-                 he = get_tile_noise_value(relative_x, relative_y, 2, height);
+    const double te = get_tile_noise_value(relative_x, relative_y, 8, temperature),
+                 hu = get_tile_noise_value(relative_x, relative_y, 4, humidity),
+                 he = get_tile_noise_value(relative_x, relative_y, 4, height);
     reseed_variations(x, y);
     const auto v1 = normal_distribution(*variation),
                v2 = normal_distribution(*variation);
-    std::cout << v1 << ' ' << v2 << '\n';
 
     Tile tile;
     tile.variation = static_cast<unsigned char>(v1 * TILE_VARIATION_MULTIPLIER);
