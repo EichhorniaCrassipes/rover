@@ -217,7 +217,7 @@ void scene::CutScene::on_start() {
 
     window->setView(window->getDefaultView());
     main_theme.play();
-    // main_theme.setVolume(0);
+    main_theme.setVolume(40);
     timer.start();
 }
 void scene::CutScene::on_end() {
