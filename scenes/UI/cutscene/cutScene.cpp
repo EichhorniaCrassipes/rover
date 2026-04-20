@@ -49,6 +49,8 @@ scene::CutScene::CutScene(RenderWindow* window_link, EngineStats* scene_index_li
 
     is_7_canvas = false;
     breakers[7] = seconds(51.7); // 51.7
+
+    breakers[8] = seconds(77); // 77
 }
 
 
@@ -213,6 +215,12 @@ void scene::CutScene::on_start() {
     sprites[7] = {};
     velocities[7] = {};
     size_deltas[7] = {};
+
+
+    textures[8] = {};
+    sprites[8] = {};
+    velocities[8] = {};
+    size_deltas[8] = {};
 
 
     window->setView(window->getDefaultView());
