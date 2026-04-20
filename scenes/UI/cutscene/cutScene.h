@@ -48,8 +48,6 @@ namespace scene {
         bool go_next = false;
         Text go_next_text;
 
-        Text current_time;
-
         void scheduler();
         array<Time, CANVASES> breakers{};
 

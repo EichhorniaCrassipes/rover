@@ -12,11 +12,8 @@ using sf::degrees;
 scene::CutScene::CutScene(RenderWindow* window_link, EngineStats* scene_index_link, const Font* font_link)
                          : UIScene(window_link, scene_index_link),
                            main_theme("music/Sand Planet.mp3"),
-                           go_next_text(*font_link, "Press [Space] to continue", 20),
-                           current_time(*font_link, "", 15) {
+                           go_next_text(*font_link, "Press [Space] to continue", 20) {
     go_next_text.setFillColor({147, 147, 147});
-    current_time.setPosition({static_cast<float>(window->getSize().x) - 45, 110});
-    current_time.setFillColor({147, 147, 147, 141});
 
     current_canvas = 0;
 
@@ -233,9 +230,6 @@ void scene::CutScene::render() {
         current->setScale(current->getScale() + size_deltas[current_canvas][i] * delta_time);
         window->draw(*current);
     }
-
-    current_time.setString(std::to_string(main_theme.getPlayingOffset().asMilliseconds()));
-    window->draw(current_time);
 
     if (go_next)
         window->draw(go_next_text);
