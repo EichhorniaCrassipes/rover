@@ -33,7 +33,6 @@ namespace generator {
     class Chunk : public Drawable, public Transformable {
     public:
         Chunk(MapGenerator* generator_link, int x, int y, Texture* texture);
-        ~Chunk() override;
         Vector2i getAbsolutePosition() const;
     private:
         MapGenerator* generator;
@@ -44,7 +43,7 @@ namespace generator {
         void draw(RenderTarget &target, RenderStates states) const override;
         bool load( Vector2u tileSize, const int* tiles, const unsigned char* var, unsigned int width, unsigned int height);
 
-        const sf::Vector2i size;
+        const Vector2i size;
 
         string get4tiles(int x, int y) const;
     };
