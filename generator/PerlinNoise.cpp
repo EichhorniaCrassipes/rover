@@ -10,14 +10,14 @@ using std::shuffle;
 using std::floor;
 
 
-generator::PerlinNoise::PerlinNoise(const long long seed) {
+generator::PerlinNoise::PerlinNoise(default_random_engine* engine_link) {
+    engine = engine_link;
+
     permutation.resize(256);
     for (unsigned short i = 0; i < 256; i++) {
         permutation[i] = i;
     }
-
-    default_random_engine engine(seed);
-    shuffle(permutation.begin(), permutation.end(), engine);
+    shuffle(permutation.begin(), permutation.end(), *engine);
 
     permutation.insert(permutation.end(), permutation.begin(), permutation.end());
 }

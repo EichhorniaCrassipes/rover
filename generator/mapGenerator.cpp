@@ -4,64 +4,104 @@
 #include "deposits.h"
 #include "decorations.h"
 
-#include <random>
-using std::default_random_engine;
-using std::uniform_int_distribution;
-
-#include <string>
-using std::string;
+#include <iostream>
 
 
 generator::MapGenerator::MapGenerator(const long long seed) {
-    this->seed = seed;
-    temperature = new PerlinNoise(seed);
-    humidity = new PerlinNoise(seed_shift(1));
-    height = new PerlinNoise(seed_shift(2));
-    variation = new PerlinNoise(seed_shift(3));
-}
-generator::MapGenerator::~MapGenerator() { free_noises_memory(); }
+    random_engines[0] = new default_random_engine(seed);
+    random_engines[1] = new default_random_engine(seed_shift(1));
+    random_engines[2] = new default_random_engine(seed_shift(2));
+    random_engines[3] = new default_random_engine(0);
+    variation = random_engines[3];
 
-void generator::MapGenerator::free_noises_memory() const {
+    initial_seed = seed;
+
+    temperature = new PerlinNoise(random_engines[0]);
+    humidity = new PerlinNoise(random_engines[1]);
+    height = new PerlinNoise(random_engines[2]);
+}
+generator::MapGenerator::~MapGenerator() { free_memory(); }
+
+void generator::MapGenerator::free_memory() const {
     delete temperature;
     delete humidity;
     delete height;
-    delete variation;
+    for (const auto r : random_engines)
+        delete r;
+}
+
+void generator::MapGenerator::reseed_variations(size_t x, size_t y) const {
+    array<seed_seq::result_type, 3> seeds = {
+        static_cast<seed_seq::result_type>(initial_seed),
+        static_cast<seed_seq::result_type>(x),
+        static_cast<seed_seq::result_type>(y)
+    };
+    seed_seq seq(seeds.begin(), seeds.end());
+
+    array<seed_seq::result_type, 1> final_seed{};
+    seq.generate(final_seed.begin(), final_seed.end());
+
+    variation->seed(final_seed[0]);
 }
 
 
-generator::Tile generator::MapGenerator::get_tile(const size_t x, const size_t y) const {
+generator::Tile generator::MapGenerator::get_tile(const size_t x, const size_t y) {
     const auto relative_x = static_cast<double>(x + COORD_SHIFT),
                relative_y = static_cast<double>(y + COORD_SHIFT);
 
     const double te = get_tile_noise_value(relative_x, relative_y, 4, temperature),
                  hu = get_tile_noise_value(relative_x, relative_y, 2, humidity),
                  he = get_tile_noise_value(relative_x, relative_y, 2, height);
-    const auto v1 = static_cast<float>(variation->noise(relative_x, relative_y)),
-               v2 = static_cast<float>(variation->noise(relative_x + 100, relative_y + 100));
+    reseed_variations(x, y);
+    const auto v1 = normal_distribution(*variation),
+               v2 = normal_distribution(*variation);
+    std::cout << v1 << ' ' << v2 << '\n';
 
     Tile tile;
     tile.variation = static_cast<unsigned char>(v1 * TILE_VARIATION_MULTIPLIER);
     tile.decorations = {};
 
-    for (const auto &b : GLOBAL_BIOMES)
-        if (b.temperature_low <= te && te <= b.temperature_high &&
-               b.humidity_low <= hu && hu <= b.humidity_high) {
-            tile.biome = b.name;
+    for (const auto &[
+                        name,
+                        temperature_low,
+                        temperature_high,
+                        humidity_low,
+                        humidity_high
+                     ] : GLOBAL_BIOMES)
+        if (temperature_low <= te && te <= temperature_high &&
+               humidity_low <= hu && hu <= humidity_high) {
+            tile.biome = name;
             break;
         }
-    for (const auto &d : GLOBAL_DEPOSITS)
-        if (d.temperature_low <= te && te <= d.temperature_high &&
-               d.humidity_low <= hu && hu <= d.humidity_high &&
-                 d.height_low <= he && he <= d.height_high) {
-            tile.deposit = d.name;
+    for (const auto &[
+                        name,
+                        temperature_low,
+                        temperature_high,
+                        humidity_low,
+                        humidity_high,
+                        height_low,
+                        height_high
+                     ] : GLOBAL_DEPOSITS)
+        if (temperature_low <= te && te <= temperature_high &&
+               humidity_low <= hu && hu <= humidity_high &&
+                 height_low <= he && he <= height_high) {
+            tile.deposit = name;
             break;
         }
-    for (const auto &d : GLOBAL_DECORATIONS)
-        if (d.temperature_low <= te && te <= d.temperature_high &&
-               d.humidity_low <= hu && hu <= d.humidity_high &&
-                 d.height_low <= he && he <= d.height_high) {
+    for (const auto &[
+                        name,
+                        temperature_low,
+                        temperature_high,
+                        humidity_low,
+                        humidity_high,
+                        height_low,
+                        height_high
+                     ] : GLOBAL_DECORATIONS)
+        if (temperature_low <= te && te <= temperature_high &&
+               humidity_low <= hu && hu <= humidity_high &&
+                 height_low <= he && he <= height_high) {
             tile.decorations.push_back({
-                d.name,
+                name,
                 {(v1 - .5f) * 2.f * DECORATION_MAX_OFFSET, (v2 - .5f) * 2.f * DECORATION_MAX_OFFSET},
                 static_cast<unsigned char>(v1 * DECORATION_VARIATION_MULTIPLIER)
             });
@@ -87,12 +127,12 @@ double generator::MapGenerator::get_tile_noise_value(const double x, const doubl
 }
 
 long long generator::MapGenerator::seed_shift(const unsigned shift) const {
-    default_random_engine random(seed);
+    default_random_engine random(initial_seed);
 
     for (unsigned i = 0; i < shift; i++) random();
 
     string seed_string;
-    long long tmp = seed;
+    long long tmp = initial_seed;
 
     while (tmp > 0 && seed_string.length() < 20) {
         auto digit = static_cast<int>(tmp % 10);
@@ -110,10 +150,16 @@ long long generator::MapGenerator::seed_shift(const unsigned shift) const {
 }
 
 void generator::MapGenerator::reseed(const long long new_seed) {
-    seed = new_seed;
-    free_noises_memory();
-    temperature = new PerlinNoise(seed);
-    humidity = new PerlinNoise(seed_shift(1));
-    height = new PerlinNoise(seed_shift(2));
-    variation = new PerlinNoise(seed_shift(3));
+    free_memory();
+
+    initial_seed = new_seed;
+
+    random_engines[0] = new default_random_engine(new_seed);
+    random_engines[1] = new default_random_engine(seed_shift(1));
+    random_engines[2] = new default_random_engine(seed_shift(2));
+    random_engines[3] = new default_random_engine(0);
+
+    temperature = new PerlinNoise(random_engines[0]);
+    humidity = new PerlinNoise(random_engines[1]);
+    height = new PerlinNoise(random_engines[2]);
 }
