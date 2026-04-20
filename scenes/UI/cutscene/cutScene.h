@@ -34,7 +34,6 @@ namespace scene {
     class CutScene : public UIScene {
     public:
         explicit CutScene(RenderWindow* window_link, EngineStats* scene_index_link, const Font* font_link);
-        ~CutScene() override;
 
         void on_start() override;
         void on_end() override;

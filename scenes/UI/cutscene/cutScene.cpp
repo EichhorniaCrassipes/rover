@@ -20,13 +20,30 @@ scene::CutScene::CutScene(RenderWindow* window_link, EngineStats* scene_index_li
 
     current_canvas = 0;
 
+    breakers[0] = seconds(0);
+    breakers[1] = seconds(11); // 11
+    breakers[2] = seconds(16); // 16
+    breakers[3] = seconds(21); // 21
 
+    shattered = false;
+    shattered_time = seconds(35.75);
+    breakers[4] = seconds(31); // 31
+
+    breakers[5] = seconds(41); // 41
+
+    default_view_reset = true;
+    breakers[6] = seconds(46); // 46
+
+    is_7_canvas = false;
+    breakers[7] = seconds(51.7); // 51.7
+}
+
+
+void scene::CutScene::on_start() {
     textures[0] = {};
     sprites[0] = {};
     velocities[0] = {};
     size_deltas[0] = {};
-
-    breakers[0] = seconds(0);
 
 
     auto* texture = new Texture("cutscene/1-1.jpg");
@@ -56,8 +73,6 @@ scene::CutScene::CutScene(RenderWindow* window_link, EngineStats* scene_index_li
     textures[1].push_back(texture);
     sprites[1].push_back(sprite);
 
-    breakers[1] = seconds(11); // 11
-
 
     texture = new Texture("cutscene/2-1.jpg");
     sprite = new Sprite(*texture);
@@ -67,8 +82,6 @@ scene::CutScene::CutScene(RenderWindow* window_link, EngineStats* scene_index_li
     size_deltas[2].emplace_back(0, 0);
     textures[2].push_back(texture);
     sprites[2].push_back(sprite);
-
-    breakers[2] = seconds(16); // 16
 
 
     texture = new Texture("cutscene/3-1.jpg");
@@ -98,8 +111,6 @@ scene::CutScene::CutScene(RenderWindow* window_link, EngineStats* scene_index_li
     textures[3].push_back(texture);
     sprites[3].push_back(sprite);
 
-    breakers[3] = seconds(21); // 21
-
 
     texture = new Texture("cutscene/3-1.jpg");
     sprite = new Sprite(*texture);
@@ -127,10 +138,6 @@ scene::CutScene::CutScene(RenderWindow* window_link, EngineStats* scene_index_li
     size_deltas[4].emplace_back(0, 0);
     textures[4].push_back(texture);
     sprites[4].push_back(sprite);
-    shattered = false;
-    shattered_time = seconds(35.75);
-
-    breakers[4] = seconds(31); // 31
 
 
     texture = new Texture("cutscene/1-1.jpg");
@@ -160,8 +167,6 @@ scene::CutScene::CutScene(RenderWindow* window_link, EngineStats* scene_index_li
     textures[5].push_back(texture);
     sprites[5].push_back(sprite);
 
-    breakers[5] = seconds(41); // 41
-
 
     texture = new Texture("cutscene/6-1.jpg");
     sprite = new Sprite(*texture);
@@ -190,29 +195,13 @@ scene::CutScene::CutScene(RenderWindow* window_link, EngineStats* scene_index_li
     textures[6].push_back(texture);
     sprites[6].push_back(sprite);
 
-    default_view_reset = true;
-
-    breakers[6] = seconds(46); // 46
-
 
     textures[7] = {};
     sprites[7] = {};
     velocities[7] = {};
     size_deltas[7] = {};
 
-    is_7_canvas = false;
 
-    breakers[7] = seconds(51.7); // 51.7
-}
-scene::CutScene::~CutScene() {
-    for (unsigned i = 0; i < CANVASES; i++)
-        for (unsigned j = 0; j < sprites[i].size(); j++) {
-            delete sprites[i][j];
-            delete textures[i][j];
-        }
-}
-
-void scene::CutScene::on_start() {
     window->setView(window->getDefaultView());
     main_theme.play();
     // main_theme.setVolume(0);
@@ -220,6 +209,17 @@ void scene::CutScene::on_start() {
 }
 void scene::CutScene::on_end() {
     main_theme.stop();
+
+    for (unsigned i = 0; i < CANVASES; i++) {
+        for (unsigned j = 0; j < sprites[i].size(); j++) {
+            delete sprites[i][j];
+            delete textures[i][j];
+        }
+        sprites[i].clear();
+        textures[i].clear();
+        velocities[i].clear();
+        size_deltas[i].clear();
+    }
 }
 
 
