@@ -14,7 +14,7 @@ object::Player::Player(const Texture* texture_link, const Vector2f &null_positio
     << "position: {" << sprite.getPosition().x << ';' << sprite.getPosition().y << "}\n\n";
 
     texture = *texture_link;
-    sprite.setTextureRect({{0, 0}, {256, 256}});
+    sprite.setTextureRect({{0, 0}, spriteSize});
     position = null_position - static_cast<sf::Vector2f>(spriteSize) / 2.f;
     setScale({.5, .5});
 }
