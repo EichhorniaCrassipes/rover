@@ -1,21 +1,116 @@
 <div align="center" style="text-align: center;">
 
-# [RE!](https://github.com/EichhorniaCrassipes/rover)
-## <...>
+# RE!
 
-<img src="https://img.shields.io/badge/C++-%2300599C.svg?style=for-the-badge&logo=c%2B%2B&logoColor=white" alt="CPP">
-<img src="https://img.shields.io/badge/SFML-8CC445?style=for-the-badge&logo=sfml&logoColor=white" alt="SFML">
-<br>
-<img src="https://img.shields.io/badge/version-0.0-466646" alt="version">
+[![C++](https://img.shields.io/badge/C++-%2300599C.svg?style=for-the-badge&logo=c%2B%2B&logoColor=white)](https://isocpp.org/)
+[![SFML](https://img.shields.io/badge/SFML-8CC445?style=for-the-badge&logo=sfml&logoColor=white)](https://www.sfml-dev.org/)
+[![Version](https://img.shields.io/badge/version-0.0-466646)](https://github.com/EichhorniaCrassipes/rover)
 
 </div>
 
-#
+---
+
+## О проекте
+
+**RE** — это 2D-игра с видом сверху, написанная на C++ с использованием библиотеки SFML 3.0.2. Игра представляет собой песочницу с элементами выживания, где игрок управляет автономным ровером на неизведанной планете.
+
+### Особенности
+- Процедурно генерируемый мир на основе шума Перлина
+- Система биомов с различными типами местности
+- Механики крафта и строительства
+- Исследование и сбор ресурсов
+
+---
+
+## Конкурс
+
+Данный проект разработан для участия в конкурсе «Старый День космонавтики».
+
+### Диаграмма наследования классов
+
+```
+object::Object (sf::Drawable + sf::Transformable)
+│
+├── object::MapElement
+│   ├── object::Block
+│   │   ├── object::Building
+│   │   │   └── object::Chest
+│   │   ├── object::Deposit
+│   │   ├── object::Loot
+│   │   └── object::Stone
+│   └── object::Decoration
+│
+└── object::Entity
+    ├── object::Mob
+    │   ├── object::Player
+    │   └── object::Enemy
+    └── object::NPC
+```
+
+---
+
+## Лор
+
+### Предыстория
+
+Человечество завершает масштабную программу по терраформированию пригодных для жизни экзопланет. Ключевым элементом программы стали автономные роверы, оснащённые продвинутым искусственным интеллектом.
+
+**Ровер** был развёрнут на одной из самых перспективных планет для первой человеческой колонии. Его миссия: анализ атмосферы, поиск ресурсов, подготовка инфраструктуры для будущих поселенцев.
+
+Во время шторма в верхних слоях атмосферы произошёл сбой в навигационной системе. Электромагнитная аномалия, предположительно вызванная неизвестным минералом в недрах планеты, вывела из строя модуль связи и двигатели ориентации. Ровер совершил аварийную посадку в неизведанном регионе.
+
+### Цель
+
+Ровер должен выжить в неизвестной агрессивной среде, восстановить свои модули и подготовить планету к прибытию колонистов. Для этого необходимо
+не только исследовать местность, но и добывать ресурсы с целью постройки базовой инфраструктуры, а также устранить все угрозы для будущих миссий.
+---
+
+## Технические требования
+
+- **ОС:** Windows
+- **Компилятор:** C++17
+- **Зависимости:** SFML 3.0.2
+
+---
+
+## Сборка и запуск
+
+```bash
+# Создание директории сборки
+cmake -B cmake-build-debug -S .
+
+# Сборка проекта
+cmake --build cmake-build-debug
+
+# Запуск игры
+.release/ROVER.exe
+```
+
+---
+
+## Архитектура
+
+Проект использует сценарно-ориентированную архитектуру с разделением на игровую логику и UI:
+
+- **engine/** — ядро движка: игровой цикл, камера, управление сценами
+- **generator/** — процедурная генерация: шум Перлина, биомы, месторождения
+- **objects/** — игровые объекты: сущности, блоки, UI-элементы
+- **scenes/** — сцены: главное меню, игра, катсцены
+
+---
+
 ## Создатели и разработчики
-[`@GriB28`](https://github.com/GriB28),
-[`@ArsenyKenunen`](https://github.com/ArsenyKenunen),
-[`@EichhorniaCrassipes`](https://github.com/EichhorniaCrassipes)
+
+[**@GriB28**](https://github.com/GriB28),  
+[**@ArsenyKenunen**](https://github.com/ArsenyKenunen),  
+[**@EichhorniaCrassipes**](https://github.com/EichhorniaCrassipes)
 
 [![Contributors](https://contrib.rocks/image?repo=EichhorniaCrassipes%2Frover)](https://github.com/EichhorniaCrassipes/rover/graphs/contributors)
 
-ФАКТ, 2026
+---
+
+<div align="center">
+
+**ФАКТ МФТИ, 2026**
+
+</div>
