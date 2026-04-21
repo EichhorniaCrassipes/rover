@@ -18,6 +18,7 @@ namespace object {
             float speed = 100
         );
     protected:
+        Vector2i sprite_size;
         float health;
         // another properties...
     };

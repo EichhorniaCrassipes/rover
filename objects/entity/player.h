@@ -14,9 +14,6 @@ namespace object {
         ~Player() override = default;
 
         void move(Vector2f vector, float delta_time) override;
-    private:
-        float speed = 250;
-        const sf::Vector2i spriteSize = {512,512};
     };
 }
 
