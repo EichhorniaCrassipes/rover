@@ -3,17 +3,25 @@
 
 #include "object.h"
 
+#include <iostream>
+using std::cout;
+
+
 namespace object {
     class Entity : public Object {
     public:
-        Entity();
+        explicit Entity(float speed = 0);
         ~Entity() override = default;
 
-        void move(Vector2f direction, float speed, float dt);
+        float getSpeed() const;
+        void setSpeed(float new_speed);
 
+        virtual void move(Vector2f vector, float delta_time);
+
+        bool checkCollision(const Object &object, Vector2f precision_radius = {.01, .01});
     protected:
-        Vector2f hitbox;
         bool collision;
+        float speed;
     };
 }
 
