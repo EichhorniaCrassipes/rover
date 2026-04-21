@@ -49,15 +49,15 @@ namespace scene {
         map<int, map<int, object::Block>> upper_decorations, interactive_blocks;
         vector<object::Entity> entities;
 
-        std::vector<generator::Chunk*> active_chunks;
-        std::vector<generator::ChunkDecorations*> active_decoration_chunks;
-        //vector<object::Block*> blocks;
+        vector<generator::Chunk*> active_chunks;
+        vector<generator::ChunkDecorations*> active_decoration_chunks;
+        vector<object::Block*> blocks;
         MapGenerator generator;
 
         object::Player player;
     private:
         void handle_player(const Vector2f &move_vector);
-        void handle_camera(const Vector2f &move_vector);
+        void handle_camera(const Vector2f &move_vector) const;
         void update_chunks();
 
         static Vector2f get_move_vector();
