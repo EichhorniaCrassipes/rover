@@ -51,7 +51,7 @@ generator::Tile generator::MapGenerator::get_tile(const size_t x, const size_t y
 
     const double te = get_tile_noise_value(relative_x, relative_y, 8, temperature),
                  hu = get_tile_noise_value(relative_x, relative_y, 4, humidity),
-                 he = get_tile_noise_value(relative_x, relative_y, 4, height);
+                 he = get_tile_noise_value(relative_x * STRETCH_v2, relative_y * STRETCH_v2, 4, height);
     reseed_variations(x, y);
     const auto v1 = normal_distribution(*variation),
                v2 = normal_distribution(*variation);

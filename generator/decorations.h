@@ -1,5 +1,5 @@
 #ifndef DECORATIONS
-#define DECORATIONS 3
+#define DECORATIONS 1
 
 #include <string>
 using std::string;
