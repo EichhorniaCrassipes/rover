@@ -32,6 +32,8 @@ scene::GameScene::~GameScene() {
         delete chunk;
     for (const auto chunk : active_decoration_chunks)
         delete chunk;
+    for (const auto block : blocks)
+        delete block;
 }
 
 void scene::GameScene::on_start() {
