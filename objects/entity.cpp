@@ -1,11 +1,15 @@
 #include "entity.h"
 
-object::Entity::Entity() {
+object::Entity::Entity(const float speed) {
     collision = false;
+    this->speed = speed;
 }
 
 
-void object::Entity::move(const Vector2f direction, const float speed, const float dt) {
+float object::Entity::getSpeed() const { return speed; }
+void object::Entity::setSpeed(const float new_speed) { speed = new_speed; }
+
+void object::Entity::move(const Vector2f vector, const float delta_time) {
     if (!collision)
-        position += direction * speed * dt;
+        position += vector * speed * delta_time;
 }
