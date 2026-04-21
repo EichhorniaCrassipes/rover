@@ -56,6 +56,8 @@ namespace scene {
 
         object::Player player;
     private:
+        bool first_start;
+
         void handle_player(const Vector2f &move_vector);
         void handle_camera(const Vector2f &move_vector) const;
         void update_chunks();
