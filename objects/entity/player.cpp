@@ -3,11 +3,8 @@
 #include <cmath>
 using std::exp;
 
-#include <iostream>
-using std::cout;
 
-
-object::Player::Player(const Texture* texture_link, const Vector2f &null_position) : Mob() {
+object::Player::Player(const Texture* texture_link, const Vector2f &null_position) : Mob(1000, 250) {
     cout << "[player/constructor]\n\t"
     << "size: {" << sprite.getScale().x << ';' << sprite.getScale().y << "}\n\t"
     << "global bounds: {" << sprite.getGlobalBounds().size.x << ';' << sprite.getGlobalBounds().size.y << "}\n\t"
@@ -15,7 +12,7 @@ object::Player::Player(const Texture* texture_link, const Vector2f &null_positio
 
     texture = *texture_link;
     sprite.setTextureRect({{0, 0}, spriteSize});
-    position = null_position - static_cast<sf::Vector2f>(spriteSize) / 2.f;
+    position = null_position - static_cast<Vector2f>(spriteSize) / 2.f;
     setScale({.5, .5});
 }
 

@@ -3,6 +3,9 @@
 
 #include "object.h"
 
+#include <iostream>
+using std::cout;
+
 
 namespace object {
     class Entity : public Object {
