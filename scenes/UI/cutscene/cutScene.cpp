@@ -223,7 +223,13 @@ void scene::CutScene::on_start() {
     size_deltas[8] = {};
 
 
-    window->setView(window->getDefaultView());
+    local_default_view = window->getDefaultView();
+    local_default_view.setCenter(window->getView().getCenter());
+    local_default_view.setSize({
+        static_cast<float>(window->getSize().x),
+        2560.f * window->getSize().y / window->getSize().x
+    });
+    window->setView(local_default_view);
     main_theme.play();
     main_theme.setVolume(40);
     timer.start();
@@ -288,13 +294,13 @@ void scene::CutScene::update() {
     if (breakers[7] > local_time && local_time >= breakers[6]) {
         auto view = window->getView();
         view.setSize(view.getSize() + Vector2f{3, 3});
-        view.setCenter(window->getDefaultView().getCenter());
+        view.setCenter(local_default_view.getCenter());
         window->setView(view);
     }
 
     if (!default_view_reset) {
         default_view_reset = true;
-        window->setView(window->getDefaultView());
+        window->setView(local_default_view);
     }
 
     if (!is_7_canvas && local_time >= breakers[7]) {

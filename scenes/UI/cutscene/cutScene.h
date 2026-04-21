@@ -23,6 +23,9 @@ using sf::Clock;
 using sf::Time;
 using sf::seconds;
 
+#include <SFML/Graphics/View.hpp>
+using sf::View;
+
 #include <vector>
 using std::vector;
 
@@ -44,6 +47,7 @@ namespace scene {
     private:
         Music main_theme;
         Clock timer;
+        View local_default_view;
 
         bool go_next = false;
         Text go_next_text;
