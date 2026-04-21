@@ -25,7 +25,7 @@ namespace generator {
 
         void reseed(long long new_seed);
     private:
-        double STRETCH = 10;
+        double STRETCH = 10, STRETCH_v2 = 1;
         size_t COORD_SHIFT = 100000;
 
         float TILE_VARIATION_MULTIPLIER = 4,
