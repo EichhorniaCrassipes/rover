@@ -186,7 +186,12 @@ void game::Engine::loop() {
         render();
         update();
 
+        // привязал текст с выходом к камере
+        const auto saved_view = window->getView();
+        window->setView(window->getDefaultView());
         window->draw(exitDialog_text);
+        window->setView(saved_view);
+
         info_update_values();
         info_overdraw();
         window->display();
