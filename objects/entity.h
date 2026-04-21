@@ -3,6 +3,7 @@
 
 #include "object.h"
 
+
 namespace object {
     class Entity : public Object {
     public:
