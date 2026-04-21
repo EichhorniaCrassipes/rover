@@ -15,3 +15,17 @@ void object::Entity::move(const Vector2f vector, const float delta_time) {
         position += delta;
     }
 }
+
+bool object::Entity::checkCollision(const Object &object, const Vector2f precision_radius) {
+    const auto local_bounds = getSprite().getGlobalBounds();
+    const auto intersection = object.getSprite().getGlobalBounds().findIntersection({
+        local_bounds.position - precision_radius,
+        local_bounds.position + precision_radius,
+    });
+
+    if (intersection.has_value())
+        collision = true;
+    else
+        collision = false;
+    return collision;
+}

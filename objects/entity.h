@@ -17,10 +17,11 @@ namespace object {
         void setSpeed(float new_speed);
 
         virtual void move(Vector2f vector, float delta_time);
+
+        bool checkCollision(const Object &object, Vector2f precision_radius = {.01, .01});
     protected:
         bool collision;
         float speed;
-
     };
 }
 
