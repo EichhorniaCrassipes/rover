@@ -12,13 +12,14 @@ using sf::degrees;
 scene::CutScene::CutScene(RenderWindow* window_link, EngineStats* scene_index_link, const Font* font_link)
                          : UIScene(window_link, scene_index_link),
                            main_theme("music/Sand Planet.mp3"),
-                           go_next_text(*font_link, "Press [Space] to continue", 20),
+                           go_next_text(*font_link, "Press [Space] to continue", 40),
                            RE(*font_link, "Re!", 150),
                            EngiLabs(*font_link, "by EngiLabs", 80),
                            authors(*font_link, "@GriB28\n@ArsenyKenunen\n@EichhorniaCrassipes", 45),
                            media_info(*font_link, "music: Sati Akura - Sand Planet\narts: @Ogonyok", 35),
                            concept_trailer(*font_link, "concept trailer", 20) {
-    go_next_text.setFillColor({147, 147, 147});
+    go_next_text.setFillColor({127, 147, 67});
+    go_next_text.setPosition({(2560 - go_next_text.getGlobalBounds().size.x) / 2, 140});
 
     RE.setFillColor({237, 147, 0});
     RE.setPosition({(2560 - RE.getGlobalBounds().size.x) / 2, 350});
@@ -52,7 +53,7 @@ scene::CutScene::CutScene(RenderWindow* window_link, EngineStats* scene_index_li
 
     breakers[8] = seconds(77); // 77
 
-    breakers[9] = seconds(79.5); // 79.5
+    breakers[9] = seconds(82); // 79.5
 }
 
 
@@ -223,7 +224,7 @@ void scene::CutScene::on_start() {
     sprite = new Sprite(*texture);
     sprite->setPosition({0, 0});
     velocities[8].emplace_back(0, 0);
-    size_deltas[8].emplace_back(.0015, .0015);
+    size_deltas[8].emplace_back(.005, .005);
     textures[8].push_back(texture);
     sprites[8].push_back(sprite);
 
@@ -233,7 +234,7 @@ void scene::CutScene::on_start() {
     sprite->setPosition({0, 0});
     sprite->setScale({1.1, 1.1});
     velocities[9].emplace_back(0, 0);
-    size_deltas[9].emplace_back(-.0015, -.0015);
+    size_deltas[9].emplace_back(-.005, -.005);
     textures[9].push_back(texture);
     sprites[9].push_back(sprite);
 
@@ -333,7 +334,7 @@ scene::Status scene::CutScene::event(const Event &event) {
         if (!keyEvent) return {false, game::DO_NOT_UPDATE_SCENE, game::DO_NOT_UPDATE_SCENE};
 
         if (keyEvent->scancode == sf::Keyboard::Scancode::Space)
-            return {true, game::EXIT_SCENE, game::UI_scenes::MENU};
+            return {true, game::game_scenes::RESET, game::UI_scenes::MENU};
     }
     return {false, game::DO_NOT_UPDATE_SCENE, game::DO_NOT_UPDATE_SCENE};
 }
