@@ -3,7 +3,7 @@
 
 #include "../UIScene.h"
 
-#define CANVASES 9
+#define CANVASES 10
 
 #include <SFML/Audio/Music.hpp>
 using sf::Music;

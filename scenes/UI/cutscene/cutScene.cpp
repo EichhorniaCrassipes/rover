@@ -51,6 +51,8 @@ scene::CutScene::CutScene(RenderWindow* window_link, EngineStats* scene_index_li
     breakers[7] = seconds(51.7); // 51.7
 
     breakers[8] = seconds(77); // 77
+
+    breakers[9] = seconds(79.5); // 79.5
 }
 
 
@@ -155,7 +157,7 @@ void scene::CutScene::on_start() {
     sprites[4].push_back(sprite);
 
 
-    texture = new Texture("cutscene/1-1.jpg");
+    texture = new Texture("cutscene/5-1.jpg");
     sprite = new Sprite(*texture);
     sprite->setPosition({-250, -50});
     sprite->setScale({1.4, 1.2});
@@ -217,10 +219,23 @@ void scene::CutScene::on_start() {
     size_deltas[7] = {};
 
 
-    textures[8] = {};
-    sprites[8] = {};
-    velocities[8] = {};
-    size_deltas[8] = {};
+    texture = new Texture("cutscene/8-1.jpg");
+    sprite = new Sprite(*texture);
+    sprite->setPosition({0, 0});
+    velocities[8].emplace_back(0, 0);
+    size_deltas[8].emplace_back(.0015, .0015);
+    textures[8].push_back(texture);
+    sprites[8].push_back(sprite);
+
+
+    texture = new Texture("cutscene/9-1.jpg");
+    sprite = new Sprite(*texture);
+    sprite->setPosition({0, 0});
+    sprite->setScale({1.1, 1.1});
+    velocities[9].emplace_back(0, 0);
+    size_deltas[9].emplace_back(-.0015, -.0015);
+    textures[9].push_back(texture);
+    sprites[9].push_back(sprite);
 
 
     local_default_view = window->getDefaultView();
@@ -247,6 +262,8 @@ void scene::CutScene::on_end() {
         velocities[i].clear();
         size_deltas[i].clear();
     }
+
+    window->setView(window->getDefaultView());
 }
 
 
