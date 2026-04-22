@@ -21,15 +21,15 @@ scene::CutScene::CutScene(RenderWindow* window_link, EngineStats* scene_index_li
     go_next_text.setFillColor({147, 147, 147});
 
     RE.setFillColor({237, 147, 0});
-    RE.setPosition({(2560 - RE.getGlobalBounds().size.x) / 2, 450});
+    RE.setPosition({(2560 - RE.getGlobalBounds().size.x) / 2, 350});
     EngiLabs.setFillColor({170, 170, 170});
-    EngiLabs.setPosition({(2560 - EngiLabs.getGlobalBounds().size.x) / 2, 680});
+    EngiLabs.setPosition({(2560 - EngiLabs.getGlobalBounds().size.x) / 2, 580});
     authors.setFillColor({147, 174, 74, 141});
-    authors.setPosition({2000, 1350});
+    authors.setPosition({2000, 1250});
     media_info.setFillColor({147, 147, 147, 141});
-    media_info.setPosition({10, 1510});
+    media_info.setPosition({10, 1310});
     concept_trailer.setFillColor({147, 147, 147, 141});
-    concept_trailer.setPosition({2560 - concept_trailer.getGlobalBounds().size.x - 10, 1510});
+    concept_trailer.setPosition({2560 - concept_trailer.getGlobalBounds().size.x - 10, 1410});
 
     current_canvas = 0;
 
