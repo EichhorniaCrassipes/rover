@@ -10,11 +10,13 @@ using std::runtime_error;
 
 #include "enums.h"
 #include "stats.h"
+#include "textures.h"
+
 EngineStats game::global_stats {0, 0};
 
 #include "../scenes/UI/menuScene.h"
+#include "../scenes/UI/cutscene/cutScene.h"
 
-#include "textures.h"
 
 game::Engine::Engine() : Engine(DEFAULT_TITLE) {}
 game::Engine::Engine(const string &name) : exitDialog_text(
@@ -108,22 +110,22 @@ game::Engine::~Engine() {
 
 void game::Engine::run(const short fps) {
     cameras[game_scenes::RESET] = nullptr;
-    cameras[game_scenes::MAIN] = new Camera(window);
+    cameras[game_scenes::MAIN]  = new Camera(window);
 
     cameras[game_scenes::MAIN]->zoom(32 * 64 / static_cast<float>(global_stats.window_width));
 
     game_scenes[game_scenes::RESET] = nullptr;
-    game_scenes[game_scenes::MAIN] = new scene::GameScene(window, cameras[game_scenes::MAIN], &global_stats, &textures);
+    game_scenes[game_scenes::MAIN]  = new scene::GameScene(window, cameras[game_scenes::MAIN], &global_stats, &textures);
 
-    UI_scenes[UI_scenes::RESET] = nullptr;
-    UI_scenes[UI_scenes::MENU] = new scene::MenuScene(window, &global_stats);
-    UI_scenes[UI_scenes::CUTSCENE]  = nullptr;
-    UI_scenes[UI_scenes::GAME] = nullptr;
+    UI_scenes[UI_scenes::RESET]    = nullptr;
+    UI_scenes[UI_scenes::MENU]     = new scene::MenuScene(window, &global_stats);
+    UI_scenes[UI_scenes::CUTSCENE] = new scene::CutScene(window, &global_stats, &default_monospace_font);
+    UI_scenes[UI_scenes::GAME]     = nullptr;
 
     if (fps > 0) window->setFramerateLimit(fps);
     else window->setVerticalSyncEnabled(true);
 
-    change_scene(game_scenes::RESET, UI_scenes::MENU);
+    change_scene(game_scenes::RESET, UI_scenes::CUTSCENE);
 
     TPS_timer.start();
     TPS_adjuster_timer.start();
@@ -193,7 +195,8 @@ void game::Engine::loop() {
         window->setView(saved_view);
 
         info_update_values();
-        info_overdraw();
+        if (current_UI_scene_index != UI_scenes::CUTSCENE)
+            info_overdraw();
         window->display();
 
         adjust_tps();

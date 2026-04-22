@@ -19,8 +19,6 @@ namespace game {
                           TPS_adjuster_delta_time_flag = sf::seconds(1);
     inline double         epsilon = .1;
 
-    inline unsigned short SCENES_CAP = 3;
-
     inline unsigned short DO_NOT_UPDATE_SCENE = -1,
                           EXIT_SCENE          = -2;
     namespace game_scenes {

@@ -1,0 +1,74 @@
+#ifndef CUTSCENE_H
+#define CUTSCENE_H
+
+#include "../UIScene.h"
+
+#define CANVASES 10
+
+#include <SFML/Audio/Music.hpp>
+using sf::Music;
+
+#include <SFML/Graphics/Text.hpp>
+using sf::Text;
+using sf::Font;
+
+#include <SFML/Graphics/Texture.hpp>
+using sf::Texture;
+using sf::Vector2f;
+using sf::Drawable;
+using sf::Sprite;
+
+#include <SFML/System/Clock.hpp>
+using sf::Clock;
+using sf::Time;
+using sf::seconds;
+
+#include <SFML/Graphics/View.hpp>
+using sf::View;
+
+#include <vector>
+using std::vector;
+
+#include <array>
+using std::array;
+
+
+namespace scene {
+    class CutScene : public UIScene {
+    public:
+        explicit CutScene(RenderWindow* window_link, EngineStats* scene_index_link, const Font* font_link);
+
+        void on_start() override;
+        void on_end() override;
+
+        void render() override;
+        void update() override;
+        Status event(const Event &event) override;
+    private:
+        Music main_theme;
+        Clock timer;
+        View local_default_view;
+
+        bool go_next = false;
+        Text go_next_text;
+
+        void scheduler();
+        array<Time, CANVASES> breakers{};
+
+        unsigned current_canvas;
+        array<vector<Texture*>, CANVASES> textures;
+        array<vector<Sprite*>,  CANVASES> sprites;
+        array<vector<Vector2f>, CANVASES> velocities,
+                                          size_deltas;
+
+        Text RE, EngiLabs, authors, media_info, concept_trailer;
+
+        bool shattered;
+        Time shattered_time;
+
+        bool default_view_reset;
+        bool is_7_canvas;
+    };
+}
+
+#endif
