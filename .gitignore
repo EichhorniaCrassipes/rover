@@ -2,6 +2,8 @@
 /.venv/
 
 /*build*/
-/.release/
+/.re*/
+
+/*.zip
 
 /SFML-3.0.2/
