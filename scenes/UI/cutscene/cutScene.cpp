@@ -240,10 +240,11 @@ void scene::CutScene::on_start() {
 
     local_default_view = window->getDefaultView();
     local_default_view.setSize({
-        2560.f * window->getSize().y / 1600.f,
-        static_cast<float>(window->getSize().y)
+        2560,
+        2560 / static_cast<float>(window->getSize().x) * static_cast<float>(window->getSize().y)
     });
-    local_default_view.setCenter({2560/2, 1600/2});
+    local_default_view.setCenter({1280, 800});
+
     window->setView(local_default_view);
     main_theme.play();
     main_theme.setVolume(40);
