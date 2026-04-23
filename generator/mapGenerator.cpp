@@ -18,7 +18,7 @@ void generator::MapGenerator::free_memory() const {
         delete r;
 }
 
-void generator::MapGenerator::local_variation_engine_reseed(const size_t x, const size_t y) const {
+void generator::MapGenerator::local_variation_engine_reseed(const long long x, const long long y) const {
     array<seed_seq::result_type, 3> seeds = {
         static_cast<seed_seq::result_type>(initial_seed),
         static_cast<seed_seq::result_type>(x),
@@ -33,9 +33,9 @@ void generator::MapGenerator::local_variation_engine_reseed(const size_t x, cons
 }
 
 
-generator::Tile generator::MapGenerator::get_tile(const size_t x, const size_t y) {
-    const auto relative_x = static_cast<double>(x + COORD_SHIFT),
-               relative_y = static_cast<double>(y + COORD_SHIFT);
+generator::Tile generator::MapGenerator::get_tile(const long long x, const long long y) {
+    const auto relative_x = static_cast<double>(x + COORD_SHIFT) + .5,
+               relative_y = static_cast<double>(y + COORD_SHIFT) + .5;
 
     const double te = get_tile_noise_value(relative_x, relative_y, 8, temperature),
                  hu = get_tile_noise_value(relative_x, relative_y, 4, humidity),

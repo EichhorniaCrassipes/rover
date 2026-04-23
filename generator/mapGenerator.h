@@ -21,12 +21,12 @@ namespace generator {
         explicit MapGenerator(long long seed);
         ~MapGenerator();
 
-        [[nodiscard]] Tile get_tile(size_t x, size_t y);
+        [[nodiscard]] Tile get_tile(long long x, long long y);
 
         void reseed(long long new_seed);
     private:
         double STRETCH = 20, STRETCH_v2 = 1.5;
-        size_t COORD_SHIFT = 100000;
+        long long COORD_SHIFT = 100000;
 
         float TILE_VARIATION_MULTIPLIER = 4,
               DECORATION_VARIATION_MULTIPLIER = 4,
@@ -41,7 +41,7 @@ namespace generator {
                                          *height = nullptr;
         void free_memory() const;
 
-        void local_variation_engine_reseed(size_t x, size_t y) const;
+        void local_variation_engine_reseed(long long x, long long y) const;
 
         double get_tile_noise_value(double x, double y, unsigned char octaves, const PerlinNoise* noise) const;
 
