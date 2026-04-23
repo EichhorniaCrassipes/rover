@@ -1,25 +1,29 @@
 #include "chunk.h"
 #include "../objects/map/tiletexturelist.h"
-
-#include <iostream>
-
 #include "../engine/textures.h"
-using std::cout;
-using std::cerr;
 
 #include "mapGenerator.h"
 
-#include "../objects/map/stone.h"
+#include <iostream>
+using std::cout;
+
+#include "SFML/System/Clock.hpp"
+#include "SFML/System/Time.hpp"
+using sf::Clock;
+
+#include "SFML/Graphics/RenderTarget.hpp"
 
 
-generator::Chunk::Chunk(MapGenerator* generator_link, const int x, const int y, Texture* texture) : position{x, y}, size{16, 16} {
+generator::Chunk::Chunk(MapGenerator* generator_link, const int x, const int y, Texture* texture) : position{x, y} {
     generator = generator_link;
     m_tileset = texture;
     cout << "[generator/chunk] at x = " << x << ", y = " << y << '\n';
     std::array<int, 256> tiles = {};
     std::array<unsigned char, 256> var = {};
-    sf::Clock gentimer;
-    gentimer.start();
+
+    Clock timer;
+
+    timer.start();
     for (int j = 0; j < size.y; j++)
         for (int i = 0; i < size.x; i++) {
             Tile tile0 = generator->get_tile(x, y);
@@ -30,13 +34,11 @@ generator::Chunk::Chunk(MapGenerator* generator_link, const int x, const int y, 
             tiles[i + j * size.x] = {texturelist::maptiles[get4tiles(tile0, tile1, tile2, tile3)]};
             var[i + j * size.x] = tile0.variation;
         }
-    std::cout << "generator time: " << gentimer.getElapsedTime().asMilliseconds() << " ms\n";
+    cout << "generating: " << timer.restart().asMilliseconds() << " ms\n";
 
-    sf::Clock loadtimer;
-    loadtimer.start();
-    if (!load( {64, 64}, tiles.data(), var.data(), size.x, size.y))
-        cerr << "Failed to load tileset.png\n";
-    std::cout << "load time: " << loadtimer.getElapsedTime().asMilliseconds() << " ms\n";
+    load({64, 64}, tiles.data(), var.data(), size.x, size.y);
+    cout << "loading: " << timer.getElapsedTime().asMilliseconds() << " ms\n";
+
     setPosition({static_cast<float>(position.x * size.x * 4), static_cast<float>(position.y * size.y * 4)});
 }
 
@@ -72,34 +74,26 @@ string generator::Chunk::get4tiles(const Tile &tile0, const Tile &tile1, const T
 }
 
 void generator::Chunk::draw(RenderTarget &target, RenderStates states) const {
-    states.transform *= getTransform();// getTransform() is defined by sf::Transformable
+    states.transform *= getTransform();
     states.transform.translate(Vector2f(32, 32));
     states.texture = m_tileset;
     target.draw(vertices, states);
 }
 
-bool generator::Chunk::load( const Vector2u tileSize, const int* tiles, const unsigned char* var, const unsigned int width, const unsigned int height) {
-    //cout << "[generator/chunk/load] tileset: " << tile_path << "\n\n";
-
-    // resize the vertex array to fit the level size
+void generator::Chunk::load(const Vector2u tileSize, const int* tiles, const unsigned char* var, const unsigned int width, const unsigned int height) {
     vertices.setPrimitiveType(sf::PrimitiveType::Triangles);
     vertices.resize(width * height * 6);
 
-    // populate the vertex array, with two triangles per tile
     for (unsigned int i = 0; i < width; ++i) {
         for (unsigned int j = 0; j < height; ++j) {
-            // get the current tile number
             const int tileNumber = tiles[i + j * width];
             const unsigned char variationOffset = var[i + j * width];
 
-            // find its position in the tileset texture
             const int tu = tileNumber % (m_tileset->getSize().x / tileSize.x);
-            const int tv = variationOffset % (128/ tileSize.y);
-            //std::cout <<tileNumber <<" "<<variationOffset<< " " << tu << " " << tv << "\n";
-            // get a pointer to the triangles' vertices of the current tile
+            const int tv = variationOffset % (128 / tileSize.y);
+
             sf::Vertex* triangles = &vertices[(i + j * width) * 6];
 
-            // define the 6 corners of the two triangles
             triangles[0].position = Vector2f(i * tileSize.x, j * tileSize.y);
             triangles[1].position = Vector2f((i + 1) * tileSize.x, j * tileSize.y);
             triangles[2].position = Vector2f(i * tileSize.x, (j + 1) * tileSize.y);
@@ -107,7 +101,6 @@ bool generator::Chunk::load( const Vector2u tileSize, const int* tiles, const un
             triangles[4].position = Vector2f((i + 1) * tileSize.x, j * tileSize.y);
             triangles[5].position = Vector2f((i + 1) * tileSize.x, (j + 1) * tileSize.y);
 
-            // define the 6 matching texture coordinates
             triangles[0].texCoords = Vector2f(tu * tileSize.x, tv * tileSize.y);
             triangles[1].texCoords = Vector2f((tu + 1) * tileSize.x, tv * tileSize.y);
             triangles[2].texCoords = Vector2f(tu * tileSize.x, (tv + 1) * tileSize.y);
@@ -116,8 +109,6 @@ bool generator::Chunk::load( const Vector2u tileSize, const int* tiles, const un
             triangles[5].texCoords = Vector2f((tu + 1) * tileSize.x, (tv + 1) * tileSize.y);
         }
     }
-
-    return true;
 }
 
 Vector2i generator::Chunk::getAbsolutePosition() const { return position; }

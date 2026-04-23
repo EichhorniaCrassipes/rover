@@ -41,9 +41,9 @@ namespace generator {
         Texture* m_tileset;
 
         void draw(RenderTarget &target, RenderStates states) const override;
-        bool load( Vector2u tileSize, const int* tiles, const unsigned char* var, unsigned int width, unsigned int height);
+        void load(Vector2u tileSize, const int* tiles, const unsigned char* var, unsigned int width, unsigned int height);
 
-        const Vector2i size;
+        const Vector2i size{CHUNK_WIDTH, CHUNK_HEIGHT};
 
         static string get4tiles(const Tile &tile0, const Tile &tile1, const Tile &tile2, const Tile &tile3) ;
     };
