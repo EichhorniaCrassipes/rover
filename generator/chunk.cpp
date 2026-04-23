@@ -22,8 +22,13 @@ generator::Chunk::Chunk(MapGenerator* generator_link, const int x, const int y, 
     gentimer.start();
     for (int j = 0; j < size.y; j++)
         for (int i = 0; i < size.x; i++) {
-            tiles[i + j * size.x] = {texturelist::maptiles[get4tiles(i+position.x, j+position.y)]};
-            var[i + j * size.x] = std::rand() % 256;
+            Tile tile0 = generator->get_tile(x, y);
+            Tile tile1 = generator->get_tile(x + 1, y);
+            Tile tile2 = generator->get_tile(x, y + 1);
+            Tile tile3 = generator->get_tile(x + 1, y + 1);
+
+            tiles[i + j * size.x] = {texturelist::maptiles[get4tiles(tile0, tile1, tile2, tile3)]};
+            var[i + j * size.x] = tile0.variation;
         }
     std::cout << "generator time: " << gentimer.getElapsedTime().asMilliseconds() << " ms\n";
 
@@ -36,12 +41,7 @@ generator::Chunk::Chunk(MapGenerator* generator_link, const int x, const int y, 
 }
 
 
-string generator::Chunk::get4tiles(int x, int y) const {
-    Tile tile0 = generator->get_tile(x, y);
-    Tile tile1 = generator->get_tile(x + 1, y);
-    Tile tile2 = generator->get_tile(x, y + 1);
-    Tile tile3 = generator->get_tile(x + 1, y + 1);
-
+string generator::Chunk::get4tiles(const Tile &tile0, const Tile &tile1, const Tile &tile2, const Tile &tile3) {
     string t0 = "0", t1 = "0", t2 = "0", t3 = "0";
     if (tile0.biome == "test1")
         t0 = '1';

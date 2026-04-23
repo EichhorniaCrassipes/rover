@@ -45,7 +45,7 @@ namespace generator {
 
         const Vector2i size;
 
-        string get4tiles(int x, int y) const;
+        static string get4tiles(const Tile &tile0, const Tile &tile1, const Tile &tile2, const Tile &tile3) ;
     };
 }
 
