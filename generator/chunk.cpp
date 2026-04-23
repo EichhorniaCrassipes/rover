@@ -59,6 +59,14 @@ string generator::Chunk::get4tiles(int x, int y) const {
         t2 = '0';
     if (tile3.biome == "test0")
         t3 = '0';
+    if (tile0.biome == "test2")
+        t0 = '2';
+    if (tile1.biome == "test2")
+        t1 = '2';
+    if (tile2.biome == "test2")
+        t2 = '2';
+    if (tile3.biome == "test2")
+        t3 = '2';
 
     return t0+t1+t2+t3;
 }
