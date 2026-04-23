@@ -1,5 +1,5 @@
 #ifndef BIOMES
-#define BIOMES 4
+#define BIOMES 3
 
 #include <string>
 using std::string;
