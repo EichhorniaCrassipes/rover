@@ -29,7 +29,7 @@ namespace generator {
         size_t COORD_SHIFT = 100000;
 
         float TILE_VARIATION_MULTIPLIER = 4,
-              DECORATION_VARIATION_MULTIPLIER = 8,
+              DECORATION_VARIATION_MULTIPLIER = 4,
               DECORATION_MAX_OFFSET = .6;
 
         long long                        initial_seed;
