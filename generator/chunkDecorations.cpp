@@ -1,10 +1,9 @@
 #include "chunkDecorations.h"
+#include "mapGenerator.h"
 
 #include <iostream>
 using std::cout;
 using std::cerr;
-
-#include "mapGenerator.h"
 
 #include "../objects/map/stone.h"
 
@@ -12,7 +11,6 @@ using std::cerr;
 generator::ChunkDecorations::ChunkDecorations(MapGenerator* generator_link, const int x, const int y, Texture* texture) : position{x, y}, size{16, 16} {
     generator = generator_link;
     m_decorations = texture;
-    //cout << "\n[generator/chunkDecorations] at x = " << x << ", y = " << y << '\n';
 
     for (int j = 0; j < size.y; j++)
         for (int i = 0; i < size.x; i++) {
@@ -38,7 +36,6 @@ void generator::ChunkDecorations::draw(RenderTarget &target, RenderStates states
 }
 
 void generator::ChunkDecorations::load(const Vector2u tileSize) {
-
     decoration_vertices.setPrimitiveType(sf::PrimitiveType::Triangles);
     cout << decorations.size() << '\n';
     decoration_vertices.resize(decorations.size() * 6);
@@ -67,6 +64,4 @@ void generator::ChunkDecorations::load(const Vector2u tileSize) {
 
 }
 
-sf::Vector2i generator::ChunkDecorations::getAbsolutePosition() const {
-    return position;
-}
+Vector2i generator::ChunkDecorations::getAbsolutePosition() const { return position; }
