@@ -7,19 +7,7 @@
 #include <iostream>
 
 
-generator::MapGenerator::MapGenerator(const long long seed) {
-    initial_seed = seed;
-
-    random_engines[0] = new default_random_engine(seed);
-    random_engines[1] = new default_random_engine(seed_shift(1));
-    random_engines[2] = new default_random_engine(seed_shift(2));
-    random_engines[3] = new default_random_engine(0);
-    variation = random_engines[3];
-
-    temperature = new PerlinNoise(random_engines[0]);
-    humidity = new PerlinNoise(random_engines[1]);
-    height = new PerlinNoise(random_engines[2]);
-}
+generator::MapGenerator::MapGenerator(const long long seed) { reseed(seed); }
 generator::MapGenerator::~MapGenerator() { free_memory(); }
 
 void generator::MapGenerator::free_memory() const {
@@ -102,7 +90,7 @@ generator::Tile generator::MapGenerator::get_tile(const size_t x, const size_t y
                  height_low <= he && he <= height_high) {
             tile.decorations.push_back({
                 name,
-                {(v1 - .5f) * 2.f * DECORATION_MAX_OFFSET, (v2 - .5f) * 2.f * DECORATION_MAX_OFFSET},
+                Vector2f{v1 - .5f, v2 - .5f} * 2.f * DECORATION_MAX_OFFSET,
                 static_cast<unsigned char>(v1 * DECORATION_VARIATION_MULTIPLIER)
             });
             break;
@@ -118,7 +106,7 @@ double generator::MapGenerator::get_tile_noise_value(const double x, const doubl
            sum   = 0;
 
     for (unsigned char octave = 0; octave < octaves; octave++) {
-        const auto k = 1l << octave;
+        const long k = 1l << octave;
         sum += 1. / k;
         value += noise->noise(xn * k, yn * k) / k;
     }

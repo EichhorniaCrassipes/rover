@@ -32,11 +32,13 @@ namespace generator {
               DECORATION_VARIATION_MULTIPLIER = 4,
               DECORATION_MAX_OFFSET = .6;
 
-        long long                        initial_seed;
+        long long                        initial_seed = 0;
         array<default_random_engine*, 4> random_engines{};
-        default_random_engine*           variation;
+        default_random_engine*           variation = nullptr;
         uniform_real_distribution<float> normal_distribution{0, 1};
-        PerlinNoise                      *temperature, *humidity, *height;
+        PerlinNoise                      *temperature = nullptr,
+                                         *humidity = nullptr,
+                                         *height = nullptr;
         void free_memory() const;
 
         void local_variation_engine_reseed(size_t x, size_t y) const;
