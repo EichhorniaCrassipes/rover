@@ -17,19 +17,21 @@ using sf::Clock;
 generator::Chunk::Chunk(MapGenerator* generator_link, const int x, const int y, Texture* texture) : position{x, y} {
     generator = generator_link;
     m_tileset = texture;
-    cout << "[generator/chunk] at x = " << x << ", y = " << y << '\n';
-    std::array<int, 256> tiles = {};
-    std::array<unsigned char, 256> var = {};
+    cout << "[generator/chunk] x = " << x << ", y = " << y << '\n';
+    array<int, 256> tiles = {};
+    array<unsigned char, 256> var = {};
 
     Clock timer;
 
     timer.start();
     for (int j = 0; j < size.y; j++)
         for (int i = 0; i < size.x; i++) {
-            Tile tile0 = generator->get_tile(x, y);
-            Tile tile1 = generator->get_tile(x + 1, y);
-            Tile tile2 = generator->get_tile(x, y + 1);
-            Tile tile3 = generator->get_tile(x + 1, y + 1);
+            const unsigned x_local = i + position.x,
+                           y_local = j + position.y;
+            Tile tile0 = generator->get_tile(x_local,     y_local);
+            Tile tile1 = generator->get_tile(x_local + 1, y_local);
+            Tile tile2 = generator->get_tile(x_local,     y_local + 1);
+            Tile tile3 = generator->get_tile(x_local + 1, y_local + 1);
 
             tiles[i + j * size.x] = {texturelist::maptiles[get4tiles(tile0, tile1, tile2, tile3)]};
             var[i + j * size.x] = tile0.variation;
