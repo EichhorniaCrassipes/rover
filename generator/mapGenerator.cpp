@@ -30,7 +30,7 @@ void generator::MapGenerator::free_memory() const {
         delete r;
 }
 
-void generator::MapGenerator::reseed_variations(size_t x, size_t y) const {
+void generator::MapGenerator::reseed_variations(const size_t x, const size_t y) const {
     array<seed_seq::result_type, 3> seeds = {
         static_cast<seed_seq::result_type>(initial_seed),
         static_cast<seed_seq::result_type>(x),
@@ -53,8 +53,9 @@ generator::Tile generator::MapGenerator::get_tile(const size_t x, const size_t y
                  hu = get_tile_noise_value(relative_x, relative_y, 4, humidity),
                  he = get_tile_noise_value(relative_x * STRETCH_v2, relative_y * STRETCH_v2, 4, height);
     reseed_variations(x, y);
-    const auto v1 = normal_distribution(*variation),
-               v2 = normal_distribution(*variation);
+    uniform_real_distribution normal_distribution(0.f, 1.f);
+    const float v1 = normal_distribution(*variation),
+                v2 = normal_distribution(*variation);
 
     Tile tile;
     tile.variation = static_cast<unsigned char>(v1 * TILE_VARIATION_MULTIPLIER);

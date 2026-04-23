@@ -32,8 +32,6 @@ namespace generator {
               DECORATION_VARIATION_MULTIPLIER = 8,
               DECORATION_MAX_OFFSET = .6;
 
-        uniform_real_distribution<float> normal_distribution{0, 1};
-
         long long initial_seed;
         array<default_random_engine*, 4> random_engines{};
         default_random_engine* variation;
