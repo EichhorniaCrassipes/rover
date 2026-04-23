@@ -44,9 +44,7 @@ void generator::ChunkDecorations::load(const Vector2u tileSize) {
     for (const auto &[biome, decoration, coordinates] : decorations) {
         unsigned char tu = 0;
         const unsigned char tv = decoration.variation;
-        if (biome == "test0")
-            tu = 0;
-        else if (biome == "test1")
+        if (biome == "test1")
             tu = 1;
         else if (biome == "test2")
             tu = 2;
