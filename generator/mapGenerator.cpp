@@ -8,13 +8,13 @@
 
 
 generator::MapGenerator::MapGenerator(const long long seed) {
+    initial_seed = seed;
+
     random_engines[0] = new default_random_engine(seed);
     random_engines[1] = new default_random_engine(seed_shift(1));
     random_engines[2] = new default_random_engine(seed_shift(2));
     random_engines[3] = new default_random_engine(0);
     variation = random_engines[3];
-
-    initial_seed = seed;
 
     temperature = new PerlinNoise(random_engines[0]);
     humidity = new PerlinNoise(random_engines[1]);
@@ -30,7 +30,7 @@ void generator::MapGenerator::free_memory() const {
         delete r;
 }
 
-void generator::MapGenerator::reseed_variations(size_t x, size_t y) const {
+void generator::MapGenerator::local_variation_engine_reseed(const size_t x, const size_t y) const {
     array<seed_seq::result_type, 3> seeds = {
         static_cast<seed_seq::result_type>(initial_seed),
         static_cast<seed_seq::result_type>(x),
@@ -52,7 +52,8 @@ generator::Tile generator::MapGenerator::get_tile(const size_t x, const size_t y
     const double te = get_tile_noise_value(relative_x, relative_y, 8, temperature),
                  hu = get_tile_noise_value(relative_x, relative_y, 4, humidity),
                  he = get_tile_noise_value(relative_x * STRETCH_v2, relative_y * STRETCH_v2, 4, height);
-    reseed_variations(x, y);
+    local_variation_engine_reseed(x, y);
+    normal_distribution.reset();
     const auto v1 = normal_distribution(*variation),
                v2 = normal_distribution(*variation);
 
@@ -157,6 +158,7 @@ void generator::MapGenerator::reseed(const long long new_seed) {
     random_engines[1] = new default_random_engine(seed_shift(1));
     random_engines[2] = new default_random_engine(seed_shift(2));
     random_engines[3] = new default_random_engine(0);
+    variation = random_engines[3];
 
     temperature = new PerlinNoise(random_engines[0]);
     humidity = new PerlinNoise(random_engines[1]);
