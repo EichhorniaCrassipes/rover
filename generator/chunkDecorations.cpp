@@ -45,8 +45,15 @@ void generator::ChunkDecorations::load(const Vector2u tileSize) {
 
     size_t i = 0;
     for (const auto &[biome, decoration, coordinates] : decorations) {
-        const int tu = biome == "test0" ? 0 : 1,
-                  tv = 0;
+        int tu = 0;
+        const int tv = decoration.variation % 4;
+        if (biome == "test0")
+            tu = 0;
+        else if (biome == "test1")
+            tu = 1;
+        else if (biome == "test2")
+            tu = 2;
+
 
         sf::Vertex* triangles = &decoration_vertices[i++ * 6];
 
