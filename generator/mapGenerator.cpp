@@ -127,7 +127,7 @@ double generator::MapGenerator::get_tile_noise_value(const double x, const doubl
 }
 
 long long generator::MapGenerator::seed_shift(const unsigned shift) const {
-    default_random_engine random(initial_seed);
+    mt19937 random(initial_seed);
 
     for (unsigned i = 0; i < shift; i++) random();
 
@@ -154,10 +154,10 @@ void generator::MapGenerator::reseed(const long long new_seed) {
 
     initial_seed = new_seed;
 
-    random_engines[0] = new default_random_engine(new_seed);
-    random_engines[1] = new default_random_engine(seed_shift(1));
-    random_engines[2] = new default_random_engine(seed_shift(2));
-    random_engines[3] = new default_random_engine(0);
+    random_engines[0] = new mt19937(new_seed);
+    random_engines[1] = new mt19937(seed_shift(1));
+    random_engines[2] = new mt19937(seed_shift(2));
+    random_engines[3] = new mt19937(0);
     variation = random_engines[3];
 
     temperature = new PerlinNoise(random_engines[0]);
