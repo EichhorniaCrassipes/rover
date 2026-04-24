@@ -7,19 +7,7 @@
 #include <iostream>
 
 
-generator::MapGenerator::MapGenerator(const long long seed) {
-    initial_seed = seed;
-
-    random_engines[0] = new default_random_engine(seed);
-    random_engines[1] = new default_random_engine(seed_shift(1));
-    random_engines[2] = new default_random_engine(seed_shift(2));
-    random_engines[3] = new default_random_engine(0);
-    variation = random_engines[3];
-
-    temperature = new PerlinNoise(random_engines[0]);
-    humidity = new PerlinNoise(random_engines[1]);
-    height = new PerlinNoise(random_engines[2]);
-}
+generator::MapGenerator::MapGenerator(const long long seed) { reseed(seed); }
 generator::MapGenerator::~MapGenerator() { free_memory(); }
 
 void generator::MapGenerator::free_memory() const {
@@ -30,7 +18,7 @@ void generator::MapGenerator::free_memory() const {
         delete r;
 }
 
-void generator::MapGenerator::local_variation_engine_reseed(const size_t x, const size_t y) const {
+void generator::MapGenerator::local_variation_engine_reseed(const long long x, const long long y) const {
     array<seed_seq::result_type, 3> seeds = {
         static_cast<seed_seq::result_type>(initial_seed),
         static_cast<seed_seq::result_type>(x),
@@ -45,13 +33,25 @@ void generator::MapGenerator::local_variation_engine_reseed(const size_t x, cons
 }
 
 
-generator::Tile generator::MapGenerator::get_tile(const size_t x, const size_t y) {
-    const auto relative_x = static_cast<double>(x + COORD_SHIFT),
-               relative_y = static_cast<double>(y + COORD_SHIFT);
+generator::Tile generator::MapGenerator::get_tile(const long long x, const long long y) {
+    const auto shifted_x = static_cast<double>(x + COORD_SHIFT),
+               shifted_y = static_cast<double>(y + COORD_SHIFT);
 
-    const double te = get_tile_noise_value(relative_x, relative_y, 8, temperature),
-                 hu = get_tile_noise_value(relative_x, relative_y, 4, humidity),
-                 he = get_tile_noise_value(relative_x * STRETCH_v2, relative_y * STRETCH_v2, 4, height);
+    const double te = get_tile_noise_value(
+                     shifted_x,
+                     shifted_y,
+                     8, temperature
+                 ),
+                 hu = get_tile_noise_value(
+                     shifted_x,
+                     shifted_y,
+                     4, humidity
+                 ),
+                 he = get_tile_noise_value(
+                     shifted_x * STRETCH_v2,
+                     shifted_y * STRETCH_v2,
+                     4, height
+                 );
     local_variation_engine_reseed(x, y);
     normal_distribution.reset();
     const auto v1 = normal_distribution(*variation),
@@ -102,7 +102,7 @@ generator::Tile generator::MapGenerator::get_tile(const size_t x, const size_t y
                  height_low <= he && he <= height_high) {
             tile.decorations.push_back({
                 name,
-                {(v1 - .5f) * 2.f * DECORATION_MAX_OFFSET, (v2 - .5f) * 2.f * DECORATION_MAX_OFFSET},
+                Vector2f{v1 - .5f, v2 - .5f} * 2.f * DECORATION_MAX_OFFSET,
                 static_cast<unsigned char>(v1 * DECORATION_VARIATION_MULTIPLIER)
             });
             break;
@@ -111,14 +111,14 @@ generator::Tile generator::MapGenerator::get_tile(const size_t x, const size_t y
     return tile;
 }
 double generator::MapGenerator::get_tile_noise_value(const double x, const double y, const unsigned char octaves, const PerlinNoise* noise) const {
-    const double xn = x / STRETCH,
-                 yn = y / STRETCH;
+    const double xn = x * STRETCH,
+                 yn = y * STRETCH;
 
     double value = 0,
            sum   = 0;
 
     for (unsigned char octave = 0; octave < octaves; octave++) {
-        const auto k = 1l << octave;
+        const long k = 1l << octave;
         sum += 1. / k;
         value += noise->noise(xn * k, yn * k) / k;
     }
@@ -145,7 +145,7 @@ long long generator::MapGenerator::seed_shift(const unsigned shift) const {
     uniform_int_distribution dist(1, 99);
     const int random_value = dist(random);
 
-    constexpr std::hash<std::string> hasher;
+    constexpr std::hash<string> hasher;
     return static_cast<long long>(hasher(seed_string) / random_value);
 }
 

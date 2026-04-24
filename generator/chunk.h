@@ -27,17 +27,18 @@ using sf::RenderTarget;
 #include <SFML/System/Vector2.hpp>
 using sf::Vector2u;
 using sf::Vector2i;
+using sf::Vector2;
 
 
 namespace generator {
     class Chunk : public Drawable, public Transformable {
     public:
-        Chunk(MapGenerator* generator_link, int x, int y, Texture* texture);
-        Vector2i getAbsolutePosition() const;
+        Chunk(MapGenerator* generator_link, long long x, long long y, Texture* texture);
+        Vector2<long long> getAbsolutePosition() const;
     private:
         MapGenerator* generator;
         VertexArray vertices;
-        Vector2i position;
+        Vector2<long long> position;
         Texture* m_tileset;
 
         void draw(RenderTarget &target, RenderStates states) const override;

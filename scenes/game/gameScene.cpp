@@ -124,7 +124,7 @@ void scene::GameScene::update_chunks() {
     };
     for (int i = -static_cast<int>(render_distance) + 1; i < static_cast<int>(render_distance); i++)
         for (int j = -static_cast<int>(render_distance) + 1; j < static_cast<int>(render_distance); j++) {
-            const Vector2i Pos = {i * 16 + playerChunk.x, j * 16 + playerChunk.y};
+            const Vector2<long long> Pos = {i * 16 + playerChunk.x, j * 16 + playerChunk.y};
             bool flag = false;
 
             for (auto it = active_chunks.begin(); it != active_chunks.end() && !flag; ++it)
@@ -139,8 +139,12 @@ void scene::GameScene::update_chunks() {
         }
 
     for (auto it = active_chunks.begin(); it != active_chunks.end(); ++it) {
-        if (const auto chunk = *it; static_cast<Vector2f>(chunk->getAbsolutePosition() - playerChunk).lengthSquared() > render_distance_squared * 4 * 256) {
-            std::cout << "distance between player and deleted chunk" << static_cast<Vector2f>(chunk->getAbsolutePosition() - playerChunk).length();
+        const auto chunk = *it;
+        const auto delta_vector = static_cast<Vector2f>(
+            chunk->getAbsolutePosition() - static_cast<Vector2<long long>>(playerChunk)
+        );
+        if (delta_vector.lengthSquared() > render_distance_squared * 4 * 256) {
+            std::cout << "[chunk sequence] chunk with delta = " << delta_vector.length() << "has been deleted\n";
             delete chunk;
             active_chunks.erase(it);
         }
