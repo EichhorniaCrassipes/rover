@@ -1,8 +1,5 @@
 #include "PerlinNoise.h"
 
-#include <random>
-using std::default_random_engine;
-
 #include <algorithm>
 using std::shuffle;
 
@@ -10,7 +7,7 @@ using std::shuffle;
 using std::floor;
 
 
-generator::PerlinNoise::PerlinNoise(default_random_engine* engine_link) {
+generator::PerlinNoise::PerlinNoise(mt19937* engine_link) {
     engine = engine_link;
 
     permutation.resize(256);
