@@ -5,18 +5,18 @@
 using std::vector;
 
 #include <random>
-using std::default_random_engine;
+using std::mt19937;
 
 namespace generator {
     class PerlinNoise {
     public:
-        explicit PerlinNoise(default_random_engine* engine_link);
+        explicit PerlinNoise(mt19937* engine_link);
         ~PerlinNoise() = default;
 
         [[nodiscard]] double noise(double x, double y) const;
 
     private:
-        default_random_engine* engine;
+        mt19937* engine;
         vector<int> permutation;
 
         static double fade(double t);
