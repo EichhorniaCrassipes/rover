@@ -34,8 +34,8 @@ void generator::MapGenerator::local_variation_engine_reseed(const long long x, c
 
 
 generator::Tile generator::MapGenerator::get_tile(const long long x, const long long y) {
-    const auto relative_x = static_cast<double>(x + COORD_SHIFT),
-               relative_y = static_cast<double>(y + COORD_SHIFT);
+    const double relative_x = static_cast<double>(x + COORD_SHIFT) + AXIAL_ANOMALY_PARAMETER,
+                 relative_y = static_cast<double>(y + COORD_SHIFT) + AXIAL_ANOMALY_PARAMETER;
 
     const double te = get_tile_noise_value(relative_x, relative_y, 8, temperature),
                  hu = get_tile_noise_value(relative_x, relative_y, 4, humidity),
@@ -99,8 +99,8 @@ generator::Tile generator::MapGenerator::get_tile(const long long x, const long 
     return tile;
 }
 double generator::MapGenerator::get_tile_noise_value(const double x, const double y, const unsigned char octaves, const PerlinNoise* noise) const {
-    const double xn = x * STRETCH + AXIAL_ANOMALY_PARAMETER,
-                 yn = y * STRETCH + AXIAL_ANOMALY_PARAMETER;
+    const double xn = x * STRETCH,
+                 yn = y * STRETCH;
 
     double value = 0,
            sum   = 0;
@@ -133,7 +133,7 @@ long long generator::MapGenerator::seed_shift(const unsigned shift) const {
     uniform_int_distribution dist(1, 99);
     const int random_value = dist(random);
 
-    constexpr std::hash<std::string> hasher;
+    constexpr std::hash<string> hasher;
     return static_cast<long long>(hasher(seed_string) / random_value);
 }
 
