@@ -27,7 +27,11 @@ namespace generator {
     private:
         double STRETCH = .05, STRETCH_v2 = 1.5;
         long long COORD_SHIFT = 100000;
-        double AXIAL_ANOMALY_PARAMETER = 1.23456789;
+
+        double AXIAL_ANOMALY_GLOBAL_PARAMETER = .12345,
+               AXIAL_ANOMALY_TE_PARAMETER     = .133719,
+               AXIAL_ANOMALY_HU_PARAMETER     = .591042,
+               AXIAL_ANOMALY_HE_PARAMETER     = .827365;
 
         float TILE_VARIATION_MULTIPLIER = 4,
               DECORATION_VARIATION_MULTIPLIER = 4,

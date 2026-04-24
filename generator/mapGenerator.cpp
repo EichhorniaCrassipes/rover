@@ -21,8 +21,8 @@ void generator::MapGenerator::free_memory() const {
 void generator::MapGenerator::local_variation_engine_reseed(const long long x, const long long y) const {
     array<seed_seq::result_type, 3> seeds = {
         static_cast<seed_seq::result_type>(initial_seed),
-        static_cast<seed_seq::result_type>(x),
-        static_cast<seed_seq::result_type>(y)
+        static_cast<seed_seq::result_type>(static_cast<double>(x + COORD_SHIFT) + AXIAL_ANOMALY_GLOBAL_PARAMETER),
+        static_cast<seed_seq::result_type>(static_cast<double>(y + COORD_SHIFT) + AXIAL_ANOMALY_GLOBAL_PARAMETER)
     };
     seed_seq seq(seeds.begin(), seeds.end());
 
@@ -34,12 +34,24 @@ void generator::MapGenerator::local_variation_engine_reseed(const long long x, c
 
 
 generator::Tile generator::MapGenerator::get_tile(const long long x, const long long y) {
-    const double relative_x = static_cast<double>(x + COORD_SHIFT) + AXIAL_ANOMALY_PARAMETER,
-                 relative_y = static_cast<double>(y + COORD_SHIFT) + AXIAL_ANOMALY_PARAMETER;
+    const auto relative_x = static_cast<double>(x + COORD_SHIFT),
+               relative_y = static_cast<double>(y + COORD_SHIFT);
 
-    const double te = get_tile_noise_value(relative_x, relative_y, 8, temperature),
-                 hu = get_tile_noise_value(relative_x, relative_y, 4, humidity),
-                 he = get_tile_noise_value(relative_x * STRETCH_v2, relative_y * STRETCH_v2, 4, height);
+    const double te = get_tile_noise_value(
+                     relative_x + AXIAL_ANOMALY_TE_PARAMETER,
+                     relative_y + AXIAL_ANOMALY_TE_PARAMETER,
+                     8, temperature
+                 ),
+                 hu = get_tile_noise_value(
+                     relative_x + AXIAL_ANOMALY_HU_PARAMETER,
+                     relative_y + AXIAL_ANOMALY_HU_PARAMETER,
+                     4, humidity
+                 ),
+                 he = get_tile_noise_value(
+                     relative_x * STRETCH_v2 + AXIAL_ANOMALY_HE_PARAMETER,
+                     relative_y * STRETCH_v2 + AXIAL_ANOMALY_HE_PARAMETER,
+                     4, height
+                 );
     local_variation_engine_reseed(x, y);
     normal_distribution.reset();
     const auto v1 = normal_distribution(*variation),
