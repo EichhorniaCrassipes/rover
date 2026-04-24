@@ -14,7 +14,7 @@ using sf::Clock;
 #include "SFML/Graphics/RenderTarget.hpp"
 
 
-generator::Chunk::Chunk(MapGenerator* generator_link, const int x, const int y, Texture* texture) : position{x, y} {
+generator::Chunk::Chunk(MapGenerator* generator_link, const long long x, const long long y, Texture* texture) : position{x, y} {
     generator = generator_link;
     m_tileset = texture;
     cout << "[generator/chunk] x = " << x << ", y = " << y << '\n';
@@ -26,8 +26,8 @@ generator::Chunk::Chunk(MapGenerator* generator_link, const int x, const int y, 
     timer.start();
     for (int j = 0; j < size.y; j++)
         for (int i = 0; i < size.x; i++) {
-            const unsigned x_local = i + position.x,
-                           y_local = j + position.y;
+            const long long x_local = i + position.x,
+                            y_local = j + position.y;
             Tile tile0 = generator->get_tile(x_local,     y_local);
             Tile tile1 = generator->get_tile(x_local + 1, y_local);
             Tile tile2 = generator->get_tile(x_local,     y_local + 1);
@@ -113,4 +113,4 @@ void generator::Chunk::load(const Vector2u tileSize, const int* tiles, const uns
     }
 }
 
-Vector2i generator::Chunk::getAbsolutePosition() const { return position; }
+Vector2<long long> generator::Chunk::getAbsolutePosition() const { return position; }
