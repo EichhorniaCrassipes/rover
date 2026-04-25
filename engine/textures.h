@@ -7,7 +7,7 @@ using std::map;
 #include <string>
 using std::string;
 
-#include "SFML/Graphics/Texture.hpp"
+#include <SFML/Graphics/Texture.hpp>
 using sf::Texture;
 
 
