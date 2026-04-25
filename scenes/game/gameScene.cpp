@@ -144,7 +144,7 @@ void scene::GameScene::update_chunks() {
             chunk->getAbsolutePosition() - static_cast<Vector2<long long>>(playerChunk)
         );
         if (delta_vector.lengthSquared() > render_distance_squared * 4 * 256) {
-            std::cout << "[chunk sequence] chunk with delta = " << delta_vector.length() << "has been deleted\n";
+            std::cout << "[chunk/deletion] delta = " << delta_vector.length() << '\n';
             delete chunk;
             active_chunks.erase(it);
         }

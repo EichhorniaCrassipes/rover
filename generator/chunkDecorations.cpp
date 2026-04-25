@@ -7,11 +7,18 @@ using std::cerr;
 
 #include "../objects/map/stone.h"
 
+#include "SFML/System/Clock.hpp"
+#include "SFML/System/Time.hpp"
+using sf::Clock;
 
 generator::ChunkDecorations::ChunkDecorations(MapGenerator* generator_link, const int x, const int y, Texture* texture) : position{x, y}, size{16, 16} {
     generator = generator_link;
     m_decorations = texture;
+    cout << "[generator/deco-chunk] x = " << x << ", y = " << y << '\n';
 
+    Clock timer;
+
+    timer.start();
     for (int j = 0; j < size.y; j++)
         for (int i = 0; i < size.x; i++) {
             auto tile_result = generator->get_tile(x + i, y + j);
@@ -23,7 +30,10 @@ generator::ChunkDecorations::ChunkDecorations(MapGenerator* generator_link, cons
                 });
         }
 
-    load( {64, 64});
+    cout << "\tgenerating: " << timer.restart().asMilliseconds() << " ms\n";
+
+    load({64, 64});
+    cout << "\tloading: " << timer.getElapsedTime().asMilliseconds() << " ms\n";
 
     setPosition({static_cast<float>(position.x * size.x * 4), static_cast<float>(position.y * size.y * 4)});
 }
