@@ -7,7 +7,7 @@ object::Object::Object(const string &index, const Vector2i &sprite_size) : textu
     this->sprite_size = sprite_size;
     sprite.setTextureRect({{0, 0}, sprite_size});
 
-    scale = {.5, .5};
+    scale = {1, 1};
     position = {0, 0};
 }
 
