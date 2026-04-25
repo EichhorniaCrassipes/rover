@@ -23,7 +23,7 @@ scene::GameScene::GameScene(
     EngineStats* engine_stats_link
 ) : Scene(window_link, engine_stats_link),
     generator(0),
-    player("player", camera_link->get_current_view().getCenter())
+    player(camera_link->get_current_view().getCenter())
 {
     camera     = camera_link;
     delta_time = 0;
