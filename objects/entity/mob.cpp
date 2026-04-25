@@ -1,8 +1,10 @@
 #include "mob.h"
 
+#include "../../engine/textures.h"
+
 
 object::Mob::Mob(
-    const Texture* texture_link,
+    const string &texture_index,
     const Vector2i sprite_size,
     const Vector2f &null_position,
     const float initial_health,
@@ -11,7 +13,7 @@ object::Mob::Mob(
 {
     health = initial_health;
     this->sprite_size = sprite_size;
-    texture = *texture_link;
+    texture = game::TEXTURE_LIBRARY[texture_index];
     position = null_position - static_cast<Vector2f>(sprite_size) / 2.f;
 
     sprite.setTextureRect({{0, 0}, sprite_size});

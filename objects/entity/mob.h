@@ -11,7 +11,7 @@ namespace object {
     class Mob : public Entity {
     public:
         explicit Mob(
-            const Texture* texture_link,
+            const string &texture_index,
             Vector2i sprite_size,
             const Vector2f &null_position = {0, 0},
             float initial_health = 1000,

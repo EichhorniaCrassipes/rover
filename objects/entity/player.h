@@ -10,7 +10,7 @@ using sf::View;
 namespace object {
     class Player : public Mob {
     public:
-        explicit Player(const Texture* texture_link, const Vector2f &null_position = {0, 0});
+        explicit Player(const string &texture_index, const Vector2f &null_position = {0, 0});
         ~Player() override = default;
 
         void move(Vector2f vector, float delta_time) override;
