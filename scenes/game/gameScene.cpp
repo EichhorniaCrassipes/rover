@@ -22,7 +22,7 @@ scene::GameScene::GameScene(
     Camera* camera_link,
     EngineStats* engine_stats_link
 ) : Scene(window_link, engine_stats_link),
-    generator(0),
+    generator(10),
     player(camera_link->get_current_view().getCenter())
 {
     camera     = camera_link;
@@ -44,6 +44,7 @@ void scene::GameScene::on_start() {
                 active_chunks.push_back(new generator::Chunk(&generator, 16 * i, 16 * j, &game::TEXTURE_LIBRARY["tileset"]));
                 active_decoration_chunks.push_back(new generator::ChunkDecorations(&generator, 16 * i, 16 * j, &game::TEXTURE_LIBRARY["decoset"]));
             }
+        entities.push_back(new object::Entity("spawn", {128,256},{0, 0}, 0));
         first_start = true;
     }
 }
@@ -58,9 +59,10 @@ void scene::GameScene::render() {
         window->draw(*chunk);
     for (const auto chunk : active_decoration_chunks)
         window->draw(*chunk);
-    /*for (const auto block : blocks)
-        block->render(window);
-    */
+
+    for (const auto& entity : entities)
+        window->draw(*entity);
+
 
     const auto move_vector = get_move_vector();
     handle_player(move_vector);

@@ -16,7 +16,8 @@ namespace game {
         {"tileset", Texture("textures/test01.png")},
         {"decoset", Texture("textures/deco01.png")},
         {"default", Texture("textures/sample_texture.jpg")},
-        {"player",  Texture("textures/player.png")}
+        {"player",  Texture("textures/player.png")},
+        {"spawn",  Texture("textures/antenna.png")}
     };
 }
 

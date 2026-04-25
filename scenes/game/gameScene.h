@@ -47,11 +47,10 @@ namespace scene {
         float delta_time;
 
         map<int, map<int, object::Block>> upper_decorations, interactive_blocks;
-        vector<object::Entity> entities;
+        vector<object::Entity*> entities;
 
         std::vector<generator::Chunk*> active_chunks;
         std::vector<generator::ChunkDecorations*> active_decoration_chunks;
-        //vector<object::Block*> blocks;
         MapGenerator generator;
 
         object::Player player;
