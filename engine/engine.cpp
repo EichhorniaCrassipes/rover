@@ -106,6 +106,9 @@ game::Engine::~Engine() {
     for (const auto t : info_texts)
         delete t;
 
+    for (const auto &[p, t] : textures)
+        delete t;
+
     delete window;
 }
 
