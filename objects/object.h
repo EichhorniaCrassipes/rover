@@ -6,12 +6,17 @@ using sf::Sprite;
 using sf::Vector2f;
 using sf::Texture;
 
+#include <map>
+using std::map;
+
+#include <string>
+using std::string;
+
+
 namespace object {
-    class Object : public sf::Drawable, public sf::Transformable
-    {
+    class Object : public sf::Drawable, public sf::Transformable {
     public:
-        Object();
-        virtual ~Object() = default;
+        explicit Object(const string &index = "default");
 
         void render(sf::RenderWindow *window_link);
 
@@ -24,6 +29,7 @@ namespace object {
     protected:
         Vector2f scale;
         Vector2f position;
+
         Texture texture;
         Sprite sprite;
     };

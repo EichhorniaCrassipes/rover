@@ -1,10 +1,13 @@
 #include "object.h"
 
-object::Object::Object() : scale(Vector2f(0.5, 0.5)), position(Vector2f(0, 0)),
-                   texture("textures/sample_texture.jpg"), sprite(texture) {
-    sprite.setPosition(position);
-    sprite.setScale(scale);
+#include "../engine/textures.h"
+
+
+object::Object::Object(const string &index) : texture(game::TEXTURE_LIBRARY[index]), sprite(texture) {
+    scale = {.5, .5};
+    position = {0, 0};
 }
+
 
 Sprite object::Object::getSprite() const {
     return sprite;
@@ -13,10 +16,10 @@ Vector2f object::Object::getPosition() const {
     return position;
 }
 
-void object::Object::setPosition(Vector2f new_position) {
+void object::Object::setPosition(const Vector2f new_position) {
     position = new_position;
 }
-void object::Object::setScale(Vector2f new_scale) {
+void object::Object::setScale(const Vector2f new_scale) {
     scale = new_scale;
 }
 
@@ -26,9 +29,8 @@ void object::Object::render(sf::RenderWindow *window_link) {
     window_link->draw(sprite);
 }
 
-void object::Object::draw(sf::RenderTarget &target, sf::RenderStates states) const
-{
-    states.transform *= getTransform();// getTransform() is defined by sf::Transformable
+void object::Object::draw(sf::RenderTarget &target, sf::RenderStates states) const {
+    states.transform *= getTransform();
     states.transform.translate(position);
     states.transform.scale(scale);
     states.texture = &texture;
