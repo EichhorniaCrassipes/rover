@@ -29,7 +29,7 @@ using game::Camera;
 namespace scene {
     class GameScene : public Scene {
     public:
-        explicit GameScene(RenderWindow* window_link, Camera* camera_link, EngineStats* engine_stats_link, map<string, Texture*>* textures);
+        explicit GameScene(RenderWindow* window_link, Camera* camera_link, EngineStats* engine_stats_link);
         ~GameScene() override;
 
         void render() override;
@@ -71,7 +71,6 @@ namespace scene {
               zoom_coefficient = 0.05,
               render_distance = 10,
               render_distance_squared = render_distance * render_distance;
-        map<string, Texture*>* scene_textures;
     };
 }
 
