@@ -2,9 +2,8 @@
 
 
 object::Player::Player(
-    const Texture* texture_link,
     const Vector2f &null_position
-) : Mob(texture_link, {512, 512}, null_position, 1000, 250)
+) : Mob("player", {512, 512}, null_position, 1000, 250)
 {
     cout << "[player/constructor]\n\t"
     << "size: {" << sprite.getScale().x << ';' << sprite.getScale().y << "}\n\t"

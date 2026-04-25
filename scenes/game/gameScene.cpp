@@ -1,5 +1,7 @@
 #include "gameScene.h"
 
+#include "../../engine/textures.h"
+
 #include <iostream>
 using std::cout;
 
@@ -18,11 +20,11 @@ using std::abs;
 scene::GameScene::GameScene(
     RenderWindow* window_link,
     Camera* camera_link,
-    EngineStats* engine_stats_link,
-    map<string, Texture*>* textures) : Scene(window_link, engine_stats_link),
-                                       generator(0),
-                                       player((*textures)["textures/player.png"], camera_link->get_current_view().getCenter()),
-                                       scene_textures(textures) {
+    EngineStats* engine_stats_link
+) : Scene(window_link, engine_stats_link),
+    generator(0),
+    player(camera_link->get_current_view().getCenter())
+{
     camera     = camera_link;
     delta_time = 0;
     FPS_timer.start();
@@ -37,10 +39,10 @@ scene::GameScene::~GameScene() {
 
 void scene::GameScene::on_start() {
     if (!first_start) {
-        for (int i = - static_cast<int>(render_distance); i < static_cast<int>(render_distance); i++)
-            for (int j = - static_cast<int>(render_distance); j < static_cast<int>(render_distance); j++) {
-                active_chunks.push_back(new generator::Chunk(&generator, 16 * i, 16 * j, (*scene_textures)["textures/test01.png"]));
-                active_decoration_chunks.push_back(new generator::ChunkDecorations(&generator, 16 * i, 16 * j, (*scene_textures)["textures/deco01.png"]));
+        for (int i = -static_cast<int>(render_distance); i < static_cast<int>(render_distance); i++)
+            for (int j = -static_cast<int>(render_distance); j < static_cast<int>(render_distance); j++) {
+                active_chunks.push_back(new generator::Chunk(&generator, 16 * i, 16 * j, &game::TEXTURE_LIBRARY["tileset"]));
+                active_decoration_chunks.push_back(new generator::ChunkDecorations(&generator, 16 * i, 16 * j, &game::TEXTURE_LIBRARY["decoset"]));
             }
         first_start = true;
     }
@@ -132,8 +134,8 @@ void scene::GameScene::update_chunks() {
                     flag = true;
 
             if (!flag) {
-                active_chunks.push_back(new generator::Chunk(&generator, Pos.x, Pos.y, (*scene_textures)["textures/test01.png"]));
-                active_decoration_chunks.push_back(new generator::ChunkDecorations(&generator, Pos.x, Pos.y, (*scene_textures)["textures/deco01.png"]));
+                active_chunks.push_back(new generator::Chunk(&generator, Pos.x, Pos.y, &game::TEXTURE_LIBRARY["tileset"]));
+                active_decoration_chunks.push_back(new generator::ChunkDecorations(&generator, Pos.x, Pos.y, &game::TEXTURE_LIBRARY["decoset"]));
             }
 
         }

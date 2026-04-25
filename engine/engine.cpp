@@ -46,10 +46,6 @@ game::Engine::Engine(const string &name) : exitDialog_text(
     current_game_scene_index = -1;
     current_UI_scene_index = -1;
 
-    for (const auto&[path, texture] : textures)
-        if (!texture->loadFromFile(path))
-            cerr << "Failed to load " << path << '\n';
-
     if (!default_monospace_font.openFromFile("fonts/OCR A Extended Regular.ttf"))
         cerr << "Failed to load OCRA font\n";
 
@@ -106,9 +102,6 @@ game::Engine::~Engine() {
     for (const auto t : info_texts)
         delete t;
 
-    for (const auto &[p, t] : textures)
-        delete t;
-
     delete window;
 }
 
@@ -119,7 +112,7 @@ void game::Engine::run(const short fps) {
     cameras[game_scenes::MAIN]->zoom(32 * 64 / static_cast<float>(global_stats.window_width));
 
     game_scenes[game_scenes::RESET] = nullptr;
-    game_scenes[game_scenes::MAIN]  = new scene::GameScene(window, cameras[game_scenes::MAIN], &global_stats, &textures);
+    game_scenes[game_scenes::MAIN]  = new scene::GameScene(window, cameras[game_scenes::MAIN], &global_stats);
 
     UI_scenes[UI_scenes::RESET]    = nullptr;
     UI_scenes[UI_scenes::MENU]     = new scene::MenuScene(window, &global_stats);

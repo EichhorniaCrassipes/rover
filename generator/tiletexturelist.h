@@ -1,13 +1,15 @@
-#ifndef ROVER_TILETEXTURELIST_H
-#define ROVER_TILETEXTURELIST_H
+#ifndef TILE_TEXTURE_LIST
+#define TILE_TEXTURE_LIST
+
 #include <string>
 using std::string;
+
 #include <map>
+using std::map;
 
 
-namespace texturelist {
-    inline std::map<string, int> maptiles  =
-    {
+namespace texture_list {
+    inline std::map<string, int> maptiles = {
         {"1111", 14},
         {"0000", 15},
         {"2222", 16},
@@ -89,9 +91,7 @@ namespace texturelist {
         {"2110", 78},
         {"2120", 79},
         {"2210", 80},
-
     };
 }
 
-#endif //ROVER_TILETEXTURELIST_H
-
+#endif

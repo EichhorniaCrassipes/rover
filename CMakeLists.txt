@@ -14,7 +14,6 @@ set(SOURCES
         main.cpp
         engine/engine.cpp
         engine/camera.cpp
-        engine/textures.cpp
 
         objects/object.cpp
         objects/entity.cpp
