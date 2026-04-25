@@ -3,7 +3,10 @@
 #include "../engine/textures.h"
 
 
-object::Object::Object(const string &index) : texture(game::TEXTURE_LIBRARY[index]), sprite(texture) {
+object::Object::Object(const string &index, const Vector2i &sprite_size) : texture(game::TEXTURE_LIBRARY[index]), sprite(texture) {
+    this->sprite_size = sprite_size;
+    sprite.setTextureRect({{0, 0}, sprite_size});
+
     scale = {.5, .5};
     position = {0, 0};
 }
