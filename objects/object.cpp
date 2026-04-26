@@ -5,6 +5,7 @@
 
 object::Object::Object(const string &index, const Vector2i &sprite_size) : texture(game::TEXTURE_LIBRARY[index]), sprite(texture) {
     this->sprite_size = sprite_size;
+    this->index = index;
     sprite.setTextureRect({{0, 0}, sprite_size});
 
     scale = {1, 1};
@@ -12,19 +13,12 @@ object::Object::Object(const string &index, const Vector2i &sprite_size) : textu
 }
 
 
-Sprite object::Object::getSprite() const {
-    return sprite;
-}
-Vector2f object::Object::getPosition() const {
-    return position;
-}
+Sprite object::Object::getSprite() const { return sprite; }
+Vector2f object::Object::getPosition() const { return position; }
+string object::Object::getLibraryIndex() const { return index; }
 
-void object::Object::setPosition(const Vector2f new_position) {
-    position = new_position;
-}
-void object::Object::setScale(const Vector2f new_scale) {
-    scale = new_scale;
-}
+void object::Object::setPosition(const Vector2f new_position) { position = new_position; }
+void object::Object::setScale(const Vector2f new_scale) { scale = new_scale; }
 
 void object::Object::render(sf::RenderWindow *window_link) {
     sprite.setPosition(position);
