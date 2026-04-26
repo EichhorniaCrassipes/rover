@@ -1,5 +1,5 @@
 #include "chunk.h"
-#include "../tiletexturelist.h"
+#include "../tileLibrary.h"
 #include "../../engine/textures.h"
 
 #include "../mapGenerator.h"
@@ -33,7 +33,7 @@ generator::Chunk::Chunk(MapGenerator* generator_link, const long long x, const l
             Tile tile2 = generator->get_tile(x_local,     y_local + 1);
             Tile tile3 = generator->get_tile(x_local + 1, y_local + 1);
 
-            tiles[i + j * size.x] = {texture_list::maptiles[get4tiles(tile0, tile1, tile2, tile3)]};
+            tiles[i + j * size.x] = {tile_library::maptiles[get4tiles(tile0, tile1, tile2, tile3)]};
             var[i + j * size.x] = tile0.variation;
         }
     cout << "\tgenerating: " << timer.restart().asMilliseconds() << " ms\n";
