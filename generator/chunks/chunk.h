@@ -4,7 +4,7 @@
 #define CHUNK_WIDTH 16
 #define CHUNK_HEIGHT 16
 
-#include "mapGenerator.h"
+#include "../mapGenerator.h"
 
 #include <vector>
 using std::vector;

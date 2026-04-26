@@ -1,8 +1,8 @@
 #include "chunk.h"
-#include "tiletexturelist.h"
-#include "../engine/textures.h"
+#include "../tiletexturelist.h"
+#include "../../engine/textures.h"
 
-#include "mapGenerator.h"
+#include "../mapGenerator.h"
 
 #include <iostream>
 using std::cout;

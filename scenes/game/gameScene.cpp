@@ -13,8 +13,8 @@ using std::abs;
 
 #include "../../engine/enums.h"
 
-#include "../../generator/chunk.h"
-#include "../../generator/chunkDecorations.h"
+#include "../../generator/chunks/chunk.h"
+#include "../../generator/chunks/chunkDecorations.h"
 
 
 scene::GameScene::GameScene(

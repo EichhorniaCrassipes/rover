@@ -1,8 +1,8 @@
 #include "mapGenerator.h"
 
-#include "biomes.h"
-#include "deposits.h"
-#include "decorations.h"
+#include "config/biomes.h"
+#include "config/deposits.h"
+#include "config/decorations.h"
 
 #include <iostream>
 

@@ -19,8 +19,8 @@ using generator::MapGenerator;
 #include "../../engine/camera.h"
 using game::Camera;
 
-#include "../../generator/chunk.h"
-#include "../../generator/chunkDecorations.h"
+#include "../../generator/chunks/chunk.h"
+#include "../../generator/chunks/chunkDecorations.h"
 
 #include "../../objects/map/block.h"
 #include "../../objects/entity.h"
