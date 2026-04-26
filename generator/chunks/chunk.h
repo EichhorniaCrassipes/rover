@@ -4,7 +4,7 @@
 #define CHUNK_WIDTH 16
 #define CHUNK_HEIGHT 16
 
-#include "mapGenerator.h"
+#include "../mapGenerator.h"
 
 #include <vector>
 using std::vector;
@@ -27,25 +27,26 @@ using sf::RenderTarget;
 #include <SFML/System/Vector2.hpp>
 using sf::Vector2u;
 using sf::Vector2i;
+using sf::Vector2;
 
 
 namespace generator {
     class Chunk : public Drawable, public Transformable {
     public:
-        Chunk(MapGenerator* generator_link, int x, int y, Texture* texture);
-        Vector2i getAbsolutePosition() const;
+        Chunk(MapGenerator* generator_link, long long x, long long y, Texture* texture);
+        Vector2<long long> getAbsolutePosition() const;
     private:
         MapGenerator* generator;
         VertexArray vertices;
-        Vector2i position;
+        Vector2<long long> position;
         Texture* m_tileset;
 
         void draw(RenderTarget &target, RenderStates states) const override;
-        bool load( Vector2u tileSize, const int* tiles, const unsigned char* var, unsigned int width, unsigned int height);
+        void load(Vector2u tileSize, const int* tiles, const unsigned char* var, unsigned int width, unsigned int height);
 
-        const Vector2i size;
+        const Vector2i size{CHUNK_WIDTH, CHUNK_HEIGHT};
 
-        string get4tiles(int x, int y) const;
+        static string get4tiles(const Tile &tile0, const Tile &tile1, const Tile &tile2, const Tile &tile3) ;
     };
 }
 

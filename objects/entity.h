@@ -10,7 +10,12 @@ using std::cout;
 namespace object {
     class Entity : public Object {
     public:
-        explicit Entity(float speed = 0);
+        explicit Entity(
+            const string &texture_index,
+            const Vector2i &sprite_size,
+            const Vector2f &null_position,
+            float speed = 0
+        );
         ~Entity() override = default;
 
         float getSpeed() const;
@@ -18,7 +23,7 @@ namespace object {
 
         virtual void move(Vector2f vector, float delta_time);
 
-        bool checkCollision(const Object &object, Vector2f precision_radius = {.01, .01});
+        bool checkCollision(const Object &object, const Vector2f &precision_radius = {.01, .01});
     protected:
         bool collision;
         float speed;

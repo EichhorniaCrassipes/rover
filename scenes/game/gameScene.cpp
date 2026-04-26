@@ -1,5 +1,7 @@
 #include "gameScene.h"
 
+#include "../../engine/textures.h"
+
 #include <iostream>
 using std::cout;
 
@@ -11,18 +13,18 @@ using std::abs;
 
 #include "../../engine/enums.h"
 
-#include "../../generator/chunk.h"
-#include "../../generator/chunkDecorations.h"
+#include "../../generator/chunks/chunk.h"
+#include "../../generator/chunks/chunkDecorations.h"
 
 
 scene::GameScene::GameScene(
     RenderWindow* window_link,
     Camera* camera_link,
-    EngineStats* engine_stats_link,
-    map<string, Texture*>* textures) : Scene(window_link, engine_stats_link),
-                                       generator(0),
-                                       player((*textures)["textures/player.png"], camera_link->get_current_view().getCenter()),
-                                       scene_textures(textures) {
+    EngineStats* engine_stats_link
+) : Scene(window_link, engine_stats_link),
+    generator(0),
+    player(camera_link->get_current_view().getCenter())
+{
     camera     = camera_link;
     delta_time = 0;
     FPS_timer.start();
@@ -39,10 +41,10 @@ scene::GameScene::~GameScene() {
 
 void scene::GameScene::on_start() {
     if (!first_start) {
-        for (int i = - static_cast<int>(render_distance); i < static_cast<int>(render_distance); i++)
-            for (int j = - static_cast<int>(render_distance); j < static_cast<int>(render_distance); j++) {
-                active_chunks.push_back(new generator::Chunk(&generator, 16 * i, 16 * j, (*scene_textures)["textures/test01.png"]));
-                active_decoration_chunks.push_back(new generator::ChunkDecorations(&generator, 16 * i, 16 * j, (*scene_textures)["textures/deco01.png"]));
+        for (int i = -static_cast<int>(render_distance); i < static_cast<int>(render_distance); i++)
+            for (int j = -static_cast<int>(render_distance); j < static_cast<int>(render_distance); j++) {
+                active_chunks.push_back(new generator::Chunk(&generator, 16 * i, 16 * j, &game::TEXTURE_LIBRARY["tileset"]));
+                active_decoration_chunks.push_back(new generator::ChunkDecorations(&generator, 16 * i, 16 * j, &game::TEXTURE_LIBRARY["decoset"]));
             }
         first_start = true;
     }
@@ -122,7 +124,7 @@ void scene::GameScene::update_chunks() {
     };
     for (int i = -static_cast<int>(render_distance) + 1; i < static_cast<int>(render_distance); i++)
         for (int j = -static_cast<int>(render_distance) + 1; j < static_cast<int>(render_distance); j++) {
-            const Vector2i Pos = {i * 16 + playerChunk.x, j * 16 + playerChunk.y};
+            const Vector2<long long> Pos = {i * 16 + playerChunk.x, j * 16 + playerChunk.y};
             bool flag = false;
 
             for (auto it = active_chunks.begin(); it != active_chunks.end() && !flag; ++it)
@@ -130,15 +132,19 @@ void scene::GameScene::update_chunks() {
                     flag = true;
 
             if (!flag) {
-                active_chunks.push_back(new generator::Chunk(&generator, Pos.x, Pos.y, (*scene_textures)["textures/test01.png"]));
-                active_decoration_chunks.push_back(new generator::ChunkDecorations(&generator, Pos.x, Pos.y, (*scene_textures)["textures/deco01.png"]));
+                active_chunks.push_back(new generator::Chunk(&generator, Pos.x, Pos.y, &game::TEXTURE_LIBRARY["tileset"]));
+                active_decoration_chunks.push_back(new generator::ChunkDecorations(&generator, Pos.x, Pos.y, &game::TEXTURE_LIBRARY["decoset"]));
             }
 
         }
 
     for (auto it = active_chunks.begin(); it != active_chunks.end(); ++it) {
-        if (const auto chunk = *it; static_cast<Vector2f>(chunk->getAbsolutePosition() - playerChunk).lengthSquared() > render_distance_squared * 4 * 256) {
-            std::cout << "distance between player and deleted chunk" << static_cast<Vector2f>(chunk->getAbsolutePosition() - playerChunk).length();
+        const auto chunk = *it;
+        const auto delta_vector = static_cast<Vector2f>(
+            chunk->getAbsolutePosition() - static_cast<Vector2<long long>>(playerChunk)
+        );
+        if (delta_vector.lengthSquared() > render_distance_squared * 4 * 256) {
+            std::cout << "[chunk/deletion] delta = " << delta_vector.length() << '\n';
             delete chunk;
             active_chunks.erase(it);
         }

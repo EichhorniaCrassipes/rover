@@ -10,11 +10,13 @@ using std::runtime_error;
 
 #include "enums.h"
 #include "stats.h"
+#include "textures.h"
+
 EngineStats game::global_stats {0, 0};
 
 #include "../scenes/UI/menuScene.h"
+#include "../scenes/UI/cutscene/cutScene.h"
 
-#include "textures.h"
 
 game::Engine::Engine() : Engine(DEFAULT_TITLE) {}
 game::Engine::Engine(const string &name) : exitDialog_text(
@@ -44,11 +46,8 @@ game::Engine::Engine(const string &name) : exitDialog_text(
     current_game_scene_index = -1;
     current_UI_scene_index = -1;
 
-    for (const auto&[fst, snd] : textures)
-        if (!snd->loadFromFile(fst))
-            std::cerr << "Failed to load " << fst << std::endl;
-
-    if (!default_monospace_font.openFromFile("fonts/OCR A Extended Regular.ttf")) {}
+    if (!default_monospace_font.openFromFile("fonts/OCR A Extended Regular.ttf"))
+        cerr << "Failed to load OCRA font\n";
 
     exitDialog_text.setFillColor(sf::Color::White);
     exitDialog_text.setOutlineColor(sf::Color::Black);
@@ -108,17 +107,17 @@ game::Engine::~Engine() {
 
 void game::Engine::run(const short fps) {
     cameras[game_scenes::RESET] = nullptr;
-    cameras[game_scenes::MAIN] = new Camera(window);
+    cameras[game_scenes::MAIN]  = new Camera(window);
 
     cameras[game_scenes::MAIN]->zoom(32 * 64 / static_cast<float>(global_stats.window_width));
 
     game_scenes[game_scenes::RESET] = nullptr;
-    game_scenes[game_scenes::MAIN] = new scene::GameScene(window, cameras[game_scenes::MAIN], &global_stats, &textures);
+    game_scenes[game_scenes::MAIN]  = new scene::GameScene(window, cameras[game_scenes::MAIN], &global_stats);
 
-    UI_scenes[UI_scenes::RESET] = nullptr;
-    UI_scenes[UI_scenes::MENU] = new scene::MenuScene(window, &global_stats);
-    UI_scenes[UI_scenes::CUTSCENE]  = nullptr;
-    UI_scenes[UI_scenes::GAME] = nullptr;
+    UI_scenes[UI_scenes::RESET]    = nullptr;
+    UI_scenes[UI_scenes::MENU]     = new scene::MenuScene(window, &global_stats);
+    UI_scenes[UI_scenes::CUTSCENE] = new scene::CutScene(window, &global_stats, &default_monospace_font);
+    UI_scenes[UI_scenes::GAME]     = nullptr;
 
     if (fps > 0) window->setFramerateLimit(fps);
     else window->setVerticalSyncEnabled(true);
@@ -193,7 +192,8 @@ void game::Engine::loop() {
         window->setView(saved_view);
 
         info_update_values();
-        info_overdraw();
+        if (current_UI_scene_index != UI_scenes::CUTSCENE)
+            info_overdraw();
         window->display();
 
         adjust_tps();
@@ -289,20 +289,19 @@ void game::Engine::adjust_tps() {
         if (TPS_adjuster_timer.getElapsedTime() >= TPS_adjuster_delta_time_flag) {
             TPS_adjuster_timer.restart();
             const float local_middle = (left_target + right_target) / 2;
-            TPS_delta_time = sf::seconds(1 / local_middle);
-            std::cout << "new delta time: " << TPS_delta_time.asSeconds() << std::endl;
+            TPS_delta_time = seconds(1 / local_middle);
+            cout << "[TPS adjuster] new delta time: " << TPS_delta_time.asSeconds() << '\n';
             adjustment_proceeding = false;
         }
     }
     else if (TPS_adjuster_timer.getElapsedTime() >= TPS_adjuster_delta_time) {
         TPS_adjuster_timer.restart();
-        std::cout << "adjuster called\n";
+        cout << "[TPS adjuster] called\n";
         if (TPS_value - epsilon >= current_real_TPS || current_real_TPS >= TPS_value + epsilon) {
-            std::cout << "adjustment started...\n";
             adjustment_proceeding = true;
             left_target = current_real_TPS * 1.2f;
             right_target = TPS_value * 2 - current_real_TPS;
-            std::cout << "left target: " << left_target << ", right target: " << right_target << std::endl;
+            cout << "\tleft target: " << left_target << "\n\tright target: " << right_target << '\n';
         }
     }
 }

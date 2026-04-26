@@ -1,7 +1,7 @@
 #ifndef CHUNK_DECORATIONS
 #define CHUNK_DECORATIONS
 
-#include "mapGenerator.h"
+#include "../mapGenerator.h"
 
 #include <vector>
 using std::vector;
@@ -39,7 +39,7 @@ namespace generator {
     class ChunkDecorations : public Drawable, public Transformable {
     public:
         ChunkDecorations(MapGenerator* generator_link, int x, int y, Texture* texture);
-        sf::Vector2i getAbsolutePosition() const;
+        Vector2i getAbsolutePosition() const;
     private:
         MapGenerator* generator;
 
@@ -47,10 +47,10 @@ namespace generator {
         Vector2i position;
         Texture* m_decorations;
 
-        const sf::Vector2<int> size;
+        const Vector2i size;
 
         void draw(RenderTarget &target, RenderStates states) const override;
-        void load( Vector2u tileSize);
+        void load(Vector2u tileSize);
 
         vector<ChunkDecorationsDecorationInfo> decorations;
     };

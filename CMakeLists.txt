@@ -14,7 +14,6 @@ set(SOURCES
         main.cpp
         engine/engine.cpp
         engine/camera.cpp
-        engine/textures.cpp
 
         objects/object.cpp
         objects/entity.cpp
@@ -35,16 +34,17 @@ set(SOURCES
 
         generator/PerlinNoise.cpp
         generator/mapGenerator.cpp
-        generator/chunk.cpp
-        generator/chunkDecorations.cpp
-        generator/biomes.cpp
-        generator/deposits.cpp
-        generator/decorations.cpp
+        generator/chunks/chunk.cpp
+        generator/chunks/chunkDecorations.cpp
+        generator/config/biomes.cpp
+        generator/config/deposits.cpp
+        generator/config/decorations.cpp
 
         scenes/scene.cpp
         scenes/game/gameScene.cpp
         scenes/UI/UIScene.cpp
         scenes/UI/menuScene.cpp
+        scenes/UI/cutscene/cutScene.cpp
 
         objects/ui/gameMenu.cpp
         objects/ui/gameInventory.cpp

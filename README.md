@@ -83,7 +83,8 @@ cmake -B cmake-build-debug -S .
 cmake --build cmake-build-debug
 
 # Запуск игры
-.release/ROVER.exe
+cd .release
+ROVER.exe
 ```
 
 ---
