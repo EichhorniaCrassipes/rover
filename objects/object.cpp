@@ -1,6 +1,6 @@
 #include "object.h"
 
-#include "../engine/textures.h"
+#include "../engine/libraries.h"
 
 
 object::Object::Object(const string &index, const Vector2i &sprite_size) : texture(game::TEXTURE_LIBRARY[index]), sprite(texture) {
