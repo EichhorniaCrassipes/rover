@@ -1,5 +1,5 @@
-#ifndef TILE_TEXTURE_LIST
-#define TILE_TEXTURE_LIST
+#ifndef TILE_LIBRARY
+#define TILE_LIBRARY
 
 #include <string>
 using std::string;
@@ -8,8 +8,8 @@ using std::string;
 using std::map;
 
 
-namespace texture_list {
-    inline std::map<string, int> maptiles = {
+namespace tile_library {
+    inline map<string, int> maptiles = {
         {"1111", 14},
         {"0000", 15},
         {"2222", 16},
