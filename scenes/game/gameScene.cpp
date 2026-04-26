@@ -1,6 +1,6 @@
 #include "gameScene.h"
 
-#include "../../engine/textures.h"
+#include "../../engine/libraries.h"
 
 #include <iostream>
 using std::cout;
@@ -35,6 +35,8 @@ scene::GameScene::~GameScene() {
         delete chunk;
     for (const auto chunk : active_decoration_chunks)
         delete chunk;
+    for (const auto block : blocks)
+        delete block;
 }
 
 void scene::GameScene::on_start() {
@@ -58,9 +60,10 @@ void scene::GameScene::render() {
         window->draw(*chunk);
     for (const auto chunk : active_decoration_chunks)
         window->draw(*chunk);
-    /*for (const auto block : blocks)
+    for (const auto block : blocks) {
         block->render(window);
-    */
+        player.checkCollision(*block);
+    }
 
     const auto move_vector = get_move_vector();
     handle_player(move_vector);
@@ -71,16 +74,16 @@ Vector2f scene::GameScene::get_move_vector() {
     float x = 0, y = 0;
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up))
-        y = 1;
-    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S) || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down))
         y = -1;
+    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S) || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down))
+        y = 1;
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right))
         x = 1;
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left))
         x = -1;
 
-    return {x, -y};
+    return {x, y};
 }
 
 void scene::GameScene::handle_player(const Vector2f &move_vector) {
@@ -89,7 +92,7 @@ void scene::GameScene::handle_player(const Vector2f &move_vector) {
     player.render(window);
 }
 
-void scene::GameScene::handle_camera(const Vector2f &move_vector) {
+void scene::GameScene::handle_camera(const Vector2f &move_vector) const {
     const auto distance = player.getPosition() + (player.getSprite().getGlobalBounds().size) / 2.f - camera->get_current_view().getCenter(),
                distance_norm = distance.normalized();
     auto delta = Vector2f(0, 0);
@@ -103,9 +106,7 @@ void scene::GameScene::handle_camera(const Vector2f &move_vector) {
     camera->move(delta);
 }
 
-void scene::GameScene::update() {
-    update_chunks();
-}
+void scene::GameScene::update() { update_chunks(); }
 
 scene::Status scene::GameScene::event(const Event &event) {
     if (const auto* wheelScrolled = event.getIf<Event::MouseWheelScrolled>())
@@ -115,9 +116,6 @@ scene::Status scene::GameScene::event(const Event &event) {
     return {false, game::DO_NOT_UPDATE_SCENE, game::DO_NOT_UPDATE_SCENE};
 }
 
-void scene::GameScene::reseed(const long long generator_seed) {
-    generator.reseed(generator_seed);
-}
 
 void scene::GameScene::update_chunks() {
     const Vector2i playerChunk = {
@@ -158,3 +156,6 @@ void scene::GameScene::update_chunks() {
         }
     }
 }
+
+
+void scene::GameScene::reseed(const long long generator_seed) { generator.reseed(generator_seed); }

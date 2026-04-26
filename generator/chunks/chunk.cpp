@@ -1,6 +1,6 @@
 #include "chunk.h"
 #include "../tileLibrary.h"
-#include "../../engine/textures.h"
+#include "../../engine/libraries.h"
 
 #include "../mapGenerator.h"
 
