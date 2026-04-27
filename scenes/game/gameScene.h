@@ -22,7 +22,7 @@ using game::Camera;
 #include "../../generator/chunks/chunk.h"
 #include "../../generator/chunks/chunkDecorations.h"
 
-#include "../../objects/map/block.h"
+#include "../../objects/block.h"
 #include "../../objects/entity.h"
 #include "../../objects/entity/player.h"
 
