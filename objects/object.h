@@ -1,12 +1,22 @@
 #ifndef OBJECT
 #define OBJECT
 
-#include <SFML/Graphics.hpp>
-using sf::Sprite;
-using sf::Vector2f;
+#include <SFML/Graphics/Drawable.hpp>
+using sf::Drawable;
+using sf::RenderTarget;
+using sf::RenderStates;
+
+#include <SFML/Graphics/Transformable.hpp>
+using sf::Transformable;
+
+#include <SFML/Graphics/Texture.hpp>
 using sf::Texture;
 
+#include <SFML/Graphics/Sprite.hpp>
+using sf::Sprite;
+
 #include <SFML/System/Vector2.hpp>
+using sf::Vector2f;
 using sf::Vector2i;
 
 #include <map>
@@ -17,11 +27,9 @@ using std::string;
 
 
 namespace object {
-    class Object : public sf::Drawable, public sf::Transformable {
+    class Object : public Drawable, public Transformable {
     public:
         explicit Object(const string &index = "default", const Vector2i &sprite_size = {0, 0});
-
-        void render(sf::RenderWindow *window_link);
 
         Sprite getSprite() const;
         Vector2f getPosition() const;
@@ -29,7 +37,7 @@ namespace object {
 
         void setPosition(Vector2f new_position);
         void setScale(Vector2f new_scale);
-        void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
+        void draw(RenderTarget &target, RenderStates states) const override;
     protected:
         Vector2f scale;
         Vector2f position;
