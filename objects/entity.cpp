@@ -3,6 +3,9 @@
 #include "../engine/libraries.h"
 using sf::IntRect;
 
+#include <iostream>
+using std::cout;
+
 
 object::Entity::Entity(
     const string &texture_index,

@@ -3,8 +3,8 @@
 
 #include "object.h"
 
-#include <iostream>
-using std::cout;
+#include <vector>
+using std::vector;
 
 
 namespace object {
