@@ -31,7 +31,6 @@ void object::Object::setScale(const Vector2f new_scale) {
 void object::Object::draw(RenderTarget &target, RenderStates states) const {
     states.transform *= getTransform();
     states.transform.translate(position);
-    states.transform.scale(scale);
     states.texture = &texture;
     target.draw(sprite, states);
 }
