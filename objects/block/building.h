@@ -1,7 +1,7 @@
 #ifndef BUILDING
 #define BUILDING
 
-#include "block.h"
+#include "../block.h"
 
 namespace object {
     class Building : public Block {

@@ -19,21 +19,17 @@ set(SOURCES
         engine/camera.cpp
 
         objects/object.cpp
-        objects/entity.cpp
-        objects/mapElement.cpp
 
-        objects/entity/enemy.cpp
+        objects/entity.cpp
         objects/entity/mob.cpp
         objects/entity/npc.cpp
+        objects/entity/enemy.cpp
         objects/entity/player.cpp
 
-        objects/map/block.cpp
-        objects/map/building.cpp
-        objects/map/chest.cpp
-        objects/map/decoration.cpp
-        objects/map/deposit.cpp
-        objects/map/loot.cpp
-        objects/map/stone.cpp
+        objects/block.cpp
+        objects/block/building.cpp
+        objects/block/deposit.cpp
+        objects/block/loot.cpp
 
         generator/PerlinNoise.cpp
         generator/mapGenerator.cpp

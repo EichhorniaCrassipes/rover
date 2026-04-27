@@ -1,7 +1,7 @@
 #ifndef LOOT
 #define LOOT
 
-#include "block.h"
+#include "../block.h"
 
 namespace object {
     class Loot : public Block {

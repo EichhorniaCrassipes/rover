@@ -1,7 +1,7 @@
 #ifndef DEPOSIT
 #define DEPOSIT
 
-#include "block.h"
+#include "../block.h"
 
 namespace object {
     class Deposit : public Block { //месторождение
