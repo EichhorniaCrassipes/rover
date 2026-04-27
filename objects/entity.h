@@ -22,12 +22,13 @@ namespace object {
 
         virtual void move(Vector2f vector, float delta_time);
 
-        unsigned checkCollision(const vector<Object*> &objects) const;
         void updateCollisionList(const vector<Object*> &objects);
     protected:
         bool collision;
         float speed;
+
         vector<Object*> collision_objects{};
+        unsigned checkCollision() const;
     };
 }
 

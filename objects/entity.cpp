@@ -28,32 +28,33 @@ void object::Entity::move(const Vector2f vector, const float delta_time) {
     const auto delta = vector.normalized() * speed * delta_time;
 
     const auto previous_position = position;
-    const auto previous_collision_area = checkCollision(collision_objects);
+    const auto previous_collision_area = checkCollision();
+
     position += delta;
-    const auto collision_area = checkCollision(collision_objects);
+    const auto collision_area = checkCollision();
+
     position = {previous_position.x + delta.x, previous_position.y};
-    const auto x_collision_area = checkCollision(collision_objects);
+    const auto x_collision_area = checkCollision();
+
     position = {previous_position.x, previous_position.y + delta.y};
-    const auto y_collision_area = checkCollision(collision_objects);
-    if (collision_area <= previous_collision_area) {
+    const auto y_collision_area = checkCollision();
+
+    if (collision_area <= previous_collision_area)
         position = previous_position + delta;
-    }
-    else if (x_collision_area <= previous_collision_area) {
+    else if (x_collision_area <= previous_collision_area)
         position = {previous_position.x + delta.x, previous_position.y};
-    }
-    else if (y_collision_area <= previous_collision_area) {
+    else if (y_collision_area <= previous_collision_area)
         position = {previous_position.x, previous_position.y + delta.y};
-    }
     else
         position = previous_position;
 
 }
 
-unsigned int object::Entity::checkCollision(const std::vector<Object*> &objects) const {
+unsigned int object::Entity::checkCollision() const {
     unsigned int area = 0;
     IntRect player_hitbox = game::HITBOX_LIBRARY[getLibraryIndex()];
     player_hitbox.position += Vector2i(position);
-    for (const auto object : objects) {
+    for (const auto object : collision_objects) {
         IntRect object_hitbox = game::HITBOX_LIBRARY[object->getLibraryIndex()];
         object_hitbox.position += Vector2i(object->getPosition());
 
