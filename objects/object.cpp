@@ -5,7 +5,11 @@
 #include "SFML/Graphics/RenderTarget.hpp"
 
 
-object::Object::Object(const string &index, const Vector2i &sprite_size) : texture(game::TEXTURE_LIBRARY[index]), sprite(texture) {
+object::Object::Object(
+    const string &index,
+    const Vector2i &sprite_size
+) : texture(game::TEXTURE_LIBRARY[index]), sprite(texture)
+{
     this->sprite_size = sprite_size;
     this->index = index;
     sprite.setTextureRect({{0, 0}, sprite_size});
