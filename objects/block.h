@@ -10,7 +10,7 @@ namespace object {
         explicit Block(
             const string &texture_index,
             const Vector2i &sprite_size,
-            const Vector2f &null_position
+            const Vector2i &null_position
         );
     };
 }
