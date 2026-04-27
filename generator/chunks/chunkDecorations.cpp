@@ -5,11 +5,11 @@
 using std::cout;
 using std::cerr;
 
-#include "../../objects/map/stone.h"
+#include "SFML/Graphics/RenderTarget.hpp"
 
 #include "SFML/System/Clock.hpp"
-#include "SFML/System/Time.hpp"
 using sf::Clock;
+
 
 generator::ChunkDecorations::ChunkDecorations(MapGenerator* generator_link, const int x, const int y, Texture* texture) : position{x, y}, size{16, 16} {
     generator = generator_link;

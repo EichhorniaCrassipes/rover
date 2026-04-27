@@ -1,17 +1,20 @@
 #include "player.h"
 
+#include <iostream>
+using std::cout;
+
 
 object::Player::Player(
     const Vector2f &null_position,
     const float speed
 ) : Mob("player", {512, 512}, null_position, 1000, speed)
 {
+    setScale({.5, .5});
+
     cout << "[player/constructor]\n\t"
     << "size: {" << sprite.getScale().x << ';' << sprite.getScale().y << "}\n\t"
     << "global bounds: {" << sprite.getGlobalBounds().size.x << ';' << sprite.getGlobalBounds().size.y << "}\n\t"
     << "position: {" << sprite.getPosition().x << ';' << sprite.getPosition().y << "}\n\n";
-
-    setScale({.5, .5});
 }
 
 

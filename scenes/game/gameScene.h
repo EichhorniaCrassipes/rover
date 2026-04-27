@@ -54,9 +54,9 @@ namespace scene {
         vector<object::Block*> blocks;
         MapGenerator generator;
 
+        const float default_player_speed = 250,
+                    sprint_player_speed = 450;
         object::Player player;
-        float default_player_speed = 250,
-              sprint_player_speed = 450;
     private:
         bool first_start;
 
