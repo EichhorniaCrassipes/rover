@@ -2,8 +2,9 @@
 
 
 object::Player::Player(
-    const Vector2f &null_position
-) : Mob("player", {512, 512}, null_position, 1000, 250)
+    const Vector2f &null_position,
+    const float speed
+) : Mob("player", {512, 512}, null_position, 1000, speed)
 {
     cout << "[player/constructor]\n\t"
     << "size: {" << sprite.getScale().x << ';' << sprite.getScale().y << "}\n\t"
