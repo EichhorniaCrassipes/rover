@@ -117,7 +117,7 @@ void scene::GameScene::handle_camera(const Vector2f &move_vector) const {
 
 void scene::GameScene::update() {
     update_chunks();
-    player.update(entities);
+    player.updateCollisionList(entities);
 }
 
 scene::Status scene::GameScene::event(const Event &event) {

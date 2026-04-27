@@ -16,19 +16,18 @@ namespace object {
             const Vector2f &null_position,
             float speed = 0
         );
-        ~Entity() override = default;
 
         float getSpeed() const;
         void setSpeed(float new_speed);
 
         virtual void move(Vector2f vector, float delta_time);
 
-        unsigned int checkCollision(const std::vector<Entity*> &objects);
-        void update(const std::vector<Entity*> &entities);
+        unsigned checkCollision(const vector<Object*> &objects) const;
+        void updateCollisionList(const vector<Object*> &objects);
     protected:
         bool collision;
         float speed;
-        std::vector<Entity*> collision_entities{};
+        vector<Object*> collision_objects{};
     };
 }
 
