@@ -9,6 +9,8 @@
 
 #include <SFML/Graphics/RenderWindow.hpp>
 using sf::RenderWindow;
+
+#include <SFML/Graphics/Text.hpp>
 using sf::Text;
 using sf::Font;
 

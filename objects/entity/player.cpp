@@ -1,5 +1,8 @@
 #include "player.h"
 
+#include <iostream>
+using std::cout;
+
 
 object::Player::Player(
     const Vector2f &null_position,
