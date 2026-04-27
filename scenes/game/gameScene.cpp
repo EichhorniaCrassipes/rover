@@ -23,7 +23,7 @@ scene::GameScene::GameScene(
     EngineStats* engine_stats_link
 ) : Scene(window_link, engine_stats_link),
     generator(0),
-    player(camera_link->get_current_view().getCenter())
+    player(camera_link->get_current_view().getCenter(), default_player_speed)
 {
     camera     = camera_link;
     delta_time = 0;
@@ -66,7 +66,8 @@ void scene::GameScene::render() {
     }
 
     const auto move_vector = get_move_vector();
-    handle_player(move_vector);
+    const bool does_sprint = get_sprint_trigger();
+    handle_player(move_vector, does_sprint);
     handle_camera(move_vector);
 }
 
@@ -85,8 +86,16 @@ Vector2f scene::GameScene::get_move_vector() {
 
     return {x, y};
 }
+bool scene::GameScene::get_sprint_trigger() {
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::RShift))
+        return true;
+    return false;
+}
 
-void scene::GameScene::handle_player(const Vector2f &move_vector) {
+void scene::GameScene::handle_player(const Vector2f &move_vector, const bool &sprint) {
+    if (sprint) player.setSpeed(sprint_player_speed);
+    else player.setSpeed(default_player_speed);
+
     if (move_vector.length() > 0)
         player.move(move_vector, delta_time);
     player.render(window);

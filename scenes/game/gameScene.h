@@ -55,14 +55,17 @@ namespace scene {
         MapGenerator generator;
 
         object::Player player;
+        float default_player_speed = 250,
+              sprint_player_speed = 450;
     private:
         bool first_start;
 
-        void handle_player(const Vector2f &move_vector);
+        void handle_player(const Vector2f &move_vector, const bool &sprint);
         void handle_camera(const Vector2f &move_vector) const;
         void update_chunks();
 
         static Vector2f get_move_vector();
+        static bool get_sprint_trigger();
 
         float camera_speed = 200,
               distance_multiplier = 0.0001,
