@@ -1,7 +1,7 @@
 #ifndef CHUNK_DECORATIONS
 #define CHUNK_DECORATIONS
 
-#include "mapGenerator.h"
+#include "../mapGenerator.h"
 
 #include <vector>
 using std::vector;

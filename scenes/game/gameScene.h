@@ -19,8 +19,8 @@ using generator::MapGenerator;
 #include "../../engine/camera.h"
 using game::Camera;
 
-#include "../../generator/chunk.h"
-#include "../../generator/chunkDecorations.h"
+#include "../../generator/chunks/chunk.h"
+#include "../../generator/chunks/chunkDecorations.h"
 
 #include "../../objects/map/block.h"
 #include "../../objects/entity.h"
@@ -47,21 +47,25 @@ namespace scene {
         float delta_time;
 
         map<int, map<int, object::Block>> upper_decorations, interactive_blocks;
-        vector<object::Entity*> entities;
+        vector<object::Entity> entities;
 
-        std::vector<generator::Chunk*> active_chunks;
-        std::vector<generator::ChunkDecorations*> active_decoration_chunks;
+        vector<generator::Chunk*> active_chunks;
+        vector<generator::ChunkDecorations*> active_decoration_chunks;
+        vector<object::Block*> blocks;
         MapGenerator generator;
 
         object::Player player;
+        float default_player_speed = 250,
+              sprint_player_speed = 450;
     private:
         bool first_start;
 
-        void handle_player(const Vector2f &move_vector);
-        void handle_camera(const Vector2f &move_vector);
+        void handle_player(const Vector2f &move_vector, const bool &sprint);
+        void handle_camera(const Vector2f &move_vector) const;
         void update_chunks();
 
         static Vector2f get_move_vector();
+        static bool get_sprint_trigger();
 
         float camera_speed = 200,
               distance_multiplier = 0.0001,

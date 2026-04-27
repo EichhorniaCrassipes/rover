@@ -1,11 +1,11 @@
 #include "chunkDecorations.h"
-#include "mapGenerator.h"
+#include "../mapGenerator.h"
 
 #include <iostream>
 using std::cout;
 using std::cerr;
 
-#include "../objects/map/stone.h"
+#include "../../objects/map/stone.h"
 
 #include "SFML/System/Clock.hpp"
 #include "SFML/System/Time.hpp"
