@@ -46,6 +46,7 @@ void scene::GameScene::on_start() {
                 active_chunks.push_back(new generator::Chunk(&generator, 16 * i, 16 * j, &game::TEXTURE_LIBRARY["tileset"]));
                 active_decoration_chunks.push_back(new generator::ChunkDecorations(&generator, 16 * i, 16 * j, &game::TEXTURE_LIBRARY["decoset"]));
             }
+        entities.push_back(new object::Entity("spawn", {128,256}, {0,0}, 0));
         first_start = true;
     }
 }
@@ -60,9 +61,8 @@ void scene::GameScene::render() {
         window->draw(*chunk);
     for (const auto chunk : active_decoration_chunks)
         window->draw(*chunk);
-    for (const auto block : blocks) {
-        block->render(window);
-        player.checkCollision(*block);
+    for (const auto entity : entities) {
+        entity->render(window);
     }
 
     const auto move_vector = get_move_vector();
@@ -115,7 +115,10 @@ void scene::GameScene::handle_camera(const Vector2f &move_vector) const {
     camera->move(delta);
 }
 
-void scene::GameScene::update() { update_chunks(); }
+void scene::GameScene::update() {
+    update_chunks();
+    player.update(entities);
+}
 
 scene::Status scene::GameScene::event(const Event &event) {
     if (const auto* wheelScrolled = event.getIf<Event::MouseWheelScrolled>())

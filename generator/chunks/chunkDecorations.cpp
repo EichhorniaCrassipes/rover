@@ -14,7 +14,7 @@ using sf::Clock;
 generator::ChunkDecorations::ChunkDecorations(MapGenerator* generator_link, const int x, const int y, Texture* texture) : position{x, y}, size{16, 16} {
     generator = generator_link;
     m_decorations = texture;
-    cout << "[generator/deco-chunk] x = " << x << ", y = " << y << '\n';
+    //cout << "[generator/deco-chunk] x = " << x << ", y = " << y << '\n';
 
     Clock timer;
 
@@ -30,10 +30,10 @@ generator::ChunkDecorations::ChunkDecorations(MapGenerator* generator_link, cons
                 });
         }
 
-    cout << "\tgenerating: " << timer.restart().asMilliseconds() << " ms\n";
+    //cout << "\tgenerating: " << timer.restart().asMilliseconds() << " ms\n";
 
     load({64, 64});
-    cout << "\tloading: " << timer.getElapsedTime().asMilliseconds() << " ms\n";
+    //cout << "\tloading: " << timer.getElapsedTime().asMilliseconds() << " ms\n";
 
     setPosition({static_cast<float>(position.x * size.x * 4), static_cast<float>(position.y * size.y * 4)});
 }
@@ -47,7 +47,7 @@ void generator::ChunkDecorations::draw(RenderTarget &target, RenderStates states
 
 void generator::ChunkDecorations::load(const Vector2u tileSize) {
     decoration_vertices.setPrimitiveType(sf::PrimitiveType::Triangles);
-    cout << decorations.size() << '\n';
+    //cout << decorations.size() << '\n';
     decoration_vertices.resize(decorations.size() * 6);
 
     size_t i = 0;
