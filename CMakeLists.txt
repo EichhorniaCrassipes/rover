@@ -28,6 +28,10 @@ set(SOURCES
 
         objects/block.cpp
         objects/block/building.cpp
+        objects/block/building/furnace.cpp
+        objects/block/building/furnace/mk1.cpp
+        objects/block/building/drill.cpp
+        objects/block/building/drill/mk1.cpp
         objects/block/deposit.cpp
         objects/block/loot.cpp
 
