@@ -4,10 +4,13 @@ project(ROVER)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/.release")
 
-set(RENDER_ICON FALSE)  # для добавления иконки на итоговый бинарник
-if (RENDER_ICON)
+set(RELEASE_FLAG FALSE)  # флаг для сборки публичной релизной версии
+if (RELEASE_FLAG)
     enable_language(RC)
     set(CMAKE_RC_COMPILER "windres.exe")
+    set(WINDOWED_MODE "WIN32")
+else()
+    set(WINDOWED_MODE "")
 endif()
 
 set(SOURCES
@@ -61,7 +64,7 @@ find_package(
         PATHS "${CMAKE_SOURCE_DIR}/SFML-3.0.2/lib/cmake/SFML"
 )
 
-add_executable(${PROJECT_NAME} ${SOURCES})
+add_executable(${PROJECT_NAME} ${WINDOWED_MODE} ${SOURCES})
 target_link_libraries(
         ${PROJECT_NAME} PRIVATE
         SFML::System
