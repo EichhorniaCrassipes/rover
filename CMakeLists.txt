@@ -33,6 +33,10 @@ set(SOURCES
         objects/block/building/drill.cpp
         objects/block/building/drill/mk1.cpp
         objects/block/deposit.cpp
+        objects/block/deposit/coal.cpp
+        objects/block/deposit/copper.cpp
+        objects/block/deposit/iron.cpp
+        objects/block/deposit/stone.cpp
         objects/block/loot.cpp
 
         generator/PerlinNoise.cpp
