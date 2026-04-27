@@ -19,7 +19,8 @@ namespace game {
         {"tileset", Texture("textures/test01.png")},
         {"decoset", Texture("textures/deco01.png")},
         {"default", Texture("textures/sample_texture.jpg")},
-        {"player",  Texture("textures/player.png")}
+        {"player",  Texture("textures/player.png")},
+        {"spawn",  Texture("textures/antenna.png")}
     };
 
     inline map<string, IntRect> HITBOX_LIBRARY = {
@@ -27,7 +28,8 @@ namespace game {
          *              спрайту в дефолтной системе координат экрана
          * theSize: размер хитбокса
          */
-        {"player", {{127, 158}, {260, 260}}}
+        {"player", {{8, 50}, {238, 160}}},
+        {"spawn", {{11, 21}, {117, 200}}}
     };
 }
 
