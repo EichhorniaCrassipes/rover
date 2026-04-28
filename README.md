@@ -4,7 +4,7 @@
 
 [![C++](https://img.shields.io/badge/C++-%2300599C.svg?style=for-the-badge&logo=c%2B%2B&logoColor=white)](https://isocpp.org/)
 [![SFML](https://img.shields.io/badge/SFML-8CC445?style=for-the-badge&logo=sfml&logoColor=white)](https://www.sfml-dev.org/)
-[![Version](https://img.shields.io/badge/version-0.0-466646)](https://github.com/EichhorniaCrassipes/rover)
+[![Version](https://img.shields.io/badge/version-0.1-466646)](https://github.com/EichhorniaCrassipes/rover)
 
 </div>
 
