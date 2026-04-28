@@ -89,11 +89,9 @@ pair<unsigned short, unsigned short> scene::MenuScene::handleMenuAction(int sele
         case 0: // Play
             return {game::game_scenes::MAIN, game::UI_scenes::GAME};
         case 1: // Settings
-            // TODO: Open settings scene
-            return {game::DO_NOT_UPDATE_SCENE, game::DO_NOT_UPDATE_SCENE};
+            return {game::DO_NOT_UPDATE_SCENE, game::UI_scenes::SETTINGS};
         case 2: // About
-            // TODO: Open about scene
-            return {game::DO_NOT_UPDATE_SCENE, game::DO_NOT_UPDATE_SCENE};
+            return {game::DO_NOT_UPDATE_SCENE, game::UI_scenes::ABOUT};
         case 3: // Exit
             return {game::EXIT_SCENE, game::EXIT_SCENE};
         default:

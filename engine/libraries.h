@@ -13,6 +13,9 @@ using sf::Texture;
 #include "SFML/Graphics/Rect.hpp"
 using sf::IntRect;
 
+#include <SFML/Graphics/Shader.hpp>
+using sf::Shader;
+
 
 namespace game {
     inline map<string, Texture> TEXTURE_LIBRARY = {
@@ -31,6 +34,8 @@ namespace game {
         {"player", {{8, 50}, {238, 160}}},
         {"spawn", {{11, 21}, {117, 200}}}
     };
+
+    inline map<string, Shader> SHADER_LIBRARY;
 }
 
 #endif

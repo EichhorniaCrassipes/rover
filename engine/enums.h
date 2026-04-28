@@ -28,12 +28,14 @@ namespace game {
                               MAIN                = 1;
     }
     namespace UI_scenes {
-        inline unsigned short CAP                 = 4,
+        inline unsigned short CAP                 = 6,
 
                               RESET               = 0,
                               MENU                = 1,
                               CUTSCENE            = 2,
-                              GAME                = 3;
+                              GAME                = 3,
+                              SETTINGS            = 4,
+                              ABOUT               = 5;
     }
 }
 

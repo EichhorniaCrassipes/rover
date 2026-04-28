@@ -16,14 +16,13 @@ EngineStats game::global_stats {0, 0};
 
 #include "../scenes/UI/menuScene.h"
 #include "../scenes/UI/cutscene/cutScene.h"
+#include "../scenes/UI/gameUIScene.h"
+#include "../scenes/UI/settingsScene.h"
+#include "../scenes/UI/aboutScene.h"
 
 
 game::Engine::Engine() : Engine(DEFAULT_TITLE) {}
-game::Engine::Engine(const string &name) : exitDialog_text(
-                                               default_monospace_font,
-                                               "Are you sure you want to exit?\n[Y]es  [N]o\nWe will miss you",
-                                               28
-                                           )
+game::Engine::Engine(const string &name)
 {
     const auto video_mode = VideoMode::getDesktopMode();
     window = new RenderWindow(
@@ -48,20 +47,6 @@ game::Engine::Engine(const string &name) : exitDialog_text(
 
     if (!default_monospace_font.openFromFile("fonts/OCR A Extended Regular.ttf"))
         cerr << "Failed to load OCRA font\n";
-
-    exitDialog_text.setFillColor(sf::Color::White);
-    exitDialog_text.setOutlineColor(sf::Color::Black);
-    exitDialog_text.setOutlineThickness(1.f);
-    exitDialog_text.setFillColor({255, 255, 255, 0});
-    exitDialog_text.setOutlineColor({0, 0, 0, 0});
-
-    auto bounds = exitDialog_text.getLocalBounds();
-    exitDialog_text.setOrigin({bounds.size.x, bounds.size.y / 2.0f});
-    exitDialog_text.setPosition({
-        static_cast<float>(window->getSize().x) / 2.f,
-        static_cast<float>(window->getSize().y) / 2.f
-    }  //todo сделать центровку (done)
-    );
 
     FPS = new Text(default_monospace_font, "", 10);
     FPS_delta = new Text(default_monospace_font, "", 10);
@@ -117,10 +102,22 @@ void game::Engine::run(const short fps) {
     UI_scenes[UI_scenes::RESET]    = nullptr;
     UI_scenes[UI_scenes::MENU]     = new scene::MenuScene(window, &global_stats);
     UI_scenes[UI_scenes::CUTSCENE] = new scene::CutScene(window, &global_stats, &default_monospace_font);
-    UI_scenes[UI_scenes::GAME]     = nullptr;
+    UI_scenes[UI_scenes::GAME]     = new scene::GameUIScene(window, &global_stats);
+    UI_scenes[UI_scenes::SETTINGS] = new scene::SettingsScene(window, &global_stats);
+    UI_scenes[UI_scenes::ABOUT]    = new scene::AboutScene(window, &global_stats);
 
     if (fps > 0) window->setFramerateLimit(fps);
     else window->setVerticalSyncEnabled(true);
+
+    if (sf::Shader::isAvailable()) {
+        auto& darken = game::SHADER_LIBRARY["darken"];
+        if (!darken.loadFromFile("shaders/darken.frag", sf::Shader::Type::Fragment))
+            cerr << "[SHADER_LIBRARY] failed to load shaders/darken.frag\n";
+        else
+            darken.setUniform("texture", sf::Shader::CurrentTexture);
+    } else {
+        cerr << "[SHADER_LIBRARY] shaders not supported on this system\n";
+    }
 
     change_scene(game_scenes::RESET, UI_scenes::MENU);
 
@@ -130,8 +127,6 @@ void game::Engine::run(const short fps) {
     loop();
 }
 
-bool exit_flag = false;
-
 void game::Engine::loop() {
     while (window->isOpen()) {
         window->clear();
@@ -139,25 +134,6 @@ void game::Engine::loop() {
         while (const auto event = window->pollEvent()) {
             if (event->is<Event::Closed>())
                 window->close();
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape))
-            {
-                exit_flag = true;
-                exitDialog_text.setFillColor({255, 255, 255, 255});
-                exitDialog_text.setOutlineColor({0, 0, 0, 255});
-            }
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Y) && exit_flag)
-            {
-                exit_flag = false;
-                exitDialog_text.setFillColor({255, 255, 255, 0});
-                exitDialog_text.setOutlineColor({0, 0, 0, 0});
-                change_scene(game_scenes::RESET, UI_scenes::MENU);
-            }
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::N) && exit_flag)
-            {
-                exit_flag = false;
-                exitDialog_text.setFillColor({255, 255, 255, 0});
-                exitDialog_text.setOutlineColor({0, 0, 0, 0});
-            }
 
             scene::Status UI_event_update{};
             if (current_UI_scene != nullptr) {
@@ -184,12 +160,6 @@ void game::Engine::loop() {
 
         render();
         update();
-
-        // привязал текст с выходом к камере
-        const auto saved_view = window->getView();
-        window->setView(window->getDefaultView());
-        window->draw(exitDialog_text);
-        window->setView(saved_view);
 
         info_update_values();
         if (current_UI_scene_index != UI_scenes::CUTSCENE)
