@@ -5,8 +5,8 @@
 #include "SFML/Graphics/RenderTarget.hpp"
 
 
-object::Object::Object(const string &index, const Vector2i &sprite_size) : texture(game::TEXTURE_LIBRARY[index]), sprite(texture) {
-    this->sprite_size = sprite_size;
+object::Object::Object(const string &index) : texture(game::TEXTURE_LIBRARY[index]), sprite(texture) {
+    sprite_size = game::TEXTURE_SIZE_LIBRARY[index];
     this->index = index;
     sprite.setTextureRect({{0, 0}, sprite_size});
 
@@ -18,6 +18,7 @@ object::Object::Object(const string &index, const Vector2i &sprite_size) : textu
 Sprite object::Object::getSprite() const { return sprite; }
 Vector2f object::Object::getPosition() const { return position; }
 string object::Object::getLibraryIndex() const { return index; }
+Vector2f object::Object::getScale() const { return scale; }
 
 void object::Object::setPosition(const Vector2f new_position) {
     position = new_position;

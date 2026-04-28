@@ -12,7 +12,6 @@ namespace object {
     public:
         explicit Entity(
             const string &texture_index,
-            const Vector2i &sprite_size,
             const Vector2f &null_position,
             float speed = 0
         );
