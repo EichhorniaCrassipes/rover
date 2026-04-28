@@ -8,7 +8,6 @@ namespace object {
     public:
         Building(
             const string &texture_index,
-            const Vector2i &sprite_size,
             const Vector2i &position,
             float initial_health
         );
