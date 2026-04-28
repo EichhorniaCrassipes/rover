@@ -13,28 +13,31 @@ namespace inventory
     class GameInventory : public object::Object
     {
         float inv_x, inv_y;
-        float inventorySize = 5; // размер инвентаря (кол-во предметов и тд)
-        int size_font;
-        int max_inventory;
-        int selected_inventory;
-        sf::Font inventoryFont;
-        std::vector<sf::Text> inventory;
-        sf::Color inventory_text_color = sf::Color::White;
-        sf::Color inventory_border_color = sf::Color::Black;
-        sf::Color inventory_chosen_color = sf::Color::Green;
+        float slot_size;
+        float slot_gap;
+        int slot_count;
+        int selected_slot;
 
-        void setInitInventory(sf::Text& text, sf::String str, float xpos, float ypos);
         sf::RenderWindow& inventorywindow;
+        std::vector<sf::RectangleShape> slots;
+
+        sf::Color slot_color     = sf::Color(60, 60, 60, 200);
+        sf::Color selected_color = sf::Color::White;
+        sf::Color border_color   = sf::Color(0, 0, 0, 220);
+
+        void buildSlots();
 
     public:
-        GameInventory(sf::RenderWindow& window, float inv_x, float inv_y, int index, sf::String name[], int size_font = 15, int step = 10);
+        GameInventory(sf::RenderWindow& window, float x, float y,
+                      int slot_count = 5, float slot_size = 70.f, float slot_gap = 8.f);
         ~GameInventory() = default;
-        void draw();
-        void setColorTextInventory(sf::Color menColor, sf::Color ChoColor,
-                              sf::Color BordColor);
-        void AlignInventory(int pos_x);
-        int getSelectedInventory();
 
+        void draw();
+        void selectSlot(int index);
+        void selectNext();
+        void selectPrev();
+        void setColorTextInventory(sf::Color slotColor, sf::Color selectedColor, sf::Color borderColor);
+        int getSelectedInventory() const;
     };
 }
 

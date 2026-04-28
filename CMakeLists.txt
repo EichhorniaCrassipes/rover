@@ -48,6 +48,9 @@ set(SOURCES
         scenes/UI/UIScene.cpp
         scenes/UI/menuScene.cpp
         scenes/UI/cutscene/cutScene.cpp
+        scenes/UI/gameUIScene.cpp
+        scenes/UI/settingsScene.cpp
+        scenes/UI/aboutScene.cpp
 
         objects/ui/gameMenu.cpp
         objects/ui/gameInventory.cpp
@@ -72,4 +75,11 @@ target_link_libraries(
         SFML::Graphics
         SFML::Audio
         SFML::Network
+)
+
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+        "${CMAKE_SOURCE_DIR}/shaders"
+        "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/shaders"
+        COMMENT "Copying shaders to runtime directory"
 )
