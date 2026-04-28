@@ -9,11 +9,16 @@ namespace object {
         Building(
             const string &texture_index,
             const Vector2i &position,
-            float initial_health
+            float initial_health,
+            float initial_energy_consumption,
+            float initial_wear,
+            float initial_wear_capacity
         );
     protected:
         float health;
-        // another properties...
+        float energy_consumption;
+        float wear;                 // скорость износа (каждый тик вычитается из wear_capacity)
+        float wear_capacity;        // предел износа (при достижении 0 здание ломается)
     };
 }
 
