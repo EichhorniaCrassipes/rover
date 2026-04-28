@@ -6,7 +6,8 @@
 
 namespace object {
     class DrillMk1 : public Drill {
-        DrillMk1();
+    public:
+        explicit DrillMk1(const Vector2i &position);
     };
 }
 
