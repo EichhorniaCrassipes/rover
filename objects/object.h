@@ -29,7 +29,7 @@ using std::string;
 namespace object {
     class Object : public Drawable, public Transformable {
     public:
-        explicit Object(const string &index = "default", const Vector2i &sprite_size = {0, 0});
+        explicit Object(const string &index = "default");
 
         Sprite getSprite() const;
         Vector2f getPosition() const;
