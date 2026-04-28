@@ -60,8 +60,6 @@ namespace game {
         Text *mouse_position, *scene_num, *version;
         array<Text*, 7> info_texts{};
 
-        Text exitDialog_text;
-
         float current_real_TPS;
         Clock TPS_adjuster_timer;
 
