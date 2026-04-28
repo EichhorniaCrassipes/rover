@@ -6,7 +6,8 @@
 
 namespace object {
     class FurnaceMk1 : public Furnace {
-        FurnaceMk1();
+    public:
+        explicit FurnaceMk1(const Vector2i &position);
     };
 }
 
