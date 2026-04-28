@@ -18,6 +18,7 @@ object::Object::Object(const string &index) : texture(game::TEXTURE_LIBRARY[inde
 Sprite object::Object::getSprite() const { return sprite; }
 Vector2f object::Object::getPosition() const { return position; }
 string object::Object::getLibraryIndex() const { return index; }
+Vector2f object::Object::getScale() const { return scale; }
 
 void object::Object::setPosition(const Vector2f new_position) {
     position = new_position;

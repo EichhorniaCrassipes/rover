@@ -9,7 +9,6 @@ namespace object {
     public:
         explicit Block(
             const string &texture_index,
-            const Vector2i &sprite_size,
             const Vector2i &null_position
         );
     };

@@ -34,6 +34,7 @@ namespace object {
         Sprite getSprite() const;
         Vector2f getPosition() const;
         string getLibraryIndex() const;
+        Vector2f getScale() const;
 
         void setPosition(Vector2f new_position);
         void setScale(Vector2f new_scale);
@@ -41,12 +42,10 @@ namespace object {
     protected:
         Vector2f scale;
         Vector2f position;
-
         Vector2i sprite_size;
 
-        string index;
-
         Texture texture;
+        string index;
         Sprite sprite;
     };
 }
