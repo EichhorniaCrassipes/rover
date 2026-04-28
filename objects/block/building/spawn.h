@@ -6,7 +6,8 @@
 
 namespace object {
     class Spawn : public Building {
-        Spawn();
+    public:
+        explicit Spawn(const Vector2i &position);
     };
 }
 

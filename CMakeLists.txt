@@ -32,6 +32,7 @@ set(SOURCES
         objects/block/building/furnace/mk1.cpp
         objects/block/building/drill.cpp
         objects/block/building/drill/mk1.cpp
+        objects/block/building/spawn.cpp
         objects/block/deposit.cpp
         objects/block/deposit/coal.cpp
         objects/block/deposit/copper.cpp
