@@ -46,7 +46,7 @@ void scene::GameScene::on_start() {
                 active_chunks.push_back(new generator::Chunk(&generator, 16 * i, 16 * j, &game::TEXTURE_LIBRARY["tileset"]));
                 active_decoration_chunks.push_back(new generator::ChunkDecorations(&generator, 16 * i, 16 * j, &game::TEXTURE_LIBRARY["decoset"]));
             }
-        entities.push_back(new object::Entity("spawn", {128,256}, {0,0}, 0));
+        entities.push_back(new object::Entity("spawn", {0,0}, 0));
         first_start = true;
     }
 }

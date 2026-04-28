@@ -29,22 +29,32 @@
 ### Диаграмма наследования классов
 
 ```
-object::Object (sf::Drawable + sf::Transformable)
+namespace object:
+Object (sf::Drawable + sf::Transformable)
 │
-├── object::MapElement
-│   ├── object::Block
-│   │   ├── object::Building
-│   │   │   └── object::Chest
-│   │   ├── object::Deposit
-│   │   ├── object::Loot
-│   │   └── object::Stone
-│   └── object::Decoration
+├── Block
+│   ├── Building
+│   │   ├── Spawn
+│   │   ├── Drill
+│   │   │   ├── DrillMk1
+│   │   │   ├── DrillMk2
+│   │   │   └── DrillMk3
+│   │   └── Furnace
+│   │       ├── FurnaceMk1
+│   │       ├── FurnaceMk2
+│   │       └── FurnaceMk3
+│   ├── Deposit
+│   │   ├── Iron
+│   │   ├── Coal
+│   │   ├── Stone
+│   │   └── Copper
+│   └── Loot
 │
-└── object::Entity
-    ├── object::Mob
-    │   ├── object::Player
-    │   └── object::Enemy
-    └── object::NPC
+└── Entity
+    ├── Mob
+    │   ├── Player
+    │   └── Enemy
+    └── NPC
 ```
 
 ---

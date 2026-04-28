@@ -9,10 +9,9 @@ using std::cout;
 
 object::Entity::Entity(
     const string &texture_index,
-    const Vector2i &sprite_size,
     const Vector2f &null_position,
     const float speed
-) : Object(texture_index, sprite_size)
+) : Object(texture_index)
 {
     position = null_position - static_cast<Vector2f>(sprite_size) / 2.f;
 

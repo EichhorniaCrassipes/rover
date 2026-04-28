@@ -31,6 +31,12 @@ namespace game {
         {"furnace",  Texture("textures/furnace.png")}
     };
 
+    inline map<string, Vector2i> TEXTURE_SIZE_LIBRARY = {
+        {"default", {128, 128}},
+        {"player", {512, 512}},
+        {"spawn", {128, 256}}
+    };
+
     inline map<string, IntRect> HITBOX_LIBRARY = {
         /* thePosition: координаты верхней левой точки хитбокса по
          *              спрайту в дефолтной системе координат экрана

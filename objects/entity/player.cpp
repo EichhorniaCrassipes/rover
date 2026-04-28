@@ -1,13 +1,15 @@
 #include "player.h"
 
 #include <iostream>
+
+#include "../../engine/libraries.h"
 using std::cout;
 
 
 object::Player::Player(
     const Vector2f &null_position,
     const float speed
-) : Mob("player", {512, 512}, null_position, 1000, speed)
+) : Mob("player", null_position, 1000, speed)
 {
     setScale({.5, .5});
 

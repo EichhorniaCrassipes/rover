@@ -12,7 +12,6 @@ namespace object {
     public:
         explicit Mob(
             const string &texture_index,
-            const Vector2i &sprite_size,
             const Vector2f &null_position,
             float initial_health = 1000,
             float speed = 100
