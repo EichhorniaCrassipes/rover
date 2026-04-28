@@ -7,7 +7,11 @@
 namespace object {
     class Coal : public Deposit {
     public:
-        Coal();
+        Coal(
+            const Vector2i &position,
+            unsigned amount,
+            float density
+        );
     };
 }
 

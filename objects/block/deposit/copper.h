@@ -7,7 +7,11 @@
 namespace object {
     class Copper : public Deposit {
     public:
-        Copper();
+        Copper(
+            const Vector2i &position,
+            unsigned amount,
+            float density
+        );
     };
 }
 

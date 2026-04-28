@@ -4,10 +4,19 @@
 #include "../block.h"
 
 namespace object {
-    class Deposit : public Block { //месторождение
+    class Deposit : public Block { // месторождение
     public:
-        Deposit();
-        ~Deposit() override = default;
+        Deposit(
+            const string &texture_index,
+            const Vector2i &position,
+            unsigned amount,
+            float density,
+            float mining_time
+        );
+    protected:
+        unsigned amount;
+        float density;
+        float mining_time;
     };
 }
 

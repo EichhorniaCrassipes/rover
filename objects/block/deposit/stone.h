@@ -7,7 +7,11 @@
 namespace object {
     class Stone : public Deposit {
     public:
-        Stone();
+        Stone(
+            const Vector2i &position,
+            unsigned amount,
+            float density
+        );
     };
 }
 

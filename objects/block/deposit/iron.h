@@ -7,7 +7,11 @@
 namespace object {
     class Iron : public Deposit {
     public:
-        Iron();
+        Iron(
+            const Vector2i &position,
+            unsigned amount,
+            float density
+        );
     };
 }
 
