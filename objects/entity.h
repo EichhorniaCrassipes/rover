@@ -23,6 +23,7 @@ namespace object {
         virtual void move(Vector2f vector, float delta_time);
 
         void updateCollisionList(const vector<Object*> &objects);
+        void updateCollisionList(const vector<Entity*> &objects);
     protected:
         bool collision;
         float speed;

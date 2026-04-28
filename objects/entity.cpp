@@ -69,3 +69,7 @@ unsigned int object::Entity::checkCollision() const {
 void object::Entity::updateCollisionList(const std::vector<Object*> &objects) {
     collision_objects = objects;
 }
+
+void object::Entity::updateCollisionList(const std::vector<Entity*> &objects) {
+    collision_objects.assign(objects.begin(), objects.end());
+}

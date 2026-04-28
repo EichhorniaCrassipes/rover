@@ -4,6 +4,10 @@
 #include "UIScene.h"
 
 #include <SFML/Graphics/RenderWindow.hpp>
+
+#include "SFML/Graphics/Font.hpp"
+#include "SFML/Graphics/Text.hpp"
+#include "SFML/Graphics/RectangleShape.hpp"
 using sf::RenderWindow;
 using sf::Font;
 using sf::Text;
