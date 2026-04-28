@@ -54,7 +54,7 @@ game::Engine::Engine(const string &name)
     TPS_delta = new Text(default_monospace_font, "", 10);
     mouse_position = new Text(default_monospace_font, "", 10);
     scene_num = new Text(default_monospace_font, "", 10);
-    version = new Text(default_monospace_font, "v0.1-indev", 12);
+    version = new Text(default_monospace_font, "v0.1-demo", 12);
 
     info_texts = {FPS, FPS_delta, TPS, TPS_delta, mouse_position, scene_num, version};
 
