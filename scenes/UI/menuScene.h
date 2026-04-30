@@ -23,8 +23,6 @@ using sf::Texture;
 #include "../../objects/ui/gameMenu.h"
 using menu::GameMenu;
 
-using std::pair;
-
 namespace scene {
     class MenuScene : public UIScene {
     public:
@@ -43,10 +41,12 @@ namespace scene {
         Font font;
         Text* title;
         GameMenu* menu;
+        Text* loading_text;
+        bool loading;
 
         void initTitle();
         void initMenu();
-        static pair<unsigned short, unsigned short> handleMenuAction(int selected_menu);
+        void initLoadingText();
     };
 }
 

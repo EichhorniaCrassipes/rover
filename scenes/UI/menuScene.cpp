@@ -7,11 +7,12 @@
 using std::cout;
 
 #include "../../engine/enums.h"
+#include "../../engine/libraries.h"
 
 
 scene::MenuScene::MenuScene(RenderWindow* window_link, EngineStats* scene_index_link)
-    : UIScene(window_link, scene_index_link), title(nullptr), menu(nullptr) {
-    // Load background texture
+    : UIScene(window_link, scene_index_link),
+      title(nullptr), menu(nullptr), loading_text(nullptr), loading(false) {
     if (!background_texture.loadFromFile("image/menu9_2.jpg")) {
         cout << "[MenuScene] error loading texture image/menu9_2.jpg" << std::endl;
         return;
@@ -20,20 +21,23 @@ scene::MenuScene::MenuScene(RenderWindow* window_link, EngineStats* scene_index_
     background.setSize({static_cast<float>(engine_stats->window_width),
                         static_cast<float>(engine_stats->window_height)});
 
-    // Load font
     if (!font.openFromFile("fonts/OCR A Extended Regular.ttf")) {
         cout << "[MenuScene] error loading font" << std::endl;
         return;
     }
 }
+
 scene::MenuScene::~MenuScene() {
     delete title;
     delete menu;
+    delete loading_text;
 }
 
 void scene::MenuScene::on_start() {
+    loading = false;
     initTitle();
     initMenu();
+    initLoadingText();
 }
 
 void scene::MenuScene::initTitle() {
@@ -53,17 +57,38 @@ void scene::MenuScene::initMenu() {
     menu->AlignMenu(2);
 }
 
-void scene::MenuScene::render() {
-    window->draw(background);
-    if (title) window->draw(*title);
-    if (menu) menu->draw();
+void scene::MenuScene::initLoadingText() {
+    delete loading_text;
+    loading_text = new Text(font, L"Loading...", 80);
+    loading_text->setFillColor(sf::Color(237, 147, 0));
+    loading_text->setOutlineThickness(2);
+    loading_text->setOutlineColor(sf::Color::Black);
+    const auto bounds = loading_text->getLocalBounds();
+    loading_text->setPosition({
+        (static_cast<float>(engine_stats->window_width)  - bounds.size.x) / 2.f - bounds.position.x,
+        (static_cast<float>(engine_stats->window_height) - bounds.size.y) / 2.f - bounds.position.y
+    });
 }
 
-void scene::MenuScene::update() {
-    // No per-tick update needed for menu
+void scene::MenuScene::render() {
+    if (loading) {
+        sf::RenderStates states;
+        if (game::SHADER_LIBRARY.count("darken"))
+            states.shader = &game::SHADER_LIBRARY.at("darken");
+        window->draw(background, states);
+        if (loading_text) window->draw(*loading_text);
+    } else {
+        window->draw(background);
+        if (title) window->draw(*title);
+        if (menu) menu->draw();
+    }
 }
+
+void scene::MenuScene::update() {}
 
 scene::Status scene::MenuScene::event(const Event &event) {
+    if (loading) return {false, game::DO_NOT_UPDATE_SCENE, game::DO_NOT_UPDATE_SCENE};
+
     if (event.is<Event::KeyReleased>()) {
         const auto* keyEvent = event.getIf<Event::KeyReleased>();
         if (!keyEvent) return {false, game::DO_NOT_UPDATE_SCENE, game::DO_NOT_UPDATE_SCENE};
@@ -77,24 +102,23 @@ scene::Status scene::MenuScene::event(const Event &event) {
             return {true, game::DO_NOT_UPDATE_SCENE, game::DO_NOT_UPDATE_SCENE};
         }
         if (keyEvent->scancode == sf::Keyboard::Scancode::Enter) {
-            const auto &[game_scene, ui_scene] = handleMenuAction(menu->getSelectedMenu());
-            return {false, game_scene, ui_scene};
+            switch (menu->getSelectedMenu()) {
+                case 0: // Play
+                    loading = true;
+                    render();
+                    window->display();
+                    window->clear();
+                    return {false, game::game_scenes::MAIN, game::UI_scenes::GAME};
+                case 1: // Settings
+                    return {false, game::DO_NOT_UPDATE_SCENE, game::UI_scenes::SETTINGS};
+                case 2: // About
+                    return {false, game::DO_NOT_UPDATE_SCENE, game::UI_scenes::ABOUT};
+                case 3: // Exit
+                    return {false, game::EXIT_SCENE, game::EXIT_SCENE};
+                default:
+                    return {false, game::DO_NOT_UPDATE_SCENE, game::DO_NOT_UPDATE_SCENE};
+            }
         }
     }
     return {false, game::DO_NOT_UPDATE_SCENE, game::DO_NOT_UPDATE_SCENE};
-}
-
-pair<unsigned short, unsigned short> scene::MenuScene::handleMenuAction(int selected_menu) {
-    switch (selected_menu) {
-        case 0: // Play
-            return {game::game_scenes::MAIN, game::UI_scenes::GAME};
-        case 1: // Settings
-            return {game::DO_NOT_UPDATE_SCENE, game::UI_scenes::SETTINGS};
-        case 2: // About
-            return {game::DO_NOT_UPDATE_SCENE, game::UI_scenes::ABOUT};
-        case 3: // Exit
-            return {game::EXIT_SCENE, game::EXIT_SCENE};
-        default:
-            return {game::DO_NOT_UPDATE_SCENE, game::DO_NOT_UPDATE_SCENE};
-    }
 }
