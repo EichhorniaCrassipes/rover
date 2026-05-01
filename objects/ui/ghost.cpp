@@ -14,7 +14,7 @@ Ghost::Ghost(const string& texture, const sf::Vector2f scale)
 
 void Ghost::draw(RenderTarget &target, RenderStates states) const {
     states.transform *= getTransform();
-    states.transform.translate(position/2.f);
+    states.transform.translate(position);
     states.transform.translate({ - static_cast<float>(sprite.getTexture().getSize().x)/2, - static_cast<float>(sprite.getTexture().getSize().y)/2});
     states.texture = &texture;
     if (game::SHADER_LIBRARY.count(index))
