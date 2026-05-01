@@ -56,7 +56,7 @@ namespace scene {
 
         const float default_player_speed = 250,
                     sprint_player_speed = 450,
-                    stamina_drain_rate  = 20.f,
+                    stamina_drain_rate  = 45.f,
                     stamina_regen_rate  = 8.f;
         object::Player player;
     private:
