@@ -31,10 +31,12 @@ namespace scene {
         GameInventory* inv;
         Font font;
         Text* exit_dialog;
+        Text* stamina_bar;
         bool exit_flag;
 
         void initInventory();
         void initExitDialog();
+        void initStaminaBar();
     };
 }
 

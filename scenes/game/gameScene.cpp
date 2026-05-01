@@ -8,6 +8,8 @@ using std::cout;
 #include <cmath>
 using std::exp;
 using std::abs;
+using std::max;
+using std::min;
 
 #include <SFML/Window/Keyboard.hpp>
 
@@ -93,8 +95,16 @@ bool scene::GameScene::get_sprint_trigger() {
 }
 
 void scene::GameScene::handle_player(const Vector2f &move_vector, const bool &sprint) {
-    if (sprint) player.setSpeed(sprint_player_speed);
-    else player.setSpeed(default_player_speed);
+    const bool can_sprint = sprint && engine_stats->stamina > 0.f;
+
+    if (can_sprint) {
+        player.setSpeed(sprint_player_speed);
+        engine_stats->stamina = std::max(0.f, engine_stats->stamina - stamina_drain_rate * delta_time);
+    } else {
+        player.setSpeed(default_player_speed);
+        if (!sprint)
+            engine_stats->stamina = std::min(100.f, engine_stats->stamina + stamina_regen_rate * delta_time);
+    }
 
     if (move_vector.length() > 0)
         player.move(move_vector, delta_time);

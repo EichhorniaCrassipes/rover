@@ -55,7 +55,9 @@ namespace scene {
         MapGenerator generator;
 
         const float default_player_speed = 250,
-                    sprint_player_speed = 450;
+                    sprint_player_speed = 450,
+                    stamina_drain_rate  = 45.f,
+                    stamina_regen_rate  = 8.f;
         object::Player player;
     private:
         bool first_start;
