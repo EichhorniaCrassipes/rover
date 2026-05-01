@@ -44,7 +44,7 @@ namespace game {
          */
         {"player", {{8, 50}, {238, 160}}},
         {"spawn", {{11, 21}, {117, 200}}},
-        {"furnace", {{0, 0}, {256, 256}}},
+        {"furnace", {{0, 0}, {128, 128}}},
     };
 
     inline map<string, Shader> SHADER_LIBRARY;
