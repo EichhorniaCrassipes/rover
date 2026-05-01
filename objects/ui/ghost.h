@@ -17,7 +17,7 @@ class Ghost : public object::Object
     void updateCollisionList(const std::vector<Object *> &objects);
     void updateShader(const string& shader);
 private:
-    string index;
+    string shader_index;
     std::vector<Object*> collision_objects{};
 };
 
