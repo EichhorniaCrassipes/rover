@@ -31,7 +31,7 @@ scene::GameScene::GameScene(
     delta_time = 0;
     FPS_timer.start();
     first_start = false;
-    mouse_object = new Ghost("spawn", {1,1}, "green");
+    mouse_object = new Ghost("spawn", {1,1});
 }
 scene::GameScene::~GameScene() {
     for (const auto chunk : active_chunks)
@@ -122,19 +122,28 @@ void scene::GameScene::handle_camera(const Vector2f &move_vector) const {
 void scene::GameScene::update() {
     update_chunks();
     player.updateCollisionList(entities);
-    const auto absolute_mouse_coords = window->mapPixelToCoords(sf::Mouse::getPosition(*window))/2.f;
+    const auto absolute_mouse_coords = window->mapPixelToCoords(sf::Mouse::getPosition(*window));
     mouse_coords_rounded = sf::Vector2f(
-        std::floor(absolute_mouse_coords.x / 32.0f) * 32.0f,
-        std::ceil(absolute_mouse_coords.y / 32.0f) * 32.0f);
-    mouse_object->setPosition(mouse_coords_rounded);
+        std::floor(absolute_mouse_coords.x / 64.0f) * 64.0f,
+        std::ceil(absolute_mouse_coords.y / 64.0f) * 64.0f);
+    mouse_object->setPosition(mouse_coords_rounded / 2.f);
 }
 
 scene::Status scene::GameScene::event(const Event &event) {
     if (const auto* wheelScrolled = event.getIf<Event::MouseWheelScrolled>())
         if (wheelScrolled->wheel == sf::Mouse::Wheel::Vertical)
             camera->zoom(1 - wheelScrolled->delta*zoom_coefficient);
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::P))
-        entities.push_back(new object::Entity("spawn", mouse_coords_rounded * 2.f, 0));
+
+    mouse_object->updateCollisionList(entities);
+    if (mouse_object->checkCollision()) {
+        mouse_object->updateShader("red");
+    }
+    else {
+        mouse_object->updateShader("green");
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::P))
+            entities.push_back(new object::Entity("spawn", mouse_coords_rounded, 0));
+    }
+
     return {false, game::DO_NOT_UPDATE_SCENE, game::DO_NOT_UPDATE_SCENE};
 }
 
