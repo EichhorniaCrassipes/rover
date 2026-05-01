@@ -91,7 +91,7 @@ void scene::GameUIScene::render()
         const auto  bounds    = stamina_bar->getLocalBounds();
         stamina_bar->setPosition({
             (static_cast<float>(engine_stats->window_width) - bounds.size.x) / 2.f,
-            inv_y - bounds.size.y - 12.f
+            inv_y - bounds.size.y - 24.f
         });
 
         window->draw(*stamina_bar);
