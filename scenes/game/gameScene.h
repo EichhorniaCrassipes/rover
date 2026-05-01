@@ -1,5 +1,6 @@
 #ifndef ROVER_GAME_SCENE_H
 #define ROVER_GAME_SCENE_H
+#include "../../objects/ui/ghost.h"
 
 #include "../scene.h"
 using sf::Drawable;
@@ -57,6 +58,8 @@ namespace scene {
         const float default_player_speed = 250,
                     sprint_player_speed = 450;
         object::Player player;
+        Ghost* mouse_object;
+        sf::Vector2f mouse_coords_rounded;
     private:
         bool first_start;
 
