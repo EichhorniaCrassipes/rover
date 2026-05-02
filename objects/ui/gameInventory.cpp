@@ -7,7 +7,7 @@ void inventory::GameInventory::buildSlots()
 
     for (int i = 0; i < slot_count; i++) {
         sf::RectangleShape slot({slot_size, slot_size});
-        slot.setPosition({inv_x + i * (slot_size + slot_gap), inv_y});
+        slot.setPosition({inv_x + static_cast<float>(i) * (slot_size + slot_gap), inv_y});
         slot.setFillColor(slot_color);
         slot.setOutlineColor(border_color);
         slot.setOutlineThickness(2.f);

@@ -39,13 +39,13 @@ namespace object {
         void setPosition(Vector2f new_position);
         void setScale(Vector2f new_scale);
         void draw(RenderTarget &target, RenderStates states) const override;
+        string index;
     protected:
         Vector2f scale;
         Vector2f position;
         Vector2i sprite_size;
 
         Texture texture;
-        string index;
         Sprite sprite;
     };
 }

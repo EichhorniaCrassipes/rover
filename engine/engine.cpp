@@ -115,6 +115,16 @@ void game::Engine::run(const short fps) {
             cerr << "[SHADER_LIBRARY] failed to load shaders/darken.frag\n";
         else
             darken.setUniform("texture", sf::Shader::CurrentTexture);
+        auto& greenshader = game::SHADER_LIBRARY["green"];
+        if (!greenshader.loadFromFile("shaders/green.frag", sf::Shader::Type::Fragment))
+            cerr << "[SHADER_LIBRARY] failed to load shaders/green.frag\n";
+        else
+            darken.setUniform("texture", sf::Shader::CurrentTexture);
+        auto& redshader = game::SHADER_LIBRARY["red"];
+        if (!redshader.loadFromFile("shaders/red.frag", sf::Shader::Type::Fragment))
+            cerr << "[SHADER_LIBRARY] failed to load shaders/red.frag\n";
+        else
+            darken.setUniform("texture", sf::Shader::CurrentTexture);
     } else {
         cerr << "[SHADER_LIBRARY] shaders not supported on this system\n";
     }

@@ -1,6 +1,7 @@
 #include "gameScene.h"
 
 #include "../../engine/libraries.h"
+#include "../../objects/ui/ghost.h"
 
 #include <iostream>
 using std::cout;
@@ -28,12 +29,14 @@ scene::GameScene::GameScene(
     EngineStats* engine_stats_link
 ) : Scene(window_link, engine_stats_link),
     generator(0),
-    player(camera_link->get_current_view().getCenter(), default_player_speed)
+    player(camera_link->get_current_view().getCenter(), default_player_speed),
+    mouse_object(nullptr)
 {
     camera     = camera_link;
     delta_time = 0;
     FPS_timer.start();
     first_start = false;
+    mouse_object = new Ghost("drill", {1,1});
 }
 scene::GameScene::~GameScene() {
     for (const auto chunk : active_chunks)
@@ -75,6 +78,7 @@ void scene::GameScene::render() {
     for (const auto entity : entities) {
         window->draw(*entity);
     }
+    window->draw(*mouse_object);
 
     while (!local_deposits_render_queue.empty()) {
         window->draw(*local_deposits_render_queue.front());
@@ -142,12 +146,28 @@ void scene::GameScene::handle_camera(const Vector2f &move_vector) const {
 void scene::GameScene::update() {
     update_chunks();
     player.updateCollisionList(entities);
+    const auto absolute_mouse_coords = window->mapPixelToCoords(sf::Mouse::getPosition(*window));
+    mouse_coords_rounded = sf::Vector2f(
+        std::floor(absolute_mouse_coords.x / 64.0f) * 64.0f,
+        std::floor(absolute_mouse_coords.y / 64.0f) * 64.0f);
+    mouse_object->setPosition(mouse_coords_rounded/2.f);
+    //std::cout << "rounded mouse coordinates: " << mouse_coords_rounded.x << "  " << mouse_coords_rounded.y << std::endl;
 }
 
 scene::Status scene::GameScene::event(const Event &event) {
     if (const auto* wheelScrolled = event.getIf<Event::MouseWheelScrolled>())
         if (wheelScrolled->wheel == sf::Mouse::Wheel::Vertical)
             camera->zoom(1 - wheelScrolled->delta*zoom_coefficient);
+
+    mouse_object->updateCollisionList(entities);
+    if (mouse_object->checkCollision()) {
+        mouse_object->updateShader("red");
+    }
+    else {
+        mouse_object->updateShader("green");
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::P))
+            entities.push_back(new object::Entity("drill", mouse_coords_rounded, 0));
+    }
 
     return {false, game::DO_NOT_UPDATE_SCENE, game::DO_NOT_UPDATE_SCENE};
 }

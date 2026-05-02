@@ -13,7 +13,7 @@ object::Entity::Entity(
     const float speed
 ) : Object(texture_index)
 {
-    position = null_position - static_cast<Vector2f>(sprite_size) / 2.f;
+    position = null_position;// - static_cast<Vector2f>(sprite_size) / 2.f;
 
     collision = false;
     this->speed = speed;

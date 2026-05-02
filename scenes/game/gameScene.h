@@ -1,5 +1,6 @@
 #ifndef ROVER_GAME_SCENE_H
 #define ROVER_GAME_SCENE_H
+#include "../../objects/ui/ghost.h"
 
 #include "../scene.h"
 using sf::Drawable;
@@ -61,6 +62,8 @@ namespace scene {
                     stamina_drain_rate  = 45.f,
                     stamina_regen_rate  = 8.f;
         object::Player player;
+        Ghost* mouse_object;
+        sf::Vector2f mouse_coords_rounded;
     private:
         bool first_start;
 

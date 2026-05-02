@@ -59,6 +59,8 @@ set(SOURCES
 
         objects/ui/gameMenu.cpp
         objects/ui/gameInventory.cpp
+        objects/ui/ghost.h
+        objects/ui/ghost.cpp
 
 )
 
