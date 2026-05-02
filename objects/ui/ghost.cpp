@@ -16,7 +16,7 @@ Ghost::Ghost(const string& texture, const sf::Vector2f scale)
 void Ghost::draw(RenderTarget &target, RenderStates states) const {
     states.transform *= getTransform();
     states.transform.translate(position);
-    states.transform.translate({ - static_cast<float>(sprite.getTexture().getSize().x)/2, - static_cast<float>(sprite.getTexture().getSize().y)/2});
+    //states.transform.translate({ - static_cast<float>(sprite.getTexture().getSize().x)/2, - static_cast<float>(sprite.getTexture().getSize().y)/2});
     states.texture = &texture;
     if (game::SHADER_LIBRARY.count(shader_index))
         states.shader = &game::SHADER_LIBRARY.at(shader_index);
@@ -36,16 +36,16 @@ bool Ghost::checkCollision() const {
         IntRect object_hitbox = game::HITBOX_LIBRARY[object->getLibraryIndex()];
         object_hitbox.position += Vector2i(object->getPosition());
         object_hitbox.position = object_hitbox.position / 2;
-        //object_hitbox.size = object_hitbox.size / 2;
+        object_hitbox.size = object_hitbox.size / 2;
         const auto intersection = player_hitbox.findIntersection(object_hitbox);
 
-        std::cout << "object: " << object->getLibraryIndex() << std::endl;
-        std::cout << "object position: " << object_hitbox.position.x << "  " << object_hitbox.position.y << std::endl;
-        std::cout << "mouse object hitbox position: " << player_hitbox.position.x << "  " << player_hitbox.position.y << std::endl;
+        //std::cout << "object: " << object->getLibraryIndex() << std::endl;
+        //std::cout << "object position: " << object_hitbox.position.x << "  " << object_hitbox.position.y << std::endl;
+        //std::cout << "mouse object hitbox position: " << player_hitbox.position.x << "  " << player_hitbox.position.y << std::endl;
 
         if (intersection.has_value()) {
             collision = true;
-            std::cout << "collision detected";
+            //std::cout << "collision detected";
         }
     }
     return collision;

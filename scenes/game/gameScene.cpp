@@ -125,7 +125,7 @@ void scene::GameScene::update() {
     const auto absolute_mouse_coords = window->mapPixelToCoords(sf::Mouse::getPosition(*window));
     mouse_coords_rounded = sf::Vector2f(
         std::floor(absolute_mouse_coords.x / 64.0f) * 64.0f,
-        std::ceil(absolute_mouse_coords.y / 64.0f) * 64.0f);
+        std::floor(absolute_mouse_coords.y / 64.0f) * 64.0f);
     mouse_object->setPosition(mouse_coords_rounded/2.f);
     //std::cout << "rounded mouse coordinates: " << mouse_coords_rounded.x << "  " << mouse_coords_rounded.y << std::endl;
 }
