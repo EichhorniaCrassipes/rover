@@ -33,7 +33,7 @@ namespace generator {
               DECORATION_MAX_OFFSET = .6;
 
         long long                        initial_seed = 0;
-        array<mt19937*, 4>               random_engines{};
+        array<mt19937*, 5>               random_engines{};
         mt19937*                         variation = nullptr;
         uniform_real_distribution<float> normal_distribution{0, 1};
 
