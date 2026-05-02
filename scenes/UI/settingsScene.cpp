@@ -10,11 +10,16 @@ static const int   FPS_OPTION_COUNT  = 5;
 static const int   fps_options[]     = {30, 60, 90, 120, 0};       // 0 = vsync
 static const char* fps_labels[]      = {"30 FPS", "60 FPS", "90 FPS", "120 FPS", "VSync"};
 
+static const int      RD_OPTION_COUNT = 5;
+static const unsigned rd_options[]    = {5, 7, 10, 15, 20};
+static const char*    rd_labels[]     = {"5", "7", "10", "15", "20"};
+
 
 scene::SettingsScene::SettingsScene(RenderWindow* window_link, EngineStats* scene_index_link)
     : UIScene(window_link, scene_index_link),
       title(nullptr), hint(nullptr),
-      selected_item(0), fps_index(2), applied_fps_index(2)
+      selected_item(0), fps_index(2), applied_fps_index(2),
+      rd_index(2), applied_rd_index(2)
 {
     if (!background_texture.loadFromFile("image/menu9_2.jpg"))
         cout << "[SettingsScene] error loading texture image/menu9_2.jpg" << std::endl;
@@ -36,6 +41,7 @@ scene::SettingsScene::~SettingsScene()
 void scene::SettingsScene::on_start()
 {
     fps_index = applied_fps_index;
+    rd_index  = applied_rd_index;
     selected_item = 0;
     initText();
     initRows();
@@ -55,7 +61,7 @@ void scene::SettingsScene::initText()
     });
 
     delete hint;
-    hint = new Text(font, L"Left/Right: Change    Enter: Apply    Esc: Back", 36);
+    hint = new Text(font, L"Up/Down: Select    Left/Right: Change    Enter: Apply    Esc: Back", 36);
     hint->setFillColor(sf::Color(200, 200, 200, 180));
     hint->setOutlineThickness(1);
     hint->setOutlineColor(sf::Color::Black);
@@ -77,7 +83,7 @@ void scene::SettingsScene::initRows()
     const float row_spacing = h * 0.12f;
     const unsigned row_size = static_cast<unsigned>(h * 0.055f);
 
-    const int ROW_COUNT = 1;
+    const int ROW_COUNT = 2;
     row_texts.reserve(ROW_COUNT);
     for (int i = 0; i < ROW_COUNT; i++) {
         auto* t = new Text(font, buildRowString(i), row_size);
@@ -97,7 +103,9 @@ void scene::SettingsScene::initRows()
 sf::String scene::SettingsScene::buildRowString(int row_index) const
 {
     if (row_index == 0)
-        return sf::String("FPS Limit:    < ") + fps_labels[fps_index] + "  >";
+        return sf::String("FPS Limit:         < ") + fps_labels[fps_index] + "  >";
+    if (row_index == 1)
+        return sf::String("Render Distance:   < ") + rd_labels[rd_index] + "  >";
     return sf::String("???");
 }
 
@@ -121,6 +129,7 @@ void scene::SettingsScene::applySettings() const
         window->setVerticalSyncEnabled(false);
         window->setFramerateLimit(static_cast<unsigned>(fps));
     }
+    engine_stats->render_distance = rd_options[rd_index];
 }
 
 void scene::SettingsScene::render()
@@ -158,22 +167,28 @@ scene::Status scene::SettingsScene::event(const Event& event)
         if (key->scancode == sf::Keyboard::Scancode::Left) {
             if (selected_item == 0)
                 fps_index = (fps_index - 1 + FPS_OPTION_COUNT) % FPS_OPTION_COUNT;
+            else if (selected_item == 1)
+                rd_index = (rd_index - 1 + RD_OPTION_COUNT) % RD_OPTION_COUNT;
             initRows();
             return {true, game::DO_NOT_UPDATE_SCENE, game::DO_NOT_UPDATE_SCENE};
         }
         if (key->scancode == sf::Keyboard::Scancode::Right) {
             if (selected_item == 0)
                 fps_index = (fps_index + 1) % FPS_OPTION_COUNT;
+            else if (selected_item == 1)
+                rd_index = (rd_index + 1) % RD_OPTION_COUNT;
             initRows();
             return {true, game::DO_NOT_UPDATE_SCENE, game::DO_NOT_UPDATE_SCENE};
         }
         if (key->scancode == sf::Keyboard::Scancode::Enter) {
             applySettings();
             applied_fps_index = fps_index;
+            applied_rd_index  = rd_index;
             return {true, game::DO_NOT_UPDATE_SCENE, game::UI_scenes::MENU};
         }
         if (key->scancode == sf::Keyboard::Scancode::Escape) {
             fps_index = applied_fps_index;
+            rd_index  = applied_rd_index;
             return {true, game::DO_NOT_UPDATE_SCENE, game::UI_scenes::MENU};
         }
     }
