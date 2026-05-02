@@ -146,7 +146,7 @@ void scene::GameScene::update_chunks() {
     };
     for (int i = -static_cast<int>(render_distance) + 1; i < static_cast<int>(render_distance); i++)
         for (int j = -static_cast<int>(render_distance) + 1; j < static_cast<int>(render_distance); j++) {
-            const Vector2<long long> Pos = {i * 16 + playerChunk.x, j * 16 + playerChunk.y};
+            const Vector2i Pos = {i * 16 + playerChunk.x, j * 16 + playerChunk.y};
             bool flag = false;
 
             for (auto it = active_chunks.begin(); it != active_chunks.end() && !flag; ++it)
@@ -163,19 +163,17 @@ void scene::GameScene::update_chunks() {
 
         }
 
-    for (size_t i = 0; i < active_chunks.size(); i++) {
-        const auto delta_vector = static_cast<Vector2f>(
-            active_chunks[i]->getAbsolutePosition() - static_cast<Vector2<long long>>(playerChunk)
-        );
-
-        if (delta_vector.lengthSquared() > render_distance_squared * 4 * 256) {
+    for (unsigned i = 0; i < active_chunks.size(); i++)
+        if (
+            const auto delta_vector = static_cast<Vector2f>(active_chunks[i]->getAbsolutePosition() - playerChunk);
+            delta_vector.lengthSquared() > render_distance_squared * 4 * 256
+        ) {
             std::cout << "[chunk/deletion] delta = " << delta_vector.length() << '\n';
             delete active_chunks[i];
             delete active_decoration_chunks[i];
             active_chunks.erase(active_chunks.begin() + i);
             active_decoration_chunks.erase(active_decoration_chunks.begin() + i);
         }
-    }
 }
 
 

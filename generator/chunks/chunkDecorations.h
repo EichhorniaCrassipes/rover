@@ -27,7 +27,6 @@ using sf::RenderTarget;
 #include <SFML/System/Vector2.hpp>
 using sf::Vector2u;
 using sf::Vector2i;
-using sf::Vector2;
 
 
 namespace generator {
@@ -40,12 +39,12 @@ namespace generator {
     class ChunkDecorations : public Drawable, public Transformable {
     public:
         ChunkDecorations(MapGenerator* generator_link, long long x, long long y, Texture* texture);
-        Vector2<long long> getAbsolutePosition() const;
+        Vector2i getAbsolutePosition() const;
     private:
         MapGenerator* generator;
 
         VertexArray decoration_vertices;
-        Vector2<long long> position;
+        Vector2i position;
         Texture* m_decorations;
 
         const Vector2i size;
