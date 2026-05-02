@@ -154,27 +154,26 @@ void scene::GameScene::update_chunks() {
                     flag = true;
 
             if (!flag) {
-                active_chunks.push_back(new generator::Chunk(&generator, Pos.x, Pos.y, &game::TEXTURE_LIBRARY["tileset"]));
-                active_decoration_chunks.push_back(new generator::ChunkDecorations(&generator, Pos.x, Pos.y, &game::TEXTURE_LIBRARY["decoset"]));
+                const auto new_chunk = new generator::Chunk(&generator, Pos.x, Pos.y, &game::TEXTURE_LIBRARY["tileset"]);
+                const auto new_deco_chunk = new generator::ChunkDecorations(&generator, Pos.x, Pos.y, &game::TEXTURE_LIBRARY["decoset"]);
+
+                active_chunks.push_back(new_chunk);
+                active_decoration_chunks.push_back(new_deco_chunk);
             }
 
         }
 
-    for (auto it = active_chunks.begin(); it != active_chunks.end(); ++it) {
-        const auto chunk = *it;
+    for (size_t i = 0; i < active_chunks.size(); i++) {
         const auto delta_vector = static_cast<Vector2f>(
-            chunk->getAbsolutePosition() - static_cast<Vector2<long long>>(playerChunk)
+            active_chunks[i]->getAbsolutePosition() - static_cast<Vector2<long long>>(playerChunk)
         );
+
         if (delta_vector.lengthSquared() > render_distance_squared * 4 * 256) {
             std::cout << "[chunk/deletion] delta = " << delta_vector.length() << '\n';
-            delete chunk;
-            active_chunks.erase(it);
-        }
-    }
-    for (auto it = active_decoration_chunks.begin(); it != active_decoration_chunks.end(); ++it) {
-        if (const auto chunk = *it; static_cast<Vector2f>(chunk->getAbsolutePosition() - playerChunk).lengthSquared() > render_distance_squared * 4 * 256) {
-            delete chunk;
-            active_decoration_chunks.erase(it);
+            delete active_chunks[i];
+            delete active_decoration_chunks[i];
+            active_chunks.erase(active_chunks.begin() + i);
+            active_decoration_chunks.erase(active_decoration_chunks.begin() + i);
         }
     }
 }
