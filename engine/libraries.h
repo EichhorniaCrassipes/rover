@@ -34,7 +34,11 @@ namespace game {
     inline map<string, Vector2i> TEXTURE_SIZE_LIBRARY = {
         {"default", {128, 128}},
         {"player", {512, 512}},
-        {"spawn", {128, 256}}
+        {"spawn", {128, 256}},
+        {"stone deposit", {64, 64}},
+        {"iron deposit", {64, 64}},
+        {"copper deposit", {64, 64}},
+        {"coal deposit", {64, 64}}
     };
 
     inline map<string, IntRect> HITBOX_LIBRARY = {

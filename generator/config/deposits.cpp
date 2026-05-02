@@ -3,7 +3,8 @@ using generator::Deposit;
 
 
 array<Deposit, DEPOSITS> generator::GLOBAL_DEPOSITS = {
-    Deposit{"stone", .35, 1, 0, .2, 0, 1},
-    Deposit{"iron", .35, 1, .2, .55, .5, 1},
-    Deposit{"copper", .35, 1, 0, .35, 0, .5}
+    Deposit{"iron",   .61, .8, .4,  .5,  .75, .85},
+    Deposit{"stone",  .59, .7, .15, .4,  .15, .4},
+    Deposit{"coal",   .35, .5, .7,  1,   .35, .5},
+    Deposit{"copper", .7,  1,  0,   .25, .5,  .71}
 };

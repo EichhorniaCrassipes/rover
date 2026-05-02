@@ -23,6 +23,7 @@ using game::Camera;
 #include "../../generator/chunks/chunkDecorations.h"
 
 #include "../../objects/block.h"
+#include "../../objects/block/deposit.h"
 #include "../../objects/entity.h"
 #include "../../objects/entity/player.h"
 
@@ -52,6 +53,7 @@ namespace scene {
         vector<generator::Chunk*> active_chunks;
         vector<generator::ChunkDecorations*> active_decoration_chunks;
         vector<object::Block*> blocks;
+        vector<object::Deposit*> deposits;
         MapGenerator generator;
 
         const float default_player_speed = 250,
@@ -70,7 +72,7 @@ namespace scene {
         static bool get_sprint_trigger();
 
         float camera_speed = 200,
-              distance_multiplier = 0.0001,
+              distance_multiplier = 0.001,
               distance_threshold = 1.5,
               move_vector_multiplier = 30,
               zoom_coefficient = 0.05,

@@ -14,6 +14,7 @@ void generator::MapGenerator::free_memory() const {
     delete temperature;
     delete humidity;
     delete height;
+    delete deposit;
     for (const auto r : random_engines)
         delete r;
 }
@@ -51,6 +52,11 @@ generator::Tile generator::MapGenerator::get_tile(const long long x, const long 
                      shifted_x * STRETCH_v2,
                      shifted_y * STRETCH_v2,
                      4, height
+                 ),
+                 de = get_tile_noise_value(
+                     shifted_x * STRETCH_v2,
+                     shifted_y * STRETCH_v2,
+                     4, deposit
                  );
     local_variation_engine_reseed(x, y);
     normal_distribution.reset();
@@ -79,12 +85,12 @@ generator::Tile generator::MapGenerator::get_tile(const long long x, const long 
                         temperature_high,
                         humidity_low,
                         humidity_high,
-                        height_low,
-                        height_high
+                        deposit_low,
+                        deposit_high
                      ] : GLOBAL_DEPOSITS)
         if (temperature_low <= te && te <= temperature_high &&
                humidity_low <= hu && hu <= humidity_high &&
-                 height_low <= he && he <= height_high) {
+                deposit_low <= de && de <= deposit_high) {
             tile.deposit = name;
             break;
         }
@@ -157,10 +163,12 @@ void generator::MapGenerator::reseed(const long long new_seed) {
     random_engines[0] = new mt19937(new_seed);
     random_engines[1] = new mt19937(seed_shift(1));
     random_engines[2] = new mt19937(seed_shift(2));
-    random_engines[3] = new mt19937(0);
-    variation = random_engines[3];
+    random_engines[3] = new mt19937(seed_shift(3));
+    random_engines[4] = new mt19937(0);
+    variation = random_engines[4];
 
     temperature = new PerlinNoise(random_engines[0]);
     humidity = new PerlinNoise(random_engines[1]);
     height = new PerlinNoise(random_engines[2]);
+    deposit = new PerlinNoise(random_engines[3]);
 }
