@@ -4,20 +4,24 @@
 
 #include "../mapGenerator.h"
 
+#include "../../objects/block/deposit/copper.h"
+#include "../../objects/block/deposit/iron.h"
+#include "../../objects/block/deposit/stone.h"
+
 #include <iostream>
 using std::cout;
 
-#include "SFML/System/Clock.hpp"
-#include "SFML/System/Time.hpp"
+#include <SFML/System/Clock.hpp>
+#include <SFML/System/Time.hpp>
 using sf::Clock;
 
-#include "SFML/Graphics/RenderTarget.hpp"
+#include <SFML/Graphics/RenderTarget.hpp>
 
 
-generator::Chunk::Chunk(MapGenerator* generator_link, const long long x, const long long y, Texture* texture) : position{x, y} {
+generator::Chunk::Chunk(MapGenerator* generator_link, const int x, const int y, Texture* texture) : position{x, y} {
     generator = generator_link;
     m_tileset = texture;
-    cout << "[generator/chunk] x = " << x << ", y = " << y << '\n';
+    cout << "[chunk/generation] x = " << x << ", y = " << y << '\n';
     array<int, 256> tiles = {};
     array<unsigned char, 256> var = {};
 
@@ -26,12 +30,36 @@ generator::Chunk::Chunk(MapGenerator* generator_link, const long long x, const l
     timer.start();
     for (int j = 0; j < size.y; j++)
         for (int i = 0; i < size.x; i++) {
-            const long long x_local = i + position.x,
-                            y_local = j + position.y;
-            Tile tile0 = generator->get_tile(x_local,     y_local);
-            Tile tile1 = generator->get_tile(x_local + 1, y_local);
-            Tile tile2 = generator->get_tile(x_local,     y_local + 1);
-            Tile tile3 = generator->get_tile(x_local + 1, y_local + 1);
+            const int x_local = i + position.x,
+                      y_local = j + position.y;
+
+            Tile tile0 = generator->get_tile(x_local,     y_local),
+                 tile1 = generator->get_tile(x_local + 1, y_local),
+                 tile2 = generator->get_tile(x_local,     y_local + 1),
+                 tile3 = generator->get_tile(x_local + 1, y_local + 1);
+
+            object::Deposit* deposit = nullptr;
+            if (tile0.deposit == "stone")
+                deposit = new object::Stone(
+                    {x_local, y_local},
+                    100,
+                    2
+                );
+            else if (tile0.deposit == "iron")
+                deposit = new object::Iron(
+                    {x_local, y_local},
+                    100,
+                    2
+                );
+            else if (tile0.deposit == "copper")
+                deposit = new object::Copper(
+                    {x_local, y_local},
+                    100,
+                    2
+                );
+
+            if (deposit != nullptr)
+                deposits.emplace_back(Vector2i{x_local, y_local}, deposit);
 
             tiles[i + j * size.x] = {tile_library::maptiles[get4tiles(tile0, tile1, tile2, tile3)]};
             var[i + j * size.x] = tile0.variation;
@@ -42,6 +70,10 @@ generator::Chunk::Chunk(MapGenerator* generator_link, const long long x, const l
     cout << "\tloading: " << timer.getElapsedTime().asMilliseconds() << " ms\n";
 
     setPosition({static_cast<float>(position.x * size.x * 4), static_cast<float>(position.y * size.y * 4)});
+}
+generator::Chunk::~Chunk() {
+    for (const auto &[_, d] : deposits)
+        delete d;
 }
 
 
@@ -113,4 +145,6 @@ void generator::Chunk::load(const Vector2u tileSize, const int* tiles, const uns
     }
 }
 
-Vector2<long long> generator::Chunk::getAbsolutePosition() const { return position; }
+Vector2i generator::Chunk::getAbsolutePosition() const { return position; }
+
+vector<pair<Vector2i, object::Deposit*>> generator::Chunk::getDeposits() const { return deposits; }

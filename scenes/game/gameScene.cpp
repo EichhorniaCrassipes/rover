@@ -11,6 +11,9 @@ using std::abs;
 using std::max;
 using std::min;
 
+#include <queue>
+using std::queue;
+
 #include <SFML/Window/Keyboard.hpp>
 
 #include "../../engine/enums.h"
@@ -59,12 +62,23 @@ void scene::GameScene::on_end() {
 
 void scene::GameScene::render() {
     delta_time = FPS_timer.restart().asSeconds();
-    for (const auto chunk : active_chunks)
+
+    queue<object::Deposit*> local_deposits_render_queue;
+
+    for (const auto chunk : active_chunks) {
         window->draw(*chunk);
+        for (const auto &[_, deposit] : chunk->getDeposits())
+            local_deposits_render_queue.push(deposit);
+    }
     for (const auto chunk : active_decoration_chunks)
         window->draw(*chunk);
     for (const auto entity : entities) {
         window->draw(*entity);
+    }
+
+    while (!local_deposits_render_queue.empty()) {
+        window->draw(*local_deposits_render_queue.front());
+        local_deposits_render_queue.pop();
     }
 
     const auto move_vector = get_move_vector();
@@ -173,6 +187,7 @@ void scene::GameScene::update_chunks() {
             delete active_decoration_chunks[i];
             active_chunks.erase(active_chunks.begin() + i);
             active_decoration_chunks.erase(active_decoration_chunks.begin() + i);
+            i--;
         }
 }
 
