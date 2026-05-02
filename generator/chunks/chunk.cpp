@@ -17,7 +17,7 @@ using sf::Clock;
 generator::Chunk::Chunk(MapGenerator* generator_link, const long long x, const long long y, Texture* texture) : position{x, y} {
     generator = generator_link;
     m_tileset = texture;
-    //cout << "[generator/chunk] x = " << x << ", y = " << y << '\n';
+    cout << "[generator/chunk] x = " << x << ", y = " << y << '\n';
     array<int, 256> tiles = {};
     array<unsigned char, 256> var = {};
 
@@ -36,10 +36,10 @@ generator::Chunk::Chunk(MapGenerator* generator_link, const long long x, const l
             tiles[i + j * size.x] = {tile_library::maptiles[get4tiles(tile0, tile1, tile2, tile3)]};
             var[i + j * size.x] = tile0.variation;
         }
-    //cout << "\tgenerating: " << timer.restart().asMilliseconds() << " ms\n";
+    cout << "\tgenerating: " << timer.restart().asMilliseconds() << " ms\n";
 
     load({64, 64}, tiles.data(), var.data(), size.x, size.y);
-    //cout << "\tloading: " << timer.getElapsedTime().asMilliseconds() << " ms\n";
+    cout << "\tloading: " << timer.getElapsedTime().asMilliseconds() << " ms\n";
 
     setPosition({static_cast<float>(position.x * size.x * 4), static_cast<float>(position.y * size.y * 4)});
 }
