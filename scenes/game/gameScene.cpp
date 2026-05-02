@@ -31,7 +31,7 @@ scene::GameScene::GameScene(
     delta_time = 0;
     FPS_timer.start();
     first_start = false;
-    mouse_object = new Ghost("spawn", {1,1});
+    mouse_object = new Ghost("drill", {1,1});
 }
 scene::GameScene::~GameScene() {
     for (const auto chunk : active_chunks)
@@ -127,6 +127,7 @@ void scene::GameScene::update() {
         std::floor(absolute_mouse_coords.x / 64.0f) * 64.0f,
         std::ceil(absolute_mouse_coords.y / 64.0f) * 64.0f);
     mouse_object->setPosition(mouse_coords_rounded/2.f);
+    //std::cout << "rounded mouse coordinates: " << mouse_coords_rounded.x << "  " << mouse_coords_rounded.y << std::endl;
 }
 
 scene::Status scene::GameScene::event(const Event &event) {
@@ -141,7 +142,7 @@ scene::Status scene::GameScene::event(const Event &event) {
     else {
         mouse_object->updateShader("green");
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::P))
-            entities.push_back(new object::Entity("spawn", mouse_coords_rounded, 0));
+            entities.push_back(new object::Entity("drill", mouse_coords_rounded, 0));
     }
 
     return {false, game::DO_NOT_UPDATE_SCENE, game::DO_NOT_UPDATE_SCENE};

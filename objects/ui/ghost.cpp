@@ -28,15 +28,24 @@ void Ghost::draw(RenderTarget &target, RenderStates states) const {
 bool Ghost::checkCollision() const {
     bool collision = false;
     IntRect player_hitbox = game::HITBOX_LIBRARY[getLibraryIndex()];
+    player_hitbox.position += Vector2i(position);
+    player_hitbox.size = player_hitbox.size / 2;
     //std::cout << getLibraryIndex() << std::endl;
-    //std::cout << player_hitbox.position.x << std::endl;
-    //std::cout << player_hitbox.position.x << std::endl;
+    //std::cout << player_hitbox.position.x << "  " << player_hitbox.position.y << std::endl;
     for (const auto object : collision_objects) {
         IntRect object_hitbox = game::HITBOX_LIBRARY[object->getLibraryIndex()];
-
+        object_hitbox.position += Vector2i(object->getPosition());
+        object_hitbox.position = object_hitbox.position / 2;
+        //object_hitbox.size = object_hitbox.size / 2;
         const auto intersection = player_hitbox.findIntersection(object_hitbox);
+
+        std::cout << "object: " << object->getLibraryIndex() << std::endl;
+        std::cout << "object position: " << object_hitbox.position.x << "  " << object_hitbox.position.y << std::endl;
+        std::cout << "mouse object hitbox position: " << player_hitbox.position.x << "  " << player_hitbox.position.y << std::endl;
+
         if (intersection.has_value()) {
             collision = true;
+            std::cout << "collision detected";
         }
     }
     return collision;
