@@ -79,4 +79,4 @@ void generator::ChunkDecorations::load(const Vector2u tileSize) {
 
 }
 
-Vector2i generator::ChunkDecorations::getAbsolutePosition() const { return position; }
+Vector2<long long> generator::ChunkDecorations::getAbsolutePosition() const { return position; }
