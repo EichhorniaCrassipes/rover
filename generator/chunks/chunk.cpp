@@ -7,6 +7,7 @@
 #include "../../objects/block/deposit/copper.h"
 #include "../../objects/block/deposit/iron.h"
 #include "../../objects/block/deposit/stone.h"
+#include "../../objects/block/deposit/coal.h"
 
 #include <iostream>
 using std::cout;
@@ -41,19 +42,25 @@ generator::Chunk::Chunk(MapGenerator* generator_link, const int x, const int y, 
             object::Deposit* deposit = nullptr;
             if (tile0.deposit == "stone")
                 deposit = new object::Stone(
-                    {x_local, y_local},
+                    Vector2i{x_local, y_local} * 32,
                     100,
                     2
                 );
             else if (tile0.deposit == "iron")
                 deposit = new object::Iron(
-                    {x_local, y_local},
+                    Vector2i{x_local, y_local} * 32,
                     100,
                     2
                 );
             else if (tile0.deposit == "copper")
                 deposit = new object::Copper(
-                    {x_local, y_local},
+                    Vector2i{x_local, y_local} * 32,
+                    100,
+                    2
+                );
+            else if (tile0.deposit == "coal")
+                deposit = new object::Coal(
+                    Vector2i{x_local, y_local} * 32,
                     100,
                     2
                 );

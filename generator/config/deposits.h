@@ -1,5 +1,5 @@
 #ifndef DEPOSITS
-#define DEPOSITS 3
+#define DEPOSITS 4
 
 #include <string>
 using std::string;
