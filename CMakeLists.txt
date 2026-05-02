@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.28)
-project(ROVER)
+project(RE)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/.release")
@@ -61,10 +61,9 @@ set(SOURCES
         objects/ui/gameInventory.cpp
         objects/ui/ghost.h
         objects/ui/ghost.cpp
-
 )
 
-if (RENDER_ICON)
+if (RELEASE_FLAG)
     list(APPEND SOURCES icon.rc)
 endif()
 
