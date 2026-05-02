@@ -4,7 +4,7 @@ project(ROVER)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/.release")
 
-set(RELEASE_FLAG FALSE)  # флаг для сборки публичной релизной версии
+set(RELEASE_FLAG FALSE)  # флаг для сборки публичной релизной версии (для WINDOWS)
 if (RELEASE_FLAG)
     enable_language(RC)
     set(CMAKE_RC_COMPILER "windres.exe")
@@ -52,7 +52,7 @@ set(SOURCES
         scenes/game/gameScene.cpp
         scenes/UI/UIScene.cpp
         scenes/UI/menuScene.cpp
-        scenes/UI/cutscene/cutScene.cpp
+        # scenes/UI/cutscene/cutScene.cpp
         scenes/UI/gameUIScene.cpp
         scenes/UI/settingsScene.cpp
         scenes/UI/aboutScene.cpp
@@ -82,11 +82,4 @@ target_link_libraries(
         SFML::Graphics
         SFML::Audio
         SFML::Network
-)
-
-add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_directory
-        "${CMAKE_SOURCE_DIR}/shaders"
-        "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/shaders"
-        COMMENT "Copying shaders to runtime directory"
 )
