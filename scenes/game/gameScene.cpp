@@ -49,8 +49,8 @@ scene::GameScene::~GameScene() {
 
 void scene::GameScene::on_start() {
     if (!first_start) {
-        for (int i = -static_cast<int>(render_distance); i < static_cast<int>(render_distance); i++)
-            for (int j = -static_cast<int>(render_distance); j < static_cast<int>(render_distance); j++) {
+        for (int i = -static_cast<int>(engine_stats->render_distance); i < static_cast<int>(engine_stats->render_distance); i++)
+            for (int j = -static_cast<int>(engine_stats->render_distance); j < static_cast<int>(engine_stats->render_distance); j++) {
                 active_chunks.push_back(new generator::Chunk(&generator, 16 * i, 16 * j, &game::TEXTURE_LIBRARY["tileset"]));
                 active_decoration_chunks.push_back(new generator::ChunkDecorations(&generator, 16 * i, 16 * j, &game::TEXTURE_LIBRARY["decoset"]));
             }
@@ -179,8 +179,8 @@ void scene::GameScene::update_chunks() {
         static_cast<int>(std::floor(player.getPosition().x / 64 / 16.0)) * 16,
         static_cast<int>(std::floor(player.getPosition().y / 64 / 16.0)) * 16
     };
-    for (int i = -static_cast<int>(render_distance) + 1; i < static_cast<int>(render_distance); i++)
-        for (int j = -static_cast<int>(render_distance) + 1; j < static_cast<int>(render_distance); j++) {
+    for (int i = -static_cast<int>(engine_stats->render_distance) + 1; i < static_cast<int>(engine_stats->render_distance); i++)
+        for (int j = -static_cast<int>(engine_stats->render_distance) + 1; j < static_cast<int>(engine_stats->render_distance); j++) {
             const Vector2i Pos = {i * 16 + playerChunk.x, j * 16 + playerChunk.y};
             bool flag = false;
 
@@ -201,7 +201,7 @@ void scene::GameScene::update_chunks() {
     for (unsigned i = 0; i < active_chunks.size(); i++)
         if (
             const auto delta_vector = static_cast<Vector2f>(active_chunks[i]->getAbsolutePosition() - playerChunk);
-            delta_vector.lengthSquared() > render_distance_squared * 4 * 256
+            delta_vector.lengthSquared() > engine_stats->render_distance * engine_stats->render_distance * 4 * 256
         ) {
             std::cout << "[chunk/deletion] delta = " << delta_vector.length() << '\n';
             delete active_chunks[i];

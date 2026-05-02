@@ -59,7 +59,7 @@ namespace scene {
 
         const float default_player_speed = 250,
                     sprint_player_speed = 450,
-                    stamina_drain_rate  = 45.f,
+                    stamina_drain_rate  = 35.f,
                     stamina_regen_rate  = 8.f;
         object::Player player;
         Ghost* mouse_object;
@@ -78,9 +78,7 @@ namespace scene {
               distance_multiplier = 0.001,
               distance_threshold = 1.5,
               move_vector_multiplier = 30,
-              zoom_coefficient = 0.05,
-              render_distance = 10,
-              render_distance_squared = render_distance * render_distance;
+              zoom_coefficient = 0.05;
     };
 }
 
