@@ -54,8 +54,8 @@ generator::Tile generator::MapGenerator::get_tile(const long long x, const long 
                      4, height
                  ),
                  de = get_tile_noise_value(
-                     shifted_x,
-                     shifted_y,
+                     shifted_x * STRETCH_v2,
+                     shifted_y * STRETCH_v2,
                      4, deposit
                  );
     local_variation_engine_reseed(x, y);
@@ -90,7 +90,7 @@ generator::Tile generator::MapGenerator::get_tile(const long long x, const long 
                      ] : GLOBAL_DEPOSITS)
         if (temperature_low <= te && te <= temperature_high &&
                humidity_low <= hu && hu <= humidity_high &&
-                 deposit_low <= de && de <= deposit_high) {
+                deposit_low <= de && de <= deposit_high) {
             tile.deposit = name;
             break;
         }
