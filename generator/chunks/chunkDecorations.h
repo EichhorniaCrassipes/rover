@@ -38,7 +38,7 @@ namespace generator {
 
     class ChunkDecorations : public Drawable, public Transformable {
     public:
-        ChunkDecorations(MapGenerator* generator_link, long long x, long long y, Texture* texture);
+        ChunkDecorations(MapGenerator* generator_link, int x, int y, Texture* texture);
         Vector2i getAbsolutePosition() const;
     private:
         MapGenerator* generator;
