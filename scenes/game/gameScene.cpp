@@ -75,14 +75,14 @@ void scene::GameScene::render() {
     }
     for (const auto chunk : active_decoration_chunks)
         window->draw(*chunk);
-    for (const auto entity : entities) {
-        window->draw(*entity);
-    }
 
     while (!local_deposits_render_queue.empty()) {
         window->draw(*local_deposits_render_queue.front());
         local_deposits_render_queue.pop();
     }
+
+    for (const auto entity : entities)
+        window->draw(*entity);
 
     window->draw(*mouse_object);
 
