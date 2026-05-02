@@ -11,7 +11,7 @@ using std::cerr;
 using sf::Clock;
 
 
-generator::ChunkDecorations::ChunkDecorations(MapGenerator* generator_link, const int x, const int y, Texture* texture) : position{x, y}, size{16, 16} {
+generator::ChunkDecorations::ChunkDecorations(MapGenerator* generator_link, const long long x, const long long y, Texture* texture) : position{x, y}, size{16, 16} {
     generator = generator_link;
     m_decorations = texture;
     //cout << "[generator/deco-chunk] x = " << x << ", y = " << y << '\n';
