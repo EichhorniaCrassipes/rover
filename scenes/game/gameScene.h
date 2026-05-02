@@ -70,7 +70,7 @@ namespace scene {
         static bool get_sprint_trigger();
 
         float camera_speed = 200,
-              distance_multiplier = 0.0001,
+              distance_multiplier = 0.001,
               distance_threshold = 1.5,
               move_vector_multiplier = 30,
               zoom_coefficient = 0.05,
