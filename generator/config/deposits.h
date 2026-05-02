@@ -1,5 +1,5 @@
 #ifndef DEPOSITS
-#define DEPOSITS 3
+#define DEPOSITS 4
 
 #include <string>
 using std::string;
@@ -13,7 +13,7 @@ namespace generator {
         string name;
         double temperature_low, temperature_high,
                humidity_low, humidity_high,
-               height_low, height_high;
+               deposit_low, deposit_high;
     };
 
     extern array<Deposit, DEPOSITS> GLOBAL_DEPOSITS;

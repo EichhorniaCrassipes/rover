@@ -4,7 +4,6 @@
 #include "UIScene.h"
 
 #include <SFML/Graphics/RenderWindow.hpp>
-
 #include "SFML/Graphics/Font.hpp"
 #include "SFML/Graphics/Text.hpp"
 #include "SFML/Graphics/RectangleShape.hpp"
@@ -13,6 +12,9 @@ using sf::Font;
 using sf::Text;
 using sf::Texture;
 using sf::RectangleShape;
+
+#include <vector>
+using std::vector;
 
 namespace scene {
     class SettingsScene : public UIScene {
@@ -33,7 +35,17 @@ namespace scene {
         Text* title;
         Text* hint;
 
+        int selected_item;
+        int fps_index;
+        int applied_fps_index;
+
+        vector<Text*> row_texts;
+
         void initText();
+        void initRows();
+        void updateRowColors();
+        void applySettings() const;
+        sf::String buildRowString(int row_index) const;
     };
 }
 

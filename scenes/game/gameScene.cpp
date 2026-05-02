@@ -9,6 +9,11 @@ using std::cout;
 #include <cmath>
 using std::exp;
 using std::abs;
+using std::max;
+using std::min;
+
+#include <queue>
+using std::queue;
 
 #include <SFML/Window/Keyboard.hpp>
 
@@ -60,14 +65,25 @@ void scene::GameScene::on_end() {
 
 void scene::GameScene::render() {
     delta_time = FPS_timer.restart().asSeconds();
-    for (const auto chunk : active_chunks)
+
+    queue<object::Deposit*> local_deposits_render_queue;
+
+    for (const auto chunk : active_chunks) {
         window->draw(*chunk);
+        for (const auto &[_, deposit] : chunk->getDeposits())
+            local_deposits_render_queue.push(deposit);
+    }
     for (const auto chunk : active_decoration_chunks)
         window->draw(*chunk);
     for (const auto entity : entities) {
         window->draw(*entity);
     }
     window->draw(*mouse_object);
+
+    while (!local_deposits_render_queue.empty()) {
+        window->draw(*local_deposits_render_queue.front());
+        local_deposits_render_queue.pop();
+    }
 
     const auto move_vector = get_move_vector();
     const bool does_sprint = get_sprint_trigger();
@@ -97,8 +113,16 @@ bool scene::GameScene::get_sprint_trigger() {
 }
 
 void scene::GameScene::handle_player(const Vector2f &move_vector, const bool &sprint) {
-    if (sprint) player.setSpeed(sprint_player_speed);
-    else player.setSpeed(default_player_speed);
+    const bool can_sprint = sprint && engine_stats->stamina > 0.f;
+
+    if (can_sprint) {
+        player.setSpeed(sprint_player_speed);
+        engine_stats->stamina = std::max(0.f, engine_stats->stamina - stamina_drain_rate * delta_time);
+    } else {
+        player.setSpeed(default_player_speed);
+        if (!sprint)
+            engine_stats->stamina = std::min(100.f, engine_stats->stamina + stamina_regen_rate * delta_time);
+    }
 
     if (move_vector.length() > 0)
         player.move(move_vector, delta_time);
@@ -156,7 +180,7 @@ void scene::GameScene::update_chunks() {
     };
     for (int i = -static_cast<int>(render_distance) + 1; i < static_cast<int>(render_distance); i++)
         for (int j = -static_cast<int>(render_distance) + 1; j < static_cast<int>(render_distance); j++) {
-            const Vector2<long long> Pos = {i * 16 + playerChunk.x, j * 16 + playerChunk.y};
+            const Vector2i Pos = {i * 16 + playerChunk.x, j * 16 + playerChunk.y};
             bool flag = false;
 
             for (auto it = active_chunks.begin(); it != active_chunks.end() && !flag; ++it)
@@ -164,29 +188,27 @@ void scene::GameScene::update_chunks() {
                     flag = true;
 
             if (!flag) {
-                active_chunks.push_back(new generator::Chunk(&generator, Pos.x, Pos.y, &game::TEXTURE_LIBRARY["tileset"]));
-                active_decoration_chunks.push_back(new generator::ChunkDecorations(&generator, Pos.x, Pos.y, &game::TEXTURE_LIBRARY["decoset"]));
+                const auto new_chunk = new generator::Chunk(&generator, Pos.x, Pos.y, &game::TEXTURE_LIBRARY["tileset"]);
+                const auto new_deco_chunk = new generator::ChunkDecorations(&generator, Pos.x, Pos.y, &game::TEXTURE_LIBRARY["decoset"]);
+
+                active_chunks.push_back(new_chunk);
+                active_decoration_chunks.push_back(new_deco_chunk);
             }
 
         }
 
-    for (auto it = active_chunks.begin(); it != active_chunks.end(); ++it) {
-        const auto chunk = *it;
-        const auto delta_vector = static_cast<Vector2f>(
-            chunk->getAbsolutePosition() - static_cast<Vector2<long long>>(playerChunk)
-        );
-        if (delta_vector.lengthSquared() > render_distance_squared * 4 * 256) {
+    for (unsigned i = 0; i < active_chunks.size(); i++)
+        if (
+            const auto delta_vector = static_cast<Vector2f>(active_chunks[i]->getAbsolutePosition() - playerChunk);
+            delta_vector.lengthSquared() > render_distance_squared * 4 * 256
+        ) {
             std::cout << "[chunk/deletion] delta = " << delta_vector.length() << '\n';
-            delete chunk;
-            active_chunks.erase(it);
+            delete active_chunks[i];
+            delete active_decoration_chunks[i];
+            active_chunks.erase(active_chunks.begin() + i);
+            active_decoration_chunks.erase(active_decoration_chunks.begin() + i);
+            i--;
         }
-    }
-    for (auto it = active_decoration_chunks.begin(); it != active_decoration_chunks.end(); ++it) {
-        if (const auto chunk = *it; static_cast<Vector2f>(chunk->getAbsolutePosition() - playerChunk).lengthSquared() > render_distance_squared * 4 * 256) {
-            delete chunk;
-            active_decoration_chunks.erase(it);
-        }
-    }
 }
 
 

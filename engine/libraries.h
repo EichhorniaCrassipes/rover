@@ -37,6 +37,10 @@ namespace game {
         {"player", {512, 512}},
         {"spawn", {128, 256}},
         {"drill", {192,192}}
+        {"stone deposit", {64, 64}},
+        {"iron deposit", {64, 64}},
+        {"copper deposit", {64, 64}},
+        {"coal deposit", {64, 64}}
     };
 
     inline map<string, IntRect> HITBOX_LIBRARY = {
