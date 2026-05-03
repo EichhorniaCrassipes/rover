@@ -33,8 +33,8 @@ void menu::GameMenu::AlignMenu(int pos_x)
     }
 }
 
-menu::GameMenu::GameMenu(sf::RenderWindow& window, float menu_x, float menu_y, float menu_width, float menu_height, int index, sf::String name[], int size_font, int step)
-    : menuwindow(window), menu_x(menu_x), menu_y(menu_y), size_font(size_font), menu_dist(step)
+menu::GameMenu::GameMenu(sf::RenderWindow& window, float max_x, float menu_y, float menu_width, float menu_height, int index, sf::String name[], int size_font, int step)
+    : menuwindow(window), max_x(max_x), menu_y(menu_y), size_font(size_font), menu_dist(step)
 {
     if (!menu_font.openFromFile("fonts/OCR A Extended Regular.ttf"))
         exit(32);
@@ -44,7 +44,8 @@ menu::GameMenu::GameMenu(sf::RenderWindow& window, float menu_x, float menu_y, f
 
     for (int i = 0, ypos = menu_y; i < max_menu; i++, ypos += menu_dist) {
         mainMenu.emplace_back(menu_font);
-        setInitMenuText(mainMenu[i], name[i], menu_x, ypos);
+        const auto bounds = mainMenu[i].getLocalBounds();
+        setInitMenuText(mainMenu[i], name[i], (max_x  - bounds.size.x) / 2.f - bounds.position.x, ypos);
     }
     selected_menu = 0;
     mainMenu[selected_menu].setFillColor(menu_border_color);
