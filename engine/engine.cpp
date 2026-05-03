@@ -14,8 +14,11 @@ using std::runtime_error;
 
 EngineStats game::global_stats {0, 0};
 
+#include <SFML/System/Time.hpp>
+using sf::seconds;
+
 #include "../scenes/UI/menuScene.h"
-#include "../scenes/UI/cutscene/cutScene.h"
+// #include "../scenes/UI/cutscene/cutScene.h"
 #include "../scenes/UI/gameUIScene.h"
 #include "../scenes/UI/settingsScene.h"
 #include "../scenes/UI/aboutScene.h"
@@ -101,7 +104,7 @@ void game::Engine::run(const short fps) {
 
     UI_scenes[UI_scenes::RESET]    = nullptr;
     UI_scenes[UI_scenes::MENU]     = new scene::MenuScene(window, &global_stats);
-    UI_scenes[UI_scenes::CUTSCENE] = new scene::CutScene(window, &global_stats, &default_monospace_font);
+    UI_scenes[UI_scenes::CUTSCENE] = nullptr; //new scene::CutScene(window, &global_stats, &default_monospace_font);
     UI_scenes[UI_scenes::GAME]     = new scene::GameUIScene(window, &global_stats);
     UI_scenes[UI_scenes::SETTINGS] = new scene::SettingsScene(window, &global_stats);
     UI_scenes[UI_scenes::ABOUT]    = new scene::AboutScene(window, &global_stats);

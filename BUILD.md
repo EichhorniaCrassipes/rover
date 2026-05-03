@@ -47,11 +47,16 @@ find_package(
 ### 4. Сборка
 
 ```bash
-cmake -B cmake-build-debug -S .
-cmake --build cmake-build-debug
+cmake -B build -S .
+cmake --build build
 ```
 
 Бинарный файл появится в `.release/ROVER.exe`.
+
+### 5. Копирование библиотек .dll из исходников SFML
+
+После сборки в папку .release необходимо скопировать файлы с расширением ``.dll`` из папки ``SFML-3.0.2/bin``.
+Нужно расположить их рядом со скомпилированным бинарным файлом RE.exe
 
 ---
 
@@ -85,9 +90,8 @@ find_package(
 )
 ```
 
-Также уберите `${WINDOWED_MODE}` из `add_executable` (флаг `WIN32` актуален только для Windows) или оставьте как есть — на Linux он просто игнорируется.
 
-### 3. Установить зависимости для SFML (если нужно)
+### 3. Установить зависимости для SFML (может понадобиться)
 
 ```bash
 sudo apt install \
@@ -99,16 +103,26 @@ sudo apt install \
 ### 4. Сборка
 
 ```bash
-cmake -B cmake-build-debug -S .
-cmake --build cmake-build-debug
+cmake -B build -S .
+cmake --build build
 ```
 
 Бинарный файл появится в `.release/ROVER`.
 
 ---
 
-## Флаги CMake
+## Установка игровых ресурсов
 
-| Флаг | Значение | Описание |
-|------|----------|----------|
-| `RELEASE_FLAG` | `TRUE` / `FALSE` | `TRUE` — оконный режим (без консоли), компилирует с иконкой через `windres`. По умолчанию `FALSE`. |
+После успешной компиляции необходимо скачать ресурсы со страницы [релизов](https://github.com/EichhorniaCrassipes/rover/releases) (для демо-версии 0.1: архив ``game resources.zip``)
+
+Установка ресурсов производится в папку .release, правильная распаковка выглядит так:
+```
+...
+└── .release
+    ├── RE.exe (или RE для Linux)
+    ├── *.dll
+    ├── fonts/
+    ├── image/
+    ├── shaders/
+    └── ...
+```

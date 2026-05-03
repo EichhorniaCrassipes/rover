@@ -85,13 +85,11 @@ Object (sf::Drawable + sf::Transformable)
 
 ## Сборка и запуск
 
+Готовая сборка для Windows 10+ – на странице [релизов](https://github.com/EichhorniaCrassipes/rover/releases).
+
+Инструкции по самостоятельной сборке и установке подробно описаны в файле [`BUILD.MD`](./BUILD.md)
+
 ```bash
-# Создание директории сборки
-cmake -B cmake-build-debug -S .
-
-# Сборка проекта
-cmake --build cmake-build-debug
-
 # Запуск игры
 cd .release
 ROVER.exe
@@ -106,7 +104,7 @@ ROVER.exe
 - **engine/** — ядро движка: игровой цикл, камера, управление сценами
 - **generator/** — процедурная генерация: шум Перлина, биомы, месторождения
 - **objects/** — игровые объекты: сущности, блоки, UI-элементы
-- **scenes/** — сцены: главное меню, игра, катсцены
+- **scenes/** — сцены: главное меню, игра, UI
 
 ---
 

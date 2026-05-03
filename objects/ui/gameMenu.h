@@ -13,7 +13,7 @@ namespace menu
 {
     class GameMenu : public object::Object
     {
-        float menu_x, menu_y, menu_width, menu_height; // размеры меню
+        float max_x, menu_y, menu_width, menu_height; // размеры меню
 
         int menu_dist; // расстояние между пунктами меню
 
@@ -30,7 +30,7 @@ namespace menu
         sf::RenderWindow& menuwindow;
 
     public:
-        GameMenu(sf::RenderWindow& window, float menu_x, float menu_y, float menu_width, float menu_height,
+        GameMenu(sf::RenderWindow& window, float max_x, float menu_y, float menu_width, float menu_height,
             int index, sf::String name[], int size_font = 60, int step = 80);
         ~GameMenu() = default;
 

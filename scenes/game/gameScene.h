@@ -78,9 +78,7 @@ namespace scene {
               distance_multiplier = 0.001,
               distance_threshold = 1.5,
               move_vector_multiplier = 30,
-              zoom_coefficient = 0.05,
-              render_distance = 10,
-              render_distance_squared = render_distance * render_distance;
+              zoom_coefficient = 0.05;
     };
 }
 

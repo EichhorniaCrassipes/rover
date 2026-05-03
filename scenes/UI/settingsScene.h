@@ -38,6 +38,8 @@ namespace scene {
         int selected_item;
         int fps_index;
         int applied_fps_index;
+        int rd_index;
+        int applied_rd_index;
 
         vector<Text*> row_texts;
 

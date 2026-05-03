@@ -139,9 +139,10 @@ void scene::AboutScene::initDescription()
     delete description;
     description = new Text(font,
         "[ Controls ]\n\n"
-        "Movement:   WASD / Arrow Keys\n"
-        "Map zoom:   Mouse scroll\n"
-        "Inventory:  Keys 1-5",
+        "Movement:    WASD / Arrow Keys\n"
+        "Map zoom:    Mouse scroll\n"
+        "Inventory:   Keys 1-5\n"
+        "Place block: P",
         desc_size);
     description->setFillColor(sf::Color::White);
     description->setOutlineThickness(1);

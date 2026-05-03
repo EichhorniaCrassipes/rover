@@ -43,7 +43,11 @@ void scene::MenuScene::on_start() {
 void scene::MenuScene::initTitle() {
     delete title;
     title = new Text(font, L"Re!", 150);
-    title->setPosition({480, 50});
+    const auto bounds = title->getLocalBounds();
+    title->setPosition({
+        (static_cast<float>(engine_stats->window_width)  - bounds.size.x) / 2.f - bounds.position.x,
+        60
+    });
     title->setFillColor(sf::Color(237, 147, 0));
     title->setOutlineThickness(3);
     title->setOutlineColor(sf::Color::Black);
@@ -52,7 +56,17 @@ void scene::MenuScene::initTitle() {
 void scene::MenuScene::initMenu() {
     sf::String menu_items[] = {L"Play", L"Settings", L"About", L"Exit"};
     delete menu;
-    menu = new GameMenu(*window, 950, 350, 450, 300, 4, menu_items, 120, 100);
+    menu = new GameMenu(
+        *window,
+        static_cast<float>(engine_stats->window_width),
+        350,
+        450,
+        300,
+        4,
+        menu_items,
+        120,
+        100
+    );
     menu->setColorTextMenu(sf::Color(237, 147, 0), sf::Color::Red, sf::Color::Black);
     menu->AlignMenu(2);
 }

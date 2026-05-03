@@ -8,6 +8,7 @@ namespace game {
         float health  = 100.f;
         bool game_over         = false;
         bool restart_requested = false;
+        unsigned render_distance = 10;
     };
 
     extern EngineStats global_stats;
