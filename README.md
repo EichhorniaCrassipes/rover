@@ -85,7 +85,9 @@ Object (sf::Drawable + sf::Transformable)
 
 ## Сборка и запуск
 
-Сборка и установка подробно описаны в файле [`BUILD.MD`](./BUILD.md)
+Готовая сборка для Windows 10+ – на странице [релизов](https://github.com/EichhorniaCrassipes/rover/releases).
+
+Инструкции по самостоятельной сборке и установке подробно описаны в файле [`BUILD.MD`](./BUILD.md)
 
 ```bash
 # Запуск игры
