@@ -51,7 +51,7 @@ cmake -B build -S .
 cmake --build build
 ```
 
-Бинарный файл появится в `.release/ROVER.exe`.
+Бинарный файл появится в `.release/RE.exe`.
 
 ### 5. Копирование библиотек .dll из исходников SFML
 
@@ -107,13 +107,13 @@ cmake -B build -S .
 cmake --build build
 ```
 
-Бинарный файл появится в `.release/ROVER`.
+Бинарный файл появится в `.release/RE`.
 
 ---
 
 ## Установка игровых ресурсов
 
-После успешной компиляции необходимо скачать ресурсы со страницы [релизов](https://github.com/EichhorniaCrassipes/rover/releases) (для демо-версии 0.1: архив ``game resources.zip``)
+После успешной компиляции необходимо скачать ресурсы со страницы [релизов](https://github.com/EichhorniaCrassipes/rover/releases) (для демо-версии 0.1: архив ``game.resources.zip``)
 
 Установка ресурсов производится в папку .release, правильная распаковка выглядит так:
 ```
